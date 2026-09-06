@@ -1,100 +1,876 @@
 {
-  "_comment": "監視対象マーケット。source: polymarket(event id) / kalshi(event ticker) / manifold(market id)。keep=残す選択肢のキーワード, top=上位N件も残す, only=指定選択肢のみ",
-  "categories": {
-    "politics":   {"ja": "政治・選挙",     "icon": "🏛️"},
-    "economy":    {"ja": "経済・金融",     "icon": "💴"},
-    "geo":        {"ja": "地政学・安全保障", "icon": "🌏"},
-    "mlb":        {"ja": "MLB・大谷翔平",   "icon": "⚾"},
-    "npb":        {"ja": "プロ野球 NPB",    "icon": "🏟️"},
-    "soccer":     {"ja": "サッカー",        "icon": "⚽"},
-    "sumo":       {"ja": "大相撲",          "icon": "🥋"},
-    "sports":     {"ja": "その他スポーツ",   "icon": "🏅"},
-    "culture":    {"ja": "エンタメ・社会",   "icon": "🎮"},
-    "disaster":   {"ja": "災害・気象",      "icon": "🌋"}
+ "_comment": "監視対象マーケット。source: polymarket(event id) / kalshi(event ticker) / manifold(market id)。keep=残す選択肢のキーワード, top=上位N件も残す, only=指定選択肢のみ scope: japan=日本関連 / global=海外で人気の賭け。news_q=関連ニュース検索語（Googleニュース・日本語）",
+ "categories": {
+  "politics": {
+   "ja": "政治・選挙",
+   "icon": "🏛️"
   },
-  "items": [
-    {"source":"polymarket","id":"382868","cat":"politics","title_ja":"高市早苗首相は2026年中に退任するか？"},
-    {"source":"polymarket","id":"410828","cat":"politics","title_ja":"2026年中に衆議院が解散されるか？"},
-    {"source":"polymarket","id":"410971","cat":"politics","title_ja":"習近平国家主席と高市首相の会談はいつ実現するか？"},
-    {"source":"polymarket","id":"839250","cat":"politics","title_ja":"沖縄県知事選（9/13投開票）当選者","top":6},
-    {"source":"polymarket","id":"879998","cat":"politics","title_ja":"福島県知事選（10/25投開票）当選者","top":5},
-    {"source":"polymarket","id":"653446","cat":"politics","title_ja":"2027年までに退陣する次の首脳は？（高市首相の扱い）","keep":["Takaichi"],"top":3},
-    {"source":"manifold","id":"8Itt8y9NlZ","cat":"politics","title_ja":"高市首相の在任期間はどれくらいになるか？"},
-    {"source":"manifold","id":"UPNQQ9ZCEl","cat":"politics","title_ja":"高市首相は在任中に靖国神社を参拝するか？"},
-    {"source":"manifold","id":"ttEZlnuLLq","cat":"politics","title_ja":"次の衆議院選挙はいつ行われるか？"},
-    {"source":"manifold","id":"c58P8028h2","cat":"politics","title_ja":"日本の首相が台湾問題で中国に謝罪する時期は？","top":6},
-    {"source":"manifold","id":"5dRtP9EA6U","cat":"politics","title_ja":"次の国政選挙の投票率は60%を超えるか？"},
-    {"source":"kalshi","id":"KXOKINAWAGOV-26SEP13","cat":"politics","title_ja":"沖縄県知事選 当選者（Kalshi）"},
-
-    {"source":"polymarket","id":"606452","cat":"economy","title_ja":"日銀 9月会合（9/17-18）の政策金利決定"},
-    {"source":"kalshi","id":"KXCBDECISIONJAPAN-26SEP17","cat":"economy","title_ja":"日銀 9月会合の政策金利決定（Kalshi）"},
-    {"source":"polymarket","id":"779132","cat":"economy","title_ja":"日銀 10月会合の政策金利決定"},
-    {"source":"kalshi","id":"KXCBDECISIONJAPAN-26OCT29","cat":"economy","title_ja":"日銀 10月会合の政策金利決定（Kalshi）"},
-    {"source":"kalshi","id":"KXCBDECISIONJAPAN-26DEC17","cat":"economy","title_ja":"日銀 12月会合の政策金利決定（Kalshi）"},
-    {"source":"manifold","id":"LyPEtt0RhI","cat":"economy","title_ja":"日銀は2026年末までにマイナス金利を再導入するか？"},
-    {"source":"polymarket","id":"199695","cat":"economy","title_ja":"ドル円は2026年中にどの水準に到達するか？"},
-    {"source":"polymarket","id":"956751","cat":"economy","title_ja":"米国が再度の円買い介入を発表するか？"},
-    {"source":"polymarket","id":"580965","cat":"economy","title_ja":"日経平均 2026年末の終値"},
-    {"source":"kalshi","id":"KXNIKKEI-26DEC31","cat":"economy","title_ja":"日経平均は2026年中にどこまで上昇するか？（Kalshi）"},
-    {"source":"polymarket","id":"580843","cat":"economy","title_ja":"日本10年国債利回り 2026年末"},
-    {"source":"polymarket","id":"606453","cat":"economy","title_ja":"日本コアCPI（前年比）2026年"},
-    {"source":"polymarket","id":"606454","cat":"economy","title_ja":"日本コアコアCPI（前年比）2026年"},
-    {"source":"polymarket","id":"867163","cat":"economy","title_ja":"日本 2026年Q3 GDP成長率（年率）"},
-    {"source":"kalshi","id":"KXGDPNOM-JAP26","cat":"economy","title_ja":"日本の名目GDP 2026年（ドル建て）","top":6},
-    {"source":"polymarket","id":"410630","cat":"economy","title_ja":"日本は2026年に景気後退入りするか？"},
-    {"source":"kalshi","id":"KXJPSGINFL-26SEP23","cat":"economy","title_ja":"8月の日本のインフレ率はシンガポールを上回るか？"},
-
-    {"source":"polymarket","id":"83798","cat":"geo","title_ja":"2027年より前に日中の軍事衝突が起きるか？"},
-    {"source":"manifold","id":"SRc6RhqANI","cat":"geo","title_ja":"2027年より前の日中衝突（形態別）"},
-    {"source":"manifold","id":"8d5hA5LIhq","cat":"geo","title_ja":"日本は2030年末までに核兵器を保有するか？"},
-    {"source":"polymarket","id":"79230","cat":"geo","title_ja":"【関連】2027年より前に中台の軍事衝突が起きるか？"},
-    {"source":"polymarket","id":"330223","cat":"geo","title_ja":"【関連】中国は2027年6月末までに台湾へ侵攻するか？"},
-    {"source":"polymarket","id":"536282","cat":"geo","title_ja":"【関連】中国は2026年中に台湾を封鎖するか？"},
-
-    {"source":"polymarket","id":"215604","cat":"mlb","title_ja":"MLB 2026 ナ・リーグMVP","keep":["Ohtani","Yamamoto"],"top":3},
-    {"source":"kalshi","id":"KXMLBNLMVP-26","cat":"mlb","title_ja":"MLB 2026 ナ・リーグMVP（Kalshi）","keep":["Ohtani","Yamamoto"],"top":3},
-    {"source":"polymarket","id":"215675","cat":"mlb","title_ja":"MLB 2026 ナ・リーグ サイ・ヤング賞","keep":["Ohtani","Yamamoto","Sasaki","Imanaga"],"top":3},
-    {"source":"kalshi","id":"KXMLBNLCY-26","cat":"mlb","title_ja":"MLB 2026 ナ・リーグ サイ・ヤング賞（Kalshi）","keep":["Ohtani","Yamamoto","Sasaki","Imanaga"],"top":3},
-    {"source":"kalshi","id":"KXMLBAWARDCOMBO-26MVPCY","cat":"mlb","title_ja":"大谷翔平がMVPとサイ・ヤング賞を同時受賞するか？"},
-    {"source":"kalshi","id":"KXMLBPITCH-26SOHTANI17","cat":"mlb","title_ja":"大谷翔平は2026年レギュラーシーズン中に再び登板するか？"},
-    {"source":"polymarket","id":"215800","cat":"mlb","title_ja":"MLB 2026 ナ・リーグ ハンク・アーロン賞","keep":["Ohtani"],"top":3},
-    {"source":"polymarket","id":"400490","cat":"mlb","title_ja":"MLB 2026 本塁打王","keep":["Ohtani","Murakami","Okamoto"],"top":3},
-    {"source":"polymarket","id":"660409","cat":"mlb","title_ja":"MLB 2026 40本塁打以上を打つ選手","keep":["Ohtani","Murakami","Okamoto"],"top":3},
-    {"source":"polymarket","id":"660410","cat":"mlb","title_ja":"MLB 2026 50本塁打以上を打つ選手","keep":["Ohtani","Murakami","Okamoto"],"top":3},
-    {"source":"manifold","id":"hcEAR6SsO0","cat":"mlb","title_ja":"大谷翔平は2026年に43本塁打以上を打つか？"},
-    {"source":"manifold","id":"tsgcSNlO9Z","cat":"mlb","title_ja":"大谷翔平が2026年に受賞するタイトルは？"},
-    {"source":"polymarket","id":"310676","cat":"mlb","title_ja":"MLB 2026 最優秀DH賞","keep":["Ohtani"],"top":3},
-    {"source":"polymarket","id":"927443","cat":"mlb","title_ja":"MLB 2026 WARリーダー","keep":["Ohtani"],"top":3},
-    {"source":"polymarket","id":"400847","cat":"mlb","title_ja":"MLB 2026 防御率タイトル","keep":["Ohtani","Yamamoto","Imanaga","Sasaki"],"top":3},
-    {"source":"polymarket","id":"400880","cat":"mlb","title_ja":"MLB 2026 奪三振王","keep":["Ohtani","Yamamoto","Imanaga","Sasaki"],"top":3},
-    {"source":"polymarket","id":"715392","cat":"culture","title_ja":"2026年 Google検索 世界1位の人物（大谷翔平の扱い）","keep":["Ohtani"],"top":3},
-
-    {"source":"polymarket","id":"927512","cat":"npb","title_ja":"NPB 2026 日本シリーズ優勝チーム","top":12},
-    {"source":"kalshi","id":"KXNPB-26","cat":"npb","title_ja":"NPB 2026 日本一（Kalshi）","top":12},
-
-    {"source":"polymarket","id":"836132","cat":"soccer","title_ja":"Jリーグ 2026-27 優勝チーム","top":8},
-    {"source":"polymarket","id":"839374","cat":"soccer","title_ja":"Jリーグ 2026-27 2位","top":6},
-    {"source":"polymarket","id":"904892","cat":"soccer","title_ja":"Jリーグ 2026-27 降格チーム","top":6},
-
-    {"source":"kalshi","id":"KXSUMOWIN-26JGSSEP","cat":"sumo","title_ja":"大相撲九月場所 幕内最高優勝","top":10},
-    {"source":"manifold","id":"LE92gUP2SZ","cat":"sumo","title_ja":"2026年末までに新たな横綱が誕生するか？"},
-    {"source":"manifold","id":"80cNs6AhpE","cat":"sumo","title_ja":"2026年に幕内で全勝優勝（15戦全勝）が出るか？"},
-    {"source":"manifold","id":"u22tIU5LEg","cat":"sumo","title_ja":"高市首相が2026年の大相撲で優勝杯を授与するか？"},
-
-    {"source":"polymarket","id":"973820","cat":"sports","title_ja":"全米オープンテニス 女子：大坂なおみ vs リバキナ","top":2},
-
-    {"source":"polymarket","id":"485574","cat":"culture","title_ja":"日本政府は2026年に新たなUFO関連文書を公開するか？"},
-    {"source":"manifold","id":"9gqUuZEhy2","cat":"culture","title_ja":"9/8のNintendo Directでスマブラ新作が発表されるか？"},
-    {"source":"manifold","id":"kkKKl4vwqqxUq1Ic3Qf1","cat":"culture","title_ja":"2030年より前に東京にMLB球団ができるか？"},
-
-    {"source":"kalshi","id":"KXEARTHQUAKEJAPAN-30","cat":"disaster","title_ja":"2030年より前に日本でM8.0以上の地震が発生するか？"},
-    {"source":"polymarket","id":"944677","cat":"disaster","title_ja":"9月末までにM6.0以上の地震が発生する場所（日本の扱い）","keep":["Japan"],"top":3}
-  ],
-  "game_series": [
-    {"source":"kalshi","series":"KXNPBGAME","label_ja":"プロ野球 NPB","cat":"npb"},
-    {"source":"kalshi","series":"KXJLEAGUEGAME","label_ja":"Jリーグ J1","cat":"soccer"},
-    {"source":"kalshi","series":"KXJ2LEAGUEGAME","label_ja":"Jリーグ J2","cat":"soccer"},
-    {"source":"kalshi","series":"KXJBLEAGUEGAME","label_ja":"Bリーグ","cat":"sports"},
-    {"source":"kalshi","series":"KXWFIBAGAME","label_ja":"女子バスケW杯","cat":"sports","must":"JPN"}
-  ]
+  "economy": {
+   "ja": "経済・金融",
+   "icon": "💴"
+  },
+  "geo": {
+   "ja": "地政学・安全保障",
+   "icon": "🌏"
+  },
+  "mlb": {
+   "ja": "MLB・大谷翔平",
+   "icon": "⚾"
+  },
+  "npb": {
+   "ja": "プロ野球 NPB",
+   "icon": "🏟️"
+  },
+  "soccer": {
+   "ja": "サッカー",
+   "icon": "⚽"
+  },
+  "sumo": {
+   "ja": "大相撲",
+   "icon": "🥋"
+  },
+  "sports": {
+   "ja": "その他スポーツ",
+   "icon": "🏅"
+  },
+  "culture": {
+   "ja": "エンタメ・社会",
+   "icon": "🎮"
+  },
+  "disaster": {
+   "ja": "災害・気象",
+   "icon": "🌋"
+  }
+ },
+ "items": [
+  {
+   "source": "polymarket",
+   "id": "382868",
+   "cat": "politics",
+   "title_ja": "高市早苗首相は2026年中に退任するか？",
+   "scope": "japan",
+   "news_q": "高市首相 退陣"
+  },
+  {
+   "source": "polymarket",
+   "id": "410828",
+   "cat": "politics",
+   "title_ja": "2026年中に衆議院が解散されるか？",
+   "scope": "japan",
+   "news_q": "衆議院 解散"
+  },
+  {
+   "source": "polymarket",
+   "id": "410971",
+   "cat": "politics",
+   "title_ja": "習近平国家主席と高市首相の会談はいつ実現するか？",
+   "scope": "japan",
+   "news_q": "習近平 高市 会談"
+  },
+  {
+   "source": "polymarket",
+   "id": "839250",
+   "cat": "politics",
+   "title_ja": "沖縄県知事選（9/13投開票）当選者",
+   "top": 6,
+   "scope": "japan",
+   "news_q": "沖縄県知事選"
+  },
+  {
+   "source": "polymarket",
+   "id": "879998",
+   "cat": "politics",
+   "title_ja": "福島県知事選（10/25投開票）当選者",
+   "top": 5,
+   "scope": "japan",
+   "news_q": "福島県知事選"
+  },
+  {
+   "source": "polymarket",
+   "id": "653446",
+   "cat": "politics",
+   "title_ja": "2027年までに退陣する次の首脳は？（高市首相の扱い）",
+   "keep": [
+    "Takaichi"
+   ],
+   "top": 3,
+   "scope": "japan",
+   "news_q": "高市首相 支持率"
+  },
+  {
+   "source": "manifold",
+   "id": "8Itt8y9NlZ",
+   "cat": "politics",
+   "title_ja": "高市首相の在任期間はどれくらいになるか？",
+   "scope": "japan",
+   "news_q": "高市政権"
+  },
+  {
+   "source": "manifold",
+   "id": "UPNQQ9ZCEl",
+   "cat": "politics",
+   "title_ja": "高市首相は在任中に靖国神社を参拝するか？",
+   "scope": "japan",
+   "news_q": "高市 靖国参拝"
+  },
+  {
+   "source": "manifold",
+   "id": "ttEZlnuLLq",
+   "cat": "politics",
+   "title_ja": "次の衆議院選挙はいつ行われるか？",
+   "scope": "japan",
+   "news_q": "衆院選 時期"
+  },
+  {
+   "source": "manifold",
+   "id": "c58P8028h2",
+   "cat": "politics",
+   "title_ja": "日本の首相が台湾問題で中国に謝罪する時期は？",
+   "top": 6,
+   "scope": "japan",
+   "news_q": "高市 台湾 発言 中国"
+  },
+  {
+   "source": "manifold",
+   "id": "5dRtP9EA6U",
+   "cat": "politics",
+   "title_ja": "次の国政選挙の投票率は60%を超えるか？",
+   "scope": "japan",
+   "news_q": "国政選挙 投票率"
+  },
+  {
+   "source": "kalshi",
+   "id": "KXOKINAWAGOV-26SEP13",
+   "cat": "politics",
+   "title_ja": "沖縄県知事選 当選者（Kalshi）",
+   "scope": "japan",
+   "news_q": "沖縄県知事選"
+  },
+  {
+   "source": "polymarket",
+   "id": "606452",
+   "cat": "economy",
+   "title_ja": "日銀 9月会合（9/17-18）の政策金利決定",
+   "scope": "japan",
+   "news_q": "日銀 9月 利上げ"
+  },
+  {
+   "source": "kalshi",
+   "id": "KXCBDECISIONJAPAN-26SEP17",
+   "cat": "economy",
+   "title_ja": "日銀 9月会合の政策金利決定（Kalshi）",
+   "scope": "japan",
+   "news_q": "日銀 金融政策決定会合"
+  },
+  {
+   "source": "polymarket",
+   "id": "779132",
+   "cat": "economy",
+   "title_ja": "日銀 10月会合の政策金利決定",
+   "scope": "japan",
+   "news_q": "日銀 10月 利上げ"
+  },
+  {
+   "source": "kalshi",
+   "id": "KXCBDECISIONJAPAN-26OCT29",
+   "cat": "economy",
+   "title_ja": "日銀 10月会合の政策金利決定（Kalshi）",
+   "scope": "japan",
+   "news_q": "日銀 10月会合"
+  },
+  {
+   "source": "kalshi",
+   "id": "KXCBDECISIONJAPAN-26DEC17",
+   "cat": "economy",
+   "title_ja": "日銀 12月会合の政策金利決定（Kalshi）",
+   "scope": "japan",
+   "news_q": "日銀 12月 利上げ"
+  },
+  {
+   "source": "manifold",
+   "id": "LyPEtt0RhI",
+   "cat": "economy",
+   "title_ja": "日銀は2026年末までにマイナス金利を再導入するか？",
+   "scope": "japan",
+   "news_q": "日銀 マイナス金利"
+  },
+  {
+   "source": "polymarket",
+   "id": "199695",
+   "cat": "economy",
+   "title_ja": "ドル円は2026年中にどの水準に到達するか？",
+   "scope": "japan",
+   "news_q": "ドル円 為替"
+  },
+  {
+   "source": "polymarket",
+   "id": "956751",
+   "cat": "economy",
+   "title_ja": "米国が再度の円買い介入を発表するか？",
+   "scope": "japan",
+   "news_q": "円 為替介入"
+  },
+  {
+   "source": "polymarket",
+   "id": "580965",
+   "cat": "economy",
+   "title_ja": "日経平均 2026年末の終値",
+   "scope": "japan",
+   "news_q": "日経平均"
+  },
+  {
+   "source": "kalshi",
+   "id": "KXNIKKEI-26DEC31",
+   "cat": "economy",
+   "title_ja": "日経平均は2026年中にどこまで上昇するか？（Kalshi）",
+   "scope": "japan",
+   "news_q": "日経平均 最高値"
+  },
+  {
+   "source": "polymarket",
+   "id": "580843",
+   "cat": "economy",
+   "title_ja": "日本10年国債利回り 2026年末",
+   "scope": "japan",
+   "news_q": "長期金利 10年債"
+  },
+  {
+   "source": "polymarket",
+   "id": "606453",
+   "cat": "economy",
+   "title_ja": "日本コアCPI（前年比）2026年",
+   "scope": "japan",
+   "news_q": "消費者物価 コアCPI"
+  },
+  {
+   "source": "polymarket",
+   "id": "606454",
+   "cat": "economy",
+   "title_ja": "日本コアコアCPI（前年比）2026年",
+   "scope": "japan",
+   "news_q": "コアコアCPI"
+  },
+  {
+   "source": "polymarket",
+   "id": "867163",
+   "cat": "economy",
+   "title_ja": "日本 2026年Q3 GDP成長率（年率）",
+   "scope": "japan",
+   "news_q": "GDP 速報 日本"
+  },
+  {
+   "source": "kalshi",
+   "id": "KXGDPNOM-JAP26",
+   "cat": "economy",
+   "title_ja": "日本の名目GDP 2026年（ドル建て）",
+   "top": 6,
+   "scope": "japan",
+   "news_q": "名目GDP 日本"
+  },
+  {
+   "source": "polymarket",
+   "id": "410630",
+   "cat": "economy",
+   "title_ja": "日本は2026年に景気後退入りするか？",
+   "scope": "japan",
+   "news_q": "日本 景気後退"
+  },
+  {
+   "source": "kalshi",
+   "id": "KXJPSGINFL-26SEP23",
+   "cat": "economy",
+   "title_ja": "8月の日本のインフレ率はシンガポールを上回るか？",
+   "scope": "japan",
+   "news_q": "日本 インフレ率"
+  },
+  {
+   "source": "polymarket",
+   "id": "83798",
+   "cat": "geo",
+   "title_ja": "2027年より前に日中の軍事衝突が起きるか？",
+   "scope": "japan",
+   "news_q": "日中 軍事 緊張"
+  },
+  {
+   "source": "manifold",
+   "id": "SRc6RhqANI",
+   "cat": "geo",
+   "title_ja": "2027年より前の日中衝突（形態別）",
+   "scope": "japan",
+   "news_q": "日中関係"
+  },
+  {
+   "source": "manifold",
+   "id": "8d5hA5LIhq",
+   "cat": "geo",
+   "title_ja": "日本は2030年末までに核兵器を保有するか？",
+   "scope": "japan",
+   "news_q": "日本 核武装 議論"
+  },
+  {
+   "source": "polymarket",
+   "id": "79230",
+   "cat": "geo",
+   "title_ja": "【関連】2027年より前に中台の軍事衝突が起きるか？",
+   "scope": "japan",
+   "news_q": "中国 台湾 軍事"
+  },
+  {
+   "source": "polymarket",
+   "id": "330223",
+   "cat": "geo",
+   "title_ja": "【関連】中国は2027年6月末までに台湾へ侵攻するか？",
+   "scope": "japan",
+   "news_q": "台湾有事"
+  },
+  {
+   "source": "polymarket",
+   "id": "536282",
+   "cat": "geo",
+   "title_ja": "【関連】中国は2026年中に台湾を封鎖するか？",
+   "scope": "japan",
+   "news_q": "台湾 封鎖"
+  },
+  {
+   "source": "polymarket",
+   "id": "215604",
+   "cat": "mlb",
+   "title_ja": "MLB 2026 ナ・リーグMVP",
+   "keep": [
+    "Ohtani",
+    "Yamamoto"
+   ],
+   "top": 3,
+   "scope": "japan",
+   "news_q": "大谷翔平 MVP"
+  },
+  {
+   "source": "kalshi",
+   "id": "KXMLBNLMVP-26",
+   "cat": "mlb",
+   "title_ja": "MLB 2026 ナ・リーグMVP（Kalshi）",
+   "keep": [
+    "Ohtani",
+    "Yamamoto"
+   ],
+   "top": 3,
+   "scope": "japan",
+   "news_q": "ナ・リーグ MVP"
+  },
+  {
+   "source": "polymarket",
+   "id": "215675",
+   "cat": "mlb",
+   "title_ja": "MLB 2026 ナ・リーグ サイ・ヤング賞",
+   "keep": [
+    "Ohtani",
+    "Yamamoto",
+    "Sasaki",
+    "Imanaga"
+   ],
+   "top": 3,
+   "scope": "japan",
+   "news_q": "サイ・ヤング賞 山本由伸"
+  },
+  {
+   "source": "kalshi",
+   "id": "KXMLBNLCY-26",
+   "cat": "mlb",
+   "title_ja": "MLB 2026 ナ・リーグ サイ・ヤング賞（Kalshi）",
+   "keep": [
+    "Ohtani",
+    "Yamamoto",
+    "Sasaki",
+    "Imanaga"
+   ],
+   "top": 3,
+   "scope": "japan",
+   "news_q": "サイ・ヤング賞"
+  },
+  {
+   "source": "kalshi",
+   "id": "KXMLBAWARDCOMBO-26MVPCY",
+   "cat": "mlb",
+   "title_ja": "大谷翔平がMVPとサイ・ヤング賞を同時受賞するか？",
+   "scope": "japan",
+   "news_q": "大谷翔平 二刀流"
+  },
+  {
+   "source": "kalshi",
+   "id": "KXMLBPITCH-26SOHTANI17",
+   "cat": "mlb",
+   "title_ja": "大谷翔平は2026年レギュラーシーズン中に再び登板するか？",
+   "scope": "japan",
+   "news_q": "大谷翔平 登板"
+  },
+  {
+   "source": "polymarket",
+   "id": "215800",
+   "cat": "mlb",
+   "title_ja": "MLB 2026 ナ・リーグ ハンク・アーロン賞",
+   "keep": [
+    "Ohtani"
+   ],
+   "top": 3,
+   "scope": "japan",
+   "news_q": "ハンク・アーロン賞"
+  },
+  {
+   "source": "polymarket",
+   "id": "400490",
+   "cat": "mlb",
+   "title_ja": "MLB 2026 本塁打王",
+   "keep": [
+    "Ohtani",
+    "Murakami",
+    "Okamoto"
+   ],
+   "top": 3,
+   "scope": "japan",
+   "news_q": "本塁打王 MLB"
+  },
+  {
+   "source": "polymarket",
+   "id": "660409",
+   "cat": "mlb",
+   "title_ja": "MLB 2026 40本塁打以上を打つ選手",
+   "keep": [
+    "Ohtani",
+    "Murakami",
+    "Okamoto"
+   ],
+   "top": 3,
+   "scope": "japan",
+   "news_q": "大谷翔平 本塁打"
+  },
+  {
+   "source": "polymarket",
+   "id": "660410",
+   "cat": "mlb",
+   "title_ja": "MLB 2026 50本塁打以上を打つ選手",
+   "keep": [
+    "Ohtani",
+    "Murakami",
+    "Okamoto"
+   ],
+   "top": 3,
+   "scope": "japan",
+   "news_q": "大谷翔平 50本塁打"
+  },
+  {
+   "source": "manifold",
+   "id": "hcEAR6SsO0",
+   "cat": "mlb",
+   "title_ja": "大谷翔平は2026年に43本塁打以上を打つか？",
+   "scope": "japan",
+   "news_q": "大谷翔平 ホームラン"
+  },
+  {
+   "source": "manifold",
+   "id": "tsgcSNlO9Z",
+   "cat": "mlb",
+   "title_ja": "大谷翔平が2026年に受賞するタイトルは？",
+   "scope": "japan",
+   "news_q": "大谷翔平 受賞"
+  },
+  {
+   "source": "polymarket",
+   "id": "310676",
+   "cat": "mlb",
+   "title_ja": "MLB 2026 最優秀DH賞",
+   "keep": [
+    "Ohtani"
+   ],
+   "top": 3,
+   "scope": "japan",
+   "news_q": "大谷翔平 DH"
+  },
+  {
+   "source": "polymarket",
+   "id": "927443",
+   "cat": "mlb",
+   "title_ja": "MLB 2026 WARリーダー",
+   "keep": [
+    "Ohtani"
+   ],
+   "top": 3,
+   "scope": "japan",
+   "news_q": "大谷翔平 WAR"
+  },
+  {
+   "source": "polymarket",
+   "id": "400847",
+   "cat": "mlb",
+   "title_ja": "MLB 2026 防御率タイトル",
+   "keep": [
+    "Ohtani",
+    "Yamamoto",
+    "Imanaga",
+    "Sasaki"
+   ],
+   "top": 3,
+   "scope": "japan",
+   "news_q": "山本由伸 防御率"
+  },
+  {
+   "source": "polymarket",
+   "id": "400880",
+   "cat": "mlb",
+   "title_ja": "MLB 2026 奪三振王",
+   "keep": [
+    "Ohtani",
+    "Yamamoto",
+    "Imanaga",
+    "Sasaki"
+   ],
+   "top": 3,
+   "scope": "japan",
+   "news_q": "奪三振 MLB 日本人"
+  },
+  {
+   "source": "polymarket",
+   "id": "715392",
+   "cat": "culture",
+   "title_ja": "2026年 Google検索 世界1位の人物（大谷翔平の扱い）",
+   "keep": [
+    "Ohtani"
+   ],
+   "top": 3,
+   "scope": "japan",
+   "news_q": "大谷翔平 人気"
+  },
+  {
+   "source": "polymarket",
+   "id": "927512",
+   "cat": "npb",
+   "title_ja": "NPB 2026 日本シリーズ優勝チーム",
+   "top": 12,
+   "scope": "japan",
+   "news_q": "日本シリーズ 優勝 予想"
+  },
+  {
+   "source": "kalshi",
+   "id": "KXNPB-26",
+   "cat": "npb",
+   "title_ja": "NPB 2026 日本一（Kalshi）",
+   "top": 12,
+   "scope": "japan",
+   "news_q": "プロ野球 優勝争い"
+  },
+  {
+   "source": "polymarket",
+   "id": "836132",
+   "cat": "soccer",
+   "title_ja": "Jリーグ 2026-27 優勝チーム",
+   "top": 8,
+   "scope": "japan",
+   "news_q": "Jリーグ 2026-27 優勝チーム"
+  },
+  {
+   "source": "polymarket",
+   "id": "839374",
+   "cat": "soccer",
+   "title_ja": "Jリーグ 2026-27 2位",
+   "top": 6,
+   "scope": "japan",
+   "news_q": "Jリーグ 2026-27 2位"
+  },
+  {
+   "source": "polymarket",
+   "id": "904892",
+   "cat": "soccer",
+   "title_ja": "Jリーグ 2026-27 降格チーム",
+   "top": 6,
+   "scope": "japan",
+   "news_q": "Jリーグ 2026-27 降格チーム"
+  },
+  {
+   "source": "kalshi",
+   "id": "KXSUMOWIN-26JGSSEP",
+   "cat": "sumo",
+   "title_ja": "大相撲九月場所 幕内最高優勝",
+   "top": 10,
+   "scope": "japan",
+   "news_q": "大相撲 九月場所"
+  },
+  {
+   "source": "manifold",
+   "id": "LE92gUP2SZ",
+   "cat": "sumo",
+   "title_ja": "2026年末までに新たな横綱が誕生するか？",
+   "scope": "japan",
+   "news_q": "横綱 昇進"
+  },
+  {
+   "source": "manifold",
+   "id": "80cNs6AhpE",
+   "cat": "sumo",
+   "title_ja": "2026年に幕内で全勝優勝（15戦全勝）が出るか？",
+   "scope": "japan",
+   "news_q": "大相撲 全勝"
+  },
+  {
+   "source": "manifold",
+   "id": "u22tIU5LEg",
+   "cat": "sumo",
+   "title_ja": "高市首相が2026年の大相撲で優勝杯を授与するか？",
+   "scope": "japan",
+   "news_q": "高市首相 大相撲 内閣総理大臣杯"
+  },
+  {
+   "source": "polymarket",
+   "id": "973820",
+   "cat": "sports",
+   "title_ja": "全米オープンテニス 女子：大坂なおみ vs リバキナ",
+   "top": 2,
+   "scope": "japan",
+   "news_q": "大坂なおみ 全米オープン"
+  },
+  {
+   "source": "polymarket",
+   "id": "485574",
+   "cat": "culture",
+   "title_ja": "日本政府は2026年に新たなUFO関連文書を公開するか？",
+   "scope": "japan",
+   "news_q": "UFO 日本政府"
+  },
+  {
+   "source": "manifold",
+   "id": "9gqUuZEhy2",
+   "cat": "culture",
+   "title_ja": "9/8のNintendo Directでスマブラ新作が発表されるか？",
+   "scope": "japan",
+   "news_q": "Nintendo Direct スマブラ"
+  },
+  {
+   "source": "manifold",
+   "id": "kkKKl4vwqqxUq1Ic3Qf1",
+   "cat": "culture",
+   "title_ja": "2030年より前に東京にMLB球団ができるか？",
+   "scope": "japan",
+   "news_q": "MLB 東京 球団"
+  },
+  {
+   "source": "kalshi",
+   "id": "KXEARTHQUAKEJAPAN-30",
+   "cat": "disaster",
+   "title_ja": "2030年より前に日本でM8.0以上の地震が発生するか？",
+   "scope": "japan",
+   "news_q": "巨大地震 発生確率"
+  },
+  {
+   "source": "polymarket",
+   "id": "944677",
+   "cat": "disaster",
+   "title_ja": "9月末までにM6.0以上の地震が発生する場所（日本の扱い）",
+   "keep": [
+    "Japan"
+   ],
+   "top": 3,
+   "scope": "japan",
+   "news_q": "地震 M6"
+  },
+  {
+   "source": "polymarket",
+   "id": "32228",
+   "cat": "politics",
+   "title_ja": "米中間選挙 2026：上下両院の勢力図",
+   "top": 4,
+   "news_q": "米中間選挙",
+   "scope": "global"
+  },
+  {
+   "source": "polymarket",
+   "id": "31552",
+   "cat": "politics",
+   "title_ja": "2028年 米大統領選 当選者",
+   "top": 5,
+   "news_q": "2028年 米大統領選",
+   "scope": "global"
+  },
+  {
+   "source": "polymarket",
+   "id": "30829",
+   "cat": "politics",
+   "title_ja": "2028年 米民主党 大統領候補",
+   "top": 5,
+   "news_q": "民主党 大統領候補 2028",
+   "scope": "global"
+  },
+  {
+   "source": "polymarket",
+   "id": "79987",
+   "cat": "politics",
+   "title_ja": "次期フランス大統領選 当選者",
+   "top": 4,
+   "news_q": "フランス大統領選",
+   "scope": "global"
+  },
+  {
+   "source": "polymarket",
+   "id": "45915",
+   "cat": "politics",
+   "title_ja": "ブラジル大統領選（10/4）当選者",
+   "top": 3,
+   "news_q": "ブラジル大統領選",
+   "scope": "global"
+  },
+  {
+   "source": "polymarket",
+   "id": "481717",
+   "cat": "economy",
+   "title_ja": "FRB 9月FOMC（9/15-16）の政策金利決定",
+   "news_q": "FOMC 9月 利上げ",
+   "scope": "global"
+  },
+  {
+   "source": "polymarket",
+   "id": "51456",
+   "cat": "economy",
+   "title_ja": "FRB 2026年の利下げ回数",
+   "top": 4,
+   "news_q": "FRB 利下げ 2026",
+   "scope": "global"
+  },
+  {
+   "source": "polymarket",
+   "id": "79041",
+   "cat": "economy",
+   "title_ja": "2026年末 時価総額世界1位の企業",
+   "top": 4,
+   "news_q": "時価総額 世界一 エヌビディア",
+   "scope": "global"
+  },
+  {
+   "source": "polymarket",
+   "id": "478472",
+   "cat": "geo",
+   "title_ja": "ロシア・ウクライナ停戦合意はいつ？",
+   "top": 4,
+   "news_q": "ウクライナ 停戦",
+   "scope": "global"
+  },
+  {
+   "source": "polymarket",
+   "id": "73130",
+   "cat": "geo",
+   "title_ja": "米国は2027年より前にイランへ侵攻するか？",
+   "news_q": "米国 イラン 攻撃",
+   "scope": "global"
+  },
+  {
+   "source": "polymarket",
+   "id": "31195",
+   "cat": "geo",
+   "title_ja": "プーチン大統領の退陣はいつ？",
+   "top": 3,
+   "news_q": "プーチン 退陣",
+   "scope": "global"
+  },
+  {
+   "source": "polymarket",
+   "id": "202857",
+   "cat": "sports",
+   "title_ja": "NFL 2026シーズン スーパーボウル優勝",
+   "top": 5,
+   "news_q": "NFL スーパーボウル 優勝候補",
+   "scope": "global"
+  },
+  {
+   "source": "polymarket",
+   "id": "179312",
+   "cat": "sports",
+   "title_ja": "MLB 2026 ワールドシリーズ優勝",
+   "top": 5,
+   "news_q": "ワールドシリーズ ドジャース",
+   "scope": "global"
+  },
+  {
+   "source": "polymarket",
+   "id": "100371",
+   "cat": "sports",
+   "title_ja": "F1 2026 ドライバーズチャンピオン",
+   "top": 4,
+   "news_q": "F1 チャンピオン争い",
+   "scope": "global"
+  },
+  {
+   "source": "polymarket",
+   "id": "48361",
+   "cat": "sports",
+   "title_ja": "バロンドール 2026 受賞者",
+   "top": 4,
+   "news_q": "バロンドール 2026",
+   "scope": "global"
+  },
+  {
+   "source": "polymarket",
+   "id": "139236",
+   "cat": "sports",
+   "title_ja": "全米オープンテニス 2026 男子優勝",
+   "top": 4,
+   "news_q": "全米オープン テニス 男子",
+   "scope": "global"
+  },
+  {
+   "source": "polymarket",
+   "id": "79831",
+   "cat": "culture",
+   "title_ja": "2026年 世界興行収入1位の映画",
+   "top": 3,
+   "news_q": "世界興行収入 2026 映画",
+   "scope": "global"
+  },
+  {
+   "source": "polymarket",
+   "id": "60182",
+   "cat": "culture",
+   "title_ja": "ノーベル平和賞 2026（10/10発表）",
+   "top": 5,
+   "news_q": "ノーベル平和賞 2026",
+   "scope": "global"
+  },
+  {
+   "source": "polymarket",
+   "id": "727186",
+   "cat": "culture",
+   "title_ja": "9月末時点で最高性能のAIモデルを持つ企業",
+   "top": 4,
+   "news_q": "AI モデル 性能 ランキング",
+   "scope": "global"
+  }
+ ],
+ "game_series": [
+  {
+   "source": "kalshi",
+   "series": "KXNPBGAME",
+   "label_ja": "プロ野球 NPB",
+   "cat": "npb"
+  },
+  {
+   "source": "kalshi",
+   "series": "KXJLEAGUEGAME",
+   "label_ja": "Jリーグ J1",
+   "cat": "soccer"
+  },
+  {
+   "source": "kalshi",
+   "series": "KXJ2LEAGUEGAME",
+   "label_ja": "Jリーグ J2",
+   "cat": "soccer"
+  },
+  {
+   "source": "kalshi",
+   "series": "KXJBLEAGUEGAME",
+   "label_ja": "Bリーグ",
+   "cat": "sports"
+  },
+  {
+   "source": "kalshi",
+   "series": "KXWFIBAGAME",
+   "label_ja": "女子バスケW杯",
+   "cat": "sports",
+   "must": "JPN"
+  }
+ ]
 }

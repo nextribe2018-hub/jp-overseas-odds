@@ -45,6 +45,41 @@ def ja(name):
         if k.lower() == name.lower(): return v
     return None
 
+def translate_url(url):
+    """Google 翻訳プロキシ（translate.goog）で日本語表示するURL"""
+    try:
+        u = urllib.parse.urlsplit(url)
+        host = u.netloc.replace("-", "--").replace(".", "-") + ".translate.goog"
+        q = (u.query + "&" if u.query else "") + "_x_tr_sl=auto&_x_tr_tl=ja&_x_tr_hl=ja"
+        return urllib.parse.urlunsplit((u.scheme, host, u.path, q, u.fragment))
+    except Exception:
+        return url
+
+def fetch_news(query, n=3):
+    """Google ニュース（日本語）RSS から関連ニュース上位 n 件"""
+    url = "https://news.google.com/rss/search?q=" + urllib.parse.quote(query) + "&hl=ja&gl=JP&ceid=JP:ja"
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=30) as r:
+            x = r.read().decode("utf-8", "replace")
+    except Exception as e:
+        print("  news ERR", query, e, file=sys.stderr); return []
+    import html as _html
+    out = []
+    for it in re.findall(r"<item>(.*?)</item>", x, re.S)[:n]:
+        def g(tag):
+            m = re.search(rf"<{tag}[^>]*>(.*?)</{tag}>", it, re.S)
+            return _html.unescape(re.sub(r"<!\[CDATA\[(.*?)\]\]>", r"\1", m.group(1))).strip() if m else ""
+        title, src = g("title"), g("source")
+        if src and title.endswith(" - " + src): title = title[: -len(src) - 3]
+        try:
+            from email.utils import parsedate_to_datetime
+            ts = int(parsedate_to_datetime(g("pubDate")).timestamp())
+        except Exception:
+            ts = None
+        out.append({"title": title, "link": g("link"), "source": src, "ts": ts})
+    return out
+
 def f(x, default=None):
     try: return float(x)
     except (TypeError, ValueError): return default
@@ -245,9 +280,17 @@ def main():
         except Exception as e:
             print("   FAILED", e, file=sys.stderr); ev = None
         if ev and ev["outcomes"]:
-            ev["_order"] = len(events); events.append(ev)
+            ev["_order"] = len(events); ev["scope"] = item.get("scope", "japan")
+            ev["url_ja"] = translate_url(ev["url"])
+            ev["news_q"] = item.get("news_q") or item.get("title_ja") or ev["title"]
+            ev["news_url"] = "https://news.google.com/search?q=" + urllib.parse.quote(ev["news_q"]) + "&hl=ja&gl=JP&ceid=JP:ja"
+            events.append(ev)
         else:
             print("   -> no data", file=sys.stderr)
+    print("[news] 関連ニュースを取得")
+    with ThreadPoolExecutor(6) as ex:
+        for ev, news in zip(events, ex.map(lambda e: fetch_news(e["news_q"]), events)):
+            ev["news"] = news
     games = []
     for gs in CFG.get("game_series", []):
         print(f"[games] {gs['series']}")

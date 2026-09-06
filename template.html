@@ -117,6 +117,51 @@ a{color:var(--accent)}
 .chart .tip{position:absolute;pointer-events:none;background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:6px 9px;font-size:12px;box-shadow:var(--shadow);white-space:nowrap;z-index:3}
 .chart .tip b{display:block;color:var(--ink-3);font-weight:400;font-size:11px;margin-bottom:2px}
 .chart .desc{font-size:12px;color:var(--ink-2);margin:10px 0 0;line-height:1.7;max-width:70ch;white-space:pre-line}
+/* news */
+.news{list-style:none;margin:0;padding:6px 16px 8px;border-top:1px solid var(--line-2);display:grid;gap:3px}
+.news li{font-size:12.5px;line-height:1.5;display:flex;gap:8px;align-items:baseline;min-width:0}
+.news li::before{content:"▸";color:var(--accent);flex:none}
+.news a{color:var(--ink);text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.news a:hover{color:var(--accent);text-decoration:underline}
+.news span{color:var(--ink-3);font-size:11px;white-space:nowrap;flex:none}
+.news .lbl{font-size:11px;color:var(--ink-3);letter-spacing:.06em;margin-right:2px}
+.ev-f .links{margin-left:auto;display:flex;gap:12px;flex-wrap:wrap}
+.scope-h{margin-top:48px;padding:14px 18px;background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:6px}
+.scope-h h2{font-family:"Shippori Mincho B1",serif;font-weight:800;font-size:22px;margin:0}
+.scope-h p{margin:4px 0 0;color:var(--ink-2);font-size:13px}
+/* board (掲示板) */
+.board{padding:12px 16px 16px;border-top:1px solid var(--line-2);background:var(--paper-2)}
+.board-top{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;margin-bottom:10px}
+.board-top h4{margin:0;font-size:14px;font-family:"Shippori Mincho B1",serif}
+.board-top .mode{font-size:11.5px;color:var(--ink-3)}
+.board-top .mode.shared{color:var(--down)}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;align-items:start}
+.col{background:var(--paper);border:1px solid var(--line);border-radius:6px;border-top:3px solid var(--c);padding:10px 12px;display:flex;flex-direction:column;gap:8px}
+.col .oh{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.col .oh b{font-size:13.5px}
+.col .oh span{font-size:12px;color:var(--ink-2);white-space:nowrap}
+.col .cnt{font-size:11px;color:var(--ink-3)}
+.post{border-top:1px solid var(--line-2);padding:7px 0 4px;font-size:13px;line-height:1.55}
+.post .pm{display:flex;justify-content:space-between;gap:8px;font-size:11px;color:var(--ink-3);margin-bottom:2px}
+.post .pm b{color:var(--ink-2);font-weight:500}
+.post p{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.post .like{font-family:inherit;font-size:11px;border:1px solid var(--line);background:var(--paper);color:var(--ink-2);border-radius:999px;padding:1px 8px;cursor:pointer;margin-top:4px}
+.post .like:hover{border-color:var(--accent);color:var(--accent)}
+.post .like[disabled]{opacity:.6;cursor:default}
+.col form{display:grid;gap:6px;margin-top:4px}
+.col textarea{font-family:inherit;font-size:13px;padding:6px 8px;border:1px solid var(--line);border-radius:4px;background:var(--paper);color:var(--ink);resize:vertical;min-height:58px}
+.col .fr{display:flex;gap:6px;align-items:center}
+.col .fr input{font-family:inherit;font-size:12px;padding:4px 8px;border:1px solid var(--line);border-radius:4px;background:var(--paper);color:var(--ink);width:110px}
+.col .fr button{font-family:inherit;font-size:12.5px;padding:5px 12px;border:0;border-radius:4px;background:var(--accent);color:var(--accent-ink);cursor:pointer;margin-left:auto}
+.col .fr button[disabled]{opacity:.5;cursor:default}
+.col .more{font-family:inherit;font-size:12px;background:none;border:0;color:var(--accent);cursor:pointer;padding:0;text-align:left}
+.col .empty{font-size:12px;color:var(--ink-3);padding:6px 0}
+.board .err{font-size:12px;color:var(--up)}
+.recent{margin-top:34px}
+.recent .rp{display:grid;grid-template-columns:1fr auto;gap:4px 12px;padding:8px 0;border-top:1px solid var(--line-2);font-size:13px;cursor:pointer}
+.recent .rp:hover .t{color:var(--accent)}
+.recent .rp small{display:block;color:var(--ink-3);font-size:11.5px}
+.recent .rp .when{color:var(--ink-3);font-size:11.5px;white-space:nowrap}
 /* games */
 .games table{width:100%;border-collapse:collapse;font-size:13px}
 .games th{text-align:left;font-size:11px;color:var(--ink-3);letter-spacing:.06em;font-weight:500;padding:6px 10px;border-bottom:1px solid var(--line)}
@@ -142,7 +187,7 @@ a{color:var(--accent)}
     <div>
       <div class="eyebrow">Overseas prediction markets · Japan watch</div>
       <h1>日本関連 海外オッズ相場表</h1>
-      <p class="sub">Polymarket・Kalshi・Manifold に上場している「日本」に関わる賭けの一覧と、掛け率（暗黙の確率）の時系列。</p>
+      <p class="sub">Polymarket・Kalshi・Manifold に上場している「日本」に関わる賭けと、海外で人気の賭けの一覧。掛け率（暗黙の確率）の時系列と関連ニュース付き。</p>
     </div>
     <div class="meta">
       <span>更新 <b class="mono">__GENERATED__</b></span>
@@ -152,17 +197,20 @@ a{color:var(--accent)}
     </div>
   </header>
   <div class="notice">
-    掲載する「確率」は各市場の YES 価格（＝市場参加者が織り込む確率）で、<b>オッズ</b>はそれを欧州式（1 ÷ 確率）に換算した参考値です。変化幅は確率のポイント差。相場表の慣例にならい<span class="d up" style="min-width:auto">上昇＝赤</span> <span class="d down" style="min-width:auto">下落＝緑</span>で示します。
+    掲載する「確率」は各市場の YES 価格（＝市場参加者が織り込む確率）で、<b>倍率</b>はそれを欧州式オッズ（1 ÷ 確率、的中時の払戻倍率）に換算した参考値です。各マーケットの「賭けを見る」で実際のサイトへ、「日本語訳で見る」で Google 翻訳経由の日本語ページへ飛べます。変化幅は確率のポイント差。相場表の慣例にならい<span class="d up" style="min-width:auto">上昇＝赤</span> <span class="d down" style="min-width:auto">下落＝緑</span>で示します。
     Manifold はプレイマネー市場のため参考値。本ページは情報の整理を目的とし、賭博への参加を勧めるものではありません（日本国内からの海外賭博サイト利用は法的リスクがあります）。
   </div>
 
   <section class="summary" aria-label="注目の動き">
     <div class="panel"><h2>24時間で動いた賭け <small>確率のポイント変化・上位</small></h2><ul class="mv" id="mv24"></ul></div>
     <div class="panel"><h2>7日間で動いた賭け <small>確率のポイント変化・上位</small></h2><ul class="mv" id="mv7"></ul></div>
-    <div class="panel"><h2>資金が集まる賭け <small>出来高（USD）上位</small></h2><ul class="mv" id="mvvol"></ul></div>
+    <div class="panel"><h2>資金が集まる賭け <small>日本関連・出来高（USD）上位</small></h2><ul class="mv" id="mvvol"></ul></div>
+    <div class="panel"><h2>🌐 世界で注目の賭け <small>海外の人気マーケット・首位と倍率</small></h2><ul class="mv" id="mvglobal"></ul></div>
   </section>
 
   <div class="filters" id="filters">
+    <div id="scopechips" style="display:contents"></div>
+    <span class="sep"></span>
     <span class="eyebrow">分野</span>
     <div id="catchips" style="display:contents"></div>
     <span class="sep"></span>
@@ -181,10 +229,16 @@ a{color:var(--accent)}
 
   <main id="list"></main>
 
+  <section class="cat recent" id="recent-sec">
+    <div class="cat-h"><h2>💬 掲示板：最近の書き込み</h2><span class="cnt" id="recent-cnt"></span></div>
+    <p class="foot" style="margin:0 0 8px;border:0;padding:0">各マーケットの「掲示板を開く」から、利上げ／据え置き／利下げなど選択肢ごとに匿名で意見を書き込み、並べて比較できます。賭けはできません。</p>
+    <div id="recent"></div>
+  </section>
+
   <section class="cat games" id="games-sec">
     <div class="cat-h"><h2>直近の試合（勝敗マーケット）</h2><span class="cnt" id="games-cnt"></span></div>
     <div class="tbl-wrap"><table>
-      <thead><tr><th>リーグ</th><th>日時（JST）</th><th>ホーム</th><th class="num">勝率</th><th class="num">オッズ</th><th>アウェイ</th><th class="num">勝率</th><th class="num">オッズ</th><th class="num">出来高</th></tr></thead>
+      <thead><tr><th>リーグ</th><th>日時（JST）</th><th>ホーム</th><th class="num">勝率</th><th class="num">倍率</th><th>アウェイ</th><th class="num">勝率</th><th class="num">倍率</th><th class="num">出来高</th></tr></thead>
       <tbody id="games"></tbody>
     </table></div>
     <p class="foot" style="margin-top:10px;border:0;padding:0">Kalshi の各試合マーケット。勝率は買値と売値の仲値、または直近約定価格。「—」は取引が成立していない試合。</p>
@@ -208,7 +262,8 @@ const SERIES = ['var(--s1)','var(--s2)','var(--s3)','var(--s4)','var(--s5)','var
 const $ = (s,el=document)=>el.querySelector(s);
 const esc = s => String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const pct = p => p==null ? '—' : (p*100).toFixed(p<0.1||p>0.9?1:1)+'%';
-const odds = p => (p==null||p<=0) ? '—' : (p>=1 ? '1.00' : Math.min(999,1/p).toFixed(2));
+const odds = p => (p==null||p<=0) ? '—' : (p>=1 ? '1.00倍' : Math.min(999,1/p).toFixed(2)+'倍');
+const fmtD = t => new Date(t*1000).toLocaleDateString('ja-JP',{timeZone:'Asia/Tokyo',month:'numeric',day:'numeric'});
 const usd = v => v==null ? '—' : v>=1e6 ? '$'+(v/1e6).toFixed(2)+'M' : v>=1e3 ? '$'+(v/1e3).toFixed(0)+'K' : '$'+Math.round(v);
 const fmtDate = iso => { if(!iso) return '—'; const d=new Date(iso); if(isNaN(d)) return '—'; return d.toLocaleDateString('ja-JP',{timeZone:'Asia/Tokyo',year:'numeric',month:'numeric',day:'numeric'}); };
 const fmtDT = iso => { const d=new Date(iso); return d.toLocaleString('ja-JP',{timeZone:'Asia/Tokyo',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}); };
@@ -231,28 +286,34 @@ function spark(hist, color){
 // ---- movers
 function movers(){
   const rows=[];
-  D.events.forEach(ev=>ev.outcomes.forEach(o=>{ if(o.prob==null) return; rows.push({ev,o,m24:o.prob_24h==null?0:o.prob-o.prob_24h,m7:o.prob_7d==null?0:o.prob-o.prob_7d}); }));
+  D.events.filter(e=>e.scope!=='global').forEach(ev=>ev.outcomes.forEach(o=>{ if(o.prob==null) return; rows.push({ev,o,m24:o.prob_24h==null?0:o.prob-o.prob_24h,m7:o.prob_7d==null?0:o.prob-o.prob_7d}); }));
   const li=(r,dv,extra)=>`<li data-ev="${esc(r.ev.key)}"><div class="t">${esc(oname(r.o,r.ev))}<small>${esc(r.ev.title_ja)}</small></div><span class="p mono">${pct(r.o.prob)}</span>${extra}</li>`;
   $('#mv24').innerHTML = rows.filter(r=>r.o.prob_24h!=null).sort((a,b)=>Math.abs(b.m24)-Math.abs(a.m24)).slice(0,7).map(r=>li(r,r.m24,delta(r.o.prob,r.o.prob_24h))).join('') || '<li class="empty">データなし</li>';
   $('#mv7').innerHTML  = rows.filter(r=>r.o.prob_7d!=null).sort((a,b)=>Math.abs(b.m7)-Math.abs(a.m7)).slice(0,7).map(r=>li(r,r.m7,delta(r.o.prob,r.o.prob_7d))).join('');
-  const byVol=[...D.events].filter(e=>e.source!=='manifold').sort((a,b)=>(b.volume||0)-(a.volume||0)).slice(0,7);
+  const byVol=[...D.events].filter(e=>e.source!=='manifold'&&e.scope!=='global').sort((a,b)=>(b.volume||0)-(a.volume||0)).slice(0,7);
   $('#mvvol').innerHTML = byVol.map(ev=>{const top=[...ev.outcomes].sort((a,b)=>(b.prob||0)-(a.prob||0))[0]; return `<li data-ev="${esc(ev.key)}"><div class="t">${esc(ev.title_ja)}<small>${esc(SRC[ev.source])} · 首位 ${esc(oname(top,ev))}</small></div><span class="p mono">${pct(top.prob)}</span><span class="d flat mono">${usd(ev.volume)}</span></li>`;}).join('');
-  document.querySelectorAll('.mv li[data-ev]').forEach(li=>li.addEventListener('click',()=>{ state.cat='all'; state.src='all'; $('#q').value=''; state.q=''; render(); const el=document.getElementById('ev-'+CSS.escape(li.dataset.ev)); if(el){ openChart(el, true); el.scrollIntoView({behavior:'smooth',block:'start'}); } }));
+  const gl=[...D.events].filter(e=>e.scope==='global').sort((a,b)=>(b.volume||0)-(a.volume||0)).slice(0,7);
+  $('#mvglobal').innerHTML = gl.map(ev=>{const top=[...ev.outcomes].sort((a,b)=>(b.prob||0)-(a.prob||0))[0]; return `<li data-ev="${esc(ev.key)}"><div class="t">${esc(ev.title_ja)}<small>首位 ${esc(oname(top,ev))} · ${usd(ev.volume)}</small></div><span class="p mono">${pct(top.prob)}</span><span class="d flat mono">${odds(top.prob)}</span></li>`;}).join('');
+  document.querySelectorAll('.mv li[data-ev]').forEach(li=>li.addEventListener('click',()=>{ state.cat='all'; state.src='all'; state.scope='all'; $('#q').value=''; state.q=''; render(); const el=document.getElementById('ev-'+CSS.escape(li.dataset.ev)); if(el){ openChart(el, true); el.scrollIntoView({behavior:'smooth',block:'start'}); } }));
 }
 
 // ---- filters
-const state={cat:'all',src:'all',q:'',sort:'default'};
+const state={scope:'all',cat:'all',src:'all',q:'',sort:'default'};
+const SCOPES={japan:{ja:'日本関連',icon:'🎌'},global:{ja:'世界の人気',icon:'🌐'}};
 function chips(){
+  const sc0={}; D.events.forEach(e=>sc0[e.scope]=(sc0[e.scope]||0)+1);
+  $('#scopechips').innerHTML = `<button class="chip" data-scope="all" aria-pressed="true">すべて</button>` + Object.entries(SCOPES).map(([k,v])=>`<button class="chip" data-scope="${k}" aria-pressed="false">${v.icon} ${v.ja}<span class="n">${sc0[k]||0}</span></button>`).join('');
   const counts={}; D.events.forEach(e=>counts[e.cat]=(counts[e.cat]||0)+1);
   $('#catchips').innerHTML = `<button class="chip" data-cat="all" aria-pressed="true">すべて<span class="n">${D.events.length}</span></button>` + Object.entries(CATS).filter(([k])=>counts[k]).map(([k,v])=>`<button class="chip" data-cat="${k}" aria-pressed="false">${v.icon} ${esc(v.ja)}<span class="n">${counts[k]}</span></button>`).join('');
   const sc={}; D.events.forEach(e=>sc[e.source]=(sc[e.source]||0)+1);
   $('#srcchips').innerHTML = `<button class="chip" data-src="all" aria-pressed="true">すべて</button>` + Object.keys(SRC).filter(k=>sc[k]).map(k=>`<button class="chip" data-src="${k}" aria-pressed="false">${SRC[k]}<span class="n">${sc[k]}</span></button>`).join('');
-  $('#filters').addEventListener('click',e=>{ const b=e.target.closest('.chip'); if(!b) return; if(b.dataset.cat){state.cat=b.dataset.cat;} if(b.dataset.src){state.src=b.dataset.src;} render(); });
+  $('#filters').addEventListener('click',e=>{ const b=e.target.closest('.chip'); if(!b) return; if(b.dataset.scope){state.scope=b.dataset.scope;} if(b.dataset.cat){state.cat=b.dataset.cat;} if(b.dataset.src){state.src=b.dataset.src;} render(); });
   $('#q').addEventListener('input',e=>{state.q=e.target.value.trim().toLowerCase(); render();});
   $('#sort').addEventListener('change',e=>{state.sort=e.target.value; render();});
 }
 function evMove(ev,k){ return Math.max(0,...ev.outcomes.map(o=>(o.prob!=null&&o[k]!=null)?Math.abs(o.prob-o[k]):0)); }
 function matches(ev){
+  if(state.scope!=='all'&&ev.scope!==state.scope) return false;
   if(state.cat!=='all'&&ev.cat!==state.cat) return false;
   if(state.src!=='all'&&ev.source!==state.src) return false;
   if(state.q){ const hay=[ev.title_ja,ev.title,...ev.outcomes.map(o=>oname(o,ev)+' '+o.name)].join(' ').toLowerCase(); if(!hay.includes(state.q)) return false; }
@@ -268,9 +329,10 @@ function card(ev){
   return `<article class="ev" id="ev-${esc(ev.key)}" data-key="${esc(ev.key)}">
     <div class="ev-h"><div><h3>${esc(ev.title_ja||ev.title)}</h3><div class="en">${esc(ev.title)}</div></div>
       <div class="right"><span class="src ${ev.source}">${SRC[ev.source]}</span><span>締切 <span class="mono">${fmtDate(ev.end)}</span></span><span>出来高 <span class="mono">${ev.source==='manifold'?('M'+(ev.volume||0).toLocaleString()):usd(ev.volume)}</span></span></div></div>
-    <div class="tbl-wrap"><table><thead><tr><th>選択肢</th><th>確率</th><th>オッズ</th><th>24h</th><th>7日</th><th>出来高</th><th class="spark">30日推移</th></tr></thead><tbody>${rows}</tbody></table></div>
-    <div class="ev-f"><button type="button" class="tgl">時系列チャートを開く</button><span>${more}</span><a href="${esc(ev.url)}" target="_blank" rel="noopener">${SRC[ev.source]} で見る ↗</a></div>
-    <div class="chart hidden"></div></article>`;
+    <div class="tbl-wrap"><table><thead><tr><th>選択肢</th><th>確率</th><th>倍率</th><th>24h</th><th>7日</th><th>出来高</th><th class="spark">30日推移</th></tr></thead><tbody>${rows}</tbody></table></div>
+    ${ev.news&&ev.news.length?`<ul class="news"><li style="display:block"><span class="lbl">関連ニュース</span></li>${ev.news.map(n=>`<li><a href="${esc(n.link)}" target="_blank" rel="noopener" title="${esc(n.title)}">${esc(n.title)}</a><span>${esc(n.source||'')}${n.ts?' · '+fmtD(n.ts):''}</span></li>`).join('')}</ul>`:''}
+    <div class="ev-f"><button type="button" class="tgl">時系列チャートを開く</button><button type="button" class="btgl">💬 掲示板を開く<span class="bc"></span></button><span>${more}</span><span class="links"><a href="${esc(ev.url)}" target="_blank" rel="noopener">${SRC[ev.source]} で賭けを見る ↗</a><a href="${esc(ev.url_ja||ev.url)}" target="_blank" rel="noopener">日本語訳で見る</a><a href="${esc(ev.news_url||'#')}" target="_blank" rel="noopener">ニュースをもっと見る</a></span></div>
+    <div class="chart hidden"></div><div class="board hidden"></div></article>`;
 }
 
 // ---- full chart
@@ -307,6 +369,7 @@ function drawChart(el){
 
 // ---- render list
 function render(){
+  document.querySelectorAll('#scopechips .chip').forEach(b=>b.setAttribute('aria-pressed',b.dataset.scope===state.scope));
   document.querySelectorAll('#catchips .chip').forEach(b=>b.setAttribute('aria-pressed',b.dataset.cat===state.cat));
   document.querySelectorAll('#srcchips .chip').forEach(b=>b.setAttribute('aria-pressed',b.dataset.src===state.src));
   let evs=D.events.filter(matches);
@@ -314,12 +377,96 @@ function render(){
   evs.sort(sorters[state.sort]);
   const list=$('#list'); if(!evs.length){ list.innerHTML='<p class="empty">該当するマーケットがありません。</p>'; return; }
   if(state.sort==='default'){
-    const groups={}; evs.forEach(e=>(groups[e.cat]=groups[e.cat]||[]).push(e));
-    list.innerHTML=Object.keys(CATS).filter(k=>groups[k]).map(k=>`<section class="cat"><div class="cat-h"><h2>${CATS[k].icon} ${esc(CATS[k].ja)}</h2><span class="cnt">${groups[k].length}件</span></div>${groups[k].map(card).join('')}</section>`).join('');
+    let html='';
+    for(const sc of ['japan','global']){
+      const sevs=evs.filter(e=>(e.scope||'japan')===sc); if(!sevs.length) continue;
+      const groups={}; sevs.forEach(e=>(groups[e.cat]=groups[e.cat]||[]).push(e));
+      html+= sc==='global' ? `<div class="scope-h"><h2>🌐 海外で人気の賭け</h2><p>世界の予測市場で資金が集中している注目マーケット。分野ごとに出来高上位を抜粋（誰が何倍かは各表のオッズ列）。</p></div>` : (state.scope==='all'?`<div class="scope-h" style="margin-top:28px"><h2>🎌 日本に関わる賭け</h2><p>日本の政治・経済・スポーツ・社会に関するマーケット。</p></div>`:'');
+      html+=Object.keys(CATS).filter(k=>groups[k]).map(k=>`<section class="cat"><div class="cat-h"><h2>${CATS[k].icon} ${esc(CATS[k].ja)}</h2><span class="cnt">${groups[k].length}件</span></div>${groups[k].map(card).join('')}</section>`).join('');
+    }
+    list.innerHTML=html;
   } else {
     list.innerHTML=`<section class="cat"><div class="cat-h"><h2>${$('#sort').selectedOptions[0].textContent}</h2><span class="cnt">${evs.length}件</span></div>${evs.map(card).join('')}</section>`;
   }
   list.querySelectorAll('.tgl').forEach(b=>b.addEventListener('click',e=>openChart(e.target.closest('.ev'))));
+  list.querySelectorAll('.btgl').forEach(b=>b.addEventListener('click',e=>openBoard(e.target.closest('.ev'))));
+  Board.refreshCounts();
+}
+
+// ---- board (掲示板): 保存先 = Claude 共有DB（db capability）→ 無ければこの端末の localStorage
+const Board = (()=>{
+  let db=null, ready=null, mode='local';
+  const LS='jpodds.board.v1';
+  const lsAll=()=>{ try{ return JSON.parse(localStorage.getItem(LS)||'[]'); }catch(e){ return []; } };
+  const lsSave=a=>{ try{ localStorage.setItem(LS, JSON.stringify(a.slice(-500))); }catch(e){} };
+  const liked=()=>{ try{ return JSON.parse(localStorage.getItem(LS+'.liked')||'{}'); }catch(e){ return {}; } };
+  const init=()=>{ if(ready) return ready; ready=(async()=>{ try{ if(window.claude&&window.claude.use){ db=await window.claude.use('db'); if(db){ mode='shared'; } } }catch(e){ db=null; } document.querySelectorAll('.board .mode').forEach(m=>m.textContent=modeText()); return mode; })(); return ready; };
+  const modeText=()=> mode==='shared' ? '共有掲示板（同じページを開いている全員に共有・匿名）' : 'この端末のみに保存（共有DBが使えない環境です。Artifact版で開くと共有されます）';
+  const uid=()=>{ let u=null; try{ u=localStorage.getItem(LS+'.uid'); if(!u){ u=Math.random().toString(36).slice(2,10); localStorage.setItem(LS+'.uid',u);} }catch(e){ u='anon'; } return u; };
+  async function list(evKey){
+    await init();
+    if(db){ const q=db.collection('posts').where('ev','==',evKey).orderBy('ts','desc').limit(200); const snap=await q.get(); return snap.docs.map(d=>Object.assign({id:d.id},d.data())); }
+    return lsAll().filter(p=>p.ev===evKey).sort((a,b)=>b.ts-a.ts);
+  }
+  async function recent(n){
+    await init();
+    if(db){ const snap=await db.collection('posts').orderBy('ts','desc').limit(n).get(); return snap.docs.map(d=>Object.assign({id:d.id},d.data())); }
+    return lsAll().sort((a,b)=>b.ts-a.ts).slice(0,n);
+  }
+  async function add(post){
+    await init();
+    post.ts=Date.now(); post.likes=0; post.by=uid().slice(0,4);
+    if(db){ const ref=await db.collection('posts').add(post); post.id=ref.id; return post; }
+    const a=lsAll(); post.id='l'+post.ts; a.push(post); lsSave(a); return post;
+  }
+  async function like(post){
+    await init(); const l=liked(); if(l[post.id]) return false; l[post.id]=1; try{ localStorage.setItem(LS+'.liked',JSON.stringify(l)); }catch(e){}
+    if(db){ await db.doc('posts/'+post.id).update({likes:(post.likes||0)+1}); return true; }
+    const a=lsAll(); const p=a.find(x=>x.id===post.id); if(p){ p.likes=(p.likes||0)+1; lsSave(a); } return true;
+  }
+  async function refreshCounts(){
+    try{ const ps=await recent(1000); const c={}; ps.forEach(p=>c[p.ev]=(c[p.ev]||0)+1);
+      document.querySelectorAll('.ev').forEach(el=>{ const n=c[el.dataset.key]||0; const b=el.querySelector('.bc'); if(b) b.textContent=n?` ${n}`:''; });
+      renderRecent(ps.slice(0,12)); }catch(e){ console.warn('board counts',e); }
+  }
+  function renderRecent(ps){
+    const box=$('#recent'); if(!box) return;
+    $('#recent-cnt').textContent = mode==='shared' ? '共有' : 'この端末のみ';
+    if(!ps.length){ box.innerHTML='<p class="empty" style="text-align:left;padding:8px 0">まだ書き込みはありません。気になるマーケットの「掲示板を開く」から最初の意見を投稿してください。</p>'; return; }
+    box.innerHTML=ps.map(p=>{ const ev=D.events.find(e=>e.key===p.ev); const o=ev&&ev.outcomes.find(x=>x.key===p.out); return `<div class="rp" data-ev="${esc(p.ev)}"><div class="t">${esc(p.text.length>90?p.text.slice(0,90)+'…':p.text)}<small>${esc(p.name||'匿名')} ／ ${esc(ev?ev.title_ja:p.ev)}${o?' ▸ '+esc(oname(o,ev)):''}</small></div><span class="when mono">${fmtTs(p.ts/1000)}</span></div>`; }).join('');
+    box.querySelectorAll('.rp').forEach(r=>r.addEventListener('click',()=>{ state.scope='all'; state.cat='all'; state.src='all'; $('#q').value=''; state.q=''; render(); const el=document.getElementById('ev-'+CSS.escape(r.dataset.ev)); if(el){ openBoard(el,true); el.scrollIntoView({behavior:'smooth',block:'start'}); } }));
+  }
+  return {init,list,recent,add,like,refreshCounts,modeText,get mode(){return mode;},get shared(){return !!db;}};
+})();
+Board.init();
+
+function openBoard(el, force){
+  const box=$('.board',el), btn=$('.btgl',el);
+  const show = force ? true : box.classList.contains('hidden');
+  box.classList.toggle('hidden',!show);
+  if(show) drawBoard(el);
+}
+async function drawBoard(el){
+  const ev=D.events.find(e=>e.key===el.dataset.key); const box=$('.board',el);
+  const outs=[...ev.outcomes].sort((a,b)=>(b.prob||0)-(a.prob||0)).slice(0,4);
+  box.innerHTML=`<div class="board-top"><h4>💬 掲示板：選択肢ごとの意見を比較</h4><span class="mode">読み込み中…</span></div><div class="cols"></div>`;
+  await Board.init();
+  $('.mode',box).textContent=Board.modeText(); $('.mode',box).classList.toggle('shared',Board.shared);
+  let posts=[]; try{ posts=await Board.list(ev.key); }catch(e){ box.insertAdjacentHTML('beforeend',`<p class="err">書き込みを読み込めませんでした（${esc(e.code||e.message||e)}）</p>`); }
+  const cols=$('.cols',box); const expanded={};
+  const draw=()=>{
+    cols.innerHTML=outs.map((o,i)=>{ const c=SERIES[i%6]; const ps=posts.filter(p=>p.out===o.key); const show=expanded[o.key]?ps:ps.slice(0,3);
+      return `<div class="col" style="--c:${c}" data-out="${esc(o.key)}"><div class="oh"><b>${esc(oname(o,ev))}</b><span class="mono">${pct(o.prob)} · ${odds(o.prob)}</span></div><div class="cnt">${ps.length}件の意見</div>
+        ${ps.length?show.map(p=>`<div class="post"><div class="pm"><b>${esc(p.name||'匿名')}</b><span class="mono">${fmtTs(p.ts/1000)}</span></div><p>${esc(p.text)}</p><button type="button" class="like" data-id="${esc(p.id)}">👍 賛同 ${p.likes||0}</button></div>`).join(''):`<div class="empty">まだ意見がありません。最初の1件を書き込んでください。</div>`}
+        ${ps.length>3&&!expanded[o.key]?`<button type="button" class="more">残り${ps.length-3}件を表示</button>`:''}
+        <form><textarea maxlength="400" placeholder="「${esc(oname(o,ev))}」についての見方・根拠（400字まで）" required></textarea><div class="fr"><input type="text" maxlength="20" placeholder="名前（任意・匿名）"><button type="submit">投稿する</button></div></form></div>`; }).join('');
+    cols.querySelectorAll('.more').forEach(b=>b.addEventListener('click',()=>{ expanded[b.closest('.col').dataset.out]=1; draw(); }));
+    cols.querySelectorAll('.like').forEach(b=>b.addEventListener('click',async()=>{ const p=posts.find(x=>x.id===b.dataset.id); if(!p) return; b.disabled=true; try{ const ok=await Board.like(p); if(ok){ p.likes=(p.likes||0)+1; b.textContent=`👍 賛同 ${p.likes}`; } }catch(e){ b.disabled=false; } }));
+    cols.querySelectorAll('form').forEach(f=>f.addEventListener('submit',async e=>{ e.preventDefault(); const ta=f.querySelector('textarea'), nm=f.querySelector('input'), bt=f.querySelector('button'); const text=ta.value.trim(); if(!text) return; bt.disabled=true; bt.textContent='送信中…';
+      try{ const p=await Board.add({ev:ev.key,out:f.closest('.col').dataset.out,name:(nm.value.trim()||'匿名').slice(0,20),text:text.slice(0,400)}); posts.unshift(p); draw(); Board.refreshCounts(); }
+      catch(err){ bt.disabled=false; bt.textContent='投稿する'; alert('投稿できませんでした：'+(err.code==='quota_exceeded'?'保存容量の上限に達しています。':(err.code||err.message||err))); } }));
+  };
+  draw();
 }
 
 // ---- games
