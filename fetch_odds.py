@@ -236,7 +236,7 @@ def fetch_manifold(item):
 FETCHERS = {"polymarket": fetch_polymarket, "kalshi": fetch_kalshi, "manifold": fetch_manifold}
 
 def main():
-    os.makedirs(DATA, exist_ok=True)
+    os.makedirs(os.path.join(DATA, "snapshots"), exist_ok=True)
     events = []
     for item in CFG["items"]:
         print(f"[{item['source']}] {item['id']} {item.get('title_ja','')}")
