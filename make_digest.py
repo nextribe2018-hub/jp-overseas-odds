@@ -92,6 +92,14 @@ for scope, head, lead in (("japan", "🎌 日本に関わる賭け", "首位の�
     for ev in sevs: groups.setdefault(ev["cat"], []).append(ev)
     for k, c in CATS.items():
         if k in groups: parts.append(f'<h2 {H2}>{c["icon"]} {e(c["ja"])}</h2>' + cat_table(groups[k]))
+# 直近7日で結果が出たマーケット
+newly = [ev for ev in D.get("archive", []) if ev.get("resolved_at") and NOW - ev["resolved_at"] <= 7 * 86400]
+if newly:
+    rows_ = [f'<table cellspacing="0" cellpadding="0" width="100%"><tr><th {TH}>マーケット</th><th {TH}>結果</th><th {THR}>確定日</th></tr>']
+    for ev in newly:
+        wins = [o for o in ev["outcomes"] if o["key"] in (ev.get("winners") or [])]
+        rows_.append(f'<tr><td {TD}>{e(ev["title_ja"])}<br><span style="color:#999;font-size:11px">{SRC[ev["source"]]}</span> <a href="{e(ev["url"])}" style="color:#2b3f7a;font-size:11px">結果を見る↗</a></td><td {TD}><b>{e("、".join(oname(w, ev) for w in wins) or "該当なし（NO）")}</b></td><td {TDR}>{fmt_d(ev["resolved_at"])}</td></tr>')
+    parts.append(f'<h2 {H2}>📁 結果が出たマーケット（直近7日）</h2><p style="font-size:12px;color:#666;margin:0 0 6px">終了したマーケットは一覧サイトの「アーカイブ」に、価格推移と掲示板ごと残ります。</p>' + "".join(rows_) + "</table>")
 parts.append(f'<h2 {H2}>直近の試合（36時間以内）</h2>' + games_table())
 parts.append('<p style="font-size:11px;color:#888;margin-top:28px;line-height:1.7">本メールは情報の整理を目的とした自動配信で、賭博への参加を勧めるものではありません。日本国内からの海外賭博サイト利用には法的リスクがあります。配信停止はGitHubリポジトリのワークフローを無効化してください。</p></div>')
 

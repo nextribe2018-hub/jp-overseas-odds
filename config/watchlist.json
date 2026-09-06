@@ -838,6 +838,39 @@
    "top": 4,
    "news_q": "AI モデル 性能 ランキング",
    "scope": "global"
+  },
+  {
+   "source": "polymarket",
+   "id": "428185",
+   "cat": "economy",
+   "title_ja": "日銀 7月会合（7/30-31）の政策金利決定",
+   "news_q": "日銀 7月会合 結果",
+   "scope": "japan"
+  },
+  {
+   "source": "polymarket",
+   "id": "510079",
+   "cat": "economy",
+   "title_ja": "日本 2026年Q2 GDP成長率（年率）",
+   "news_q": "4-6月期 GDP 速報",
+   "scope": "japan"
+  },
+  {
+   "source": "polymarket",
+   "id": "772835",
+   "cat": "disaster",
+   "title_ja": "スーパー台風ドルフィンは日本に上陸するか？",
+   "news_q": "台風 上陸 8月",
+   "scope": "japan"
+  },
+  {
+   "source": "polymarket",
+   "id": "177522",
+   "cat": "politics",
+   "title_ja": "衆院選（2026年2月）後の首相は誰か？",
+   "top": 4,
+   "news_q": "衆院選 首相指名",
+   "scope": "japan"
   }
  ],
  "game_series": [

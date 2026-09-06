@@ -120,7 +120,6 @@ def fetch_polymarket(item):
     if not ev: return None
     outs = []
     for m in ev.get("markets", []):
-        if m.get("closed") and not m.get("active"): continue
         try:
             prices = json.loads(m.get("outcomePrices") or "[]")
             toks = json.loads(m.get("clobTokenIds") or "[]")
@@ -130,9 +129,10 @@ def fetch_polymarket(item):
         if not prices: continue
         name = m.get("groupItemTitle") or m.get("question")
         vol, liq, p0 = f(m.get("volumeNum"), 0) or 0, f(m.get("liquidityNum"), 0) or 0, f(prices[0], 0.5)
+        closed = bool(m.get("closed"))
         if re.fullmatch(r"(Person|Player|Team|Candidate) [A-Z0-9]+", name or "") and not vol:
             continue  # プレースホルダー選択肢を除外
-        if not vol and (not liq or abs(p0 - 0.5) < 0.02):
+        if not closed and not vol and (not liq or abs(p0 - 0.5) < 0.02):
             continue  # 未成立（取引・流動性なし、価格0.5固定）の選択肢を除外
         outs.append({
             "key": f"pm:{m['id']}", "name": name, "name_ja": ja(name),
@@ -142,6 +142,7 @@ def fetch_polymarket(item):
             "token": toks[0] if toks else None,
             "binary_labels": names,
             "end": m.get("endDate"),
+            "closed": closed, "won": (closed and f(prices[0], 0) >= 0.99) or None,
         })
     outs = select_outcomes(outs, item)
     with ThreadPoolExecutor(6) as ex:
@@ -156,6 +157,7 @@ def fetch_polymarket(item):
         "liquidity": round(f(ev.get("liquidity"), 0) or 0),
         "end": ev.get("endDate"), "description": (ev.get("description") or "")[:600],
         "n_total": len(ev.get("markets", [])), "outcomes": outs,
+        "closed": bool(ev.get("closed")) or (bool(outs) and all(o["closed"] for o in outs)),
     }
 
 # ---------------- Kalshi ----------------
@@ -189,6 +191,8 @@ def kalshi_outcome(m, series):
         "key": f"ks:{m['ticker']}", "name": name, "name_ja": ja(name), "question": m.get("title"),
         "prob": prob, "bid": yb, "ask": ya, "last": last,
         "volume": round(f(m.get("volume_fp"), 0) or 0), "end": m.get("close_time"),
+        "closed": m.get("status") in ("settled", "finalized", "closed", "determined"),
+        "won": True if m.get("result") == "yes" else (False if m.get("result") == "no" else None),
         "_series": series, "_ticker": m["ticker"],
     }
 
@@ -196,7 +200,9 @@ def fetch_kalshi(item):
     r = get(f"{KALSHI}/events/{item['id']}?with_nested_markets=true")
     if not r or "event" not in r: return None
     ev = r["event"]; series = ev.get("series_ticker")
-    outs = [kalshi_outcome(m, series) for m in ev.get("markets", []) if m.get("status") in ("active", "open", "initialized")]
+    outs = [kalshi_outcome(m, series) for m in ev.get("markets", []) if m.get("status") in ("active", "open", "initialized", "settled", "finalized", "closed", "determined")]
+    for o in outs:
+        if o["closed"] and o["won"] is not None: o["prob"] = 1.0 if o["won"] else 0.0
     outs = select_outcomes(outs, item)
     with ThreadPoolExecutor(6) as ex:
         hists = list(ex.map(lambda o: kalshi_history(o["_series"], o["_ticker"]), outs))
@@ -209,6 +215,7 @@ def fetch_kalshi(item):
         "volume": sum(o["volume"] for o in outs), "volume24h": None, "liquidity": None,
         "end": max((o["end"] or "" for o in outs), default=None),
         "description": (ev.get("sub_title") or ""), "n_total": len(ev.get("markets", [])), "outcomes": outs,
+        "closed": bool(outs) and all(o["closed"] for o in outs),
     }
 
 def fetch_kalshi_games(gs, days=4):
@@ -244,16 +251,19 @@ def fetch_manifold(item):
     if m.get("outcomeType") == "BINARY":
         hist = [[b["createdTime"] // 1000, b["probAfter"]] for b in bets if b.get("probAfter") is not None]
         hist.append([NOW, m.get("probability")])
+        res = m.get("resolution")
         outs.append({"key": f"mf:{m['id']}", "name": "Yes", "name_ja": "はい（YES）", "question": m["question"],
-                     "prob": m.get("probability"), "bid": None, "ask": None, "volume": round(m.get("volume") or 0),
-                     "end": None, "history": thin(hist)})
+                     "prob": (1.0 if res == "YES" else 0.0 if res == "NO" else m.get("probability")), "bid": None, "ask": None, "volume": round(m.get("volume") or 0),
+                     "end": None, "history": thin(hist), "closed": bool(m.get("isResolved")),
+                     "won": (True if res == "YES" else False if res == "NO" else None) if m.get("isResolved") else None})
     elif m.get("outcomeType") in ("MULTIPLE_CHOICE",):
         for a in m.get("answers", []):
             if a.get("text") == "Other" and a.get("probability", 0) < 0.02: continue
             hist = [[b["createdTime"] // 1000, b["probAfter"]] for b in bets if b.get("answerId") == a["id"] and b.get("probAfter") is not None]
             hist.append([NOW, a.get("probability")])
             outs.append({"key": f"mf:{m['id']}:{a['id']}", "name": a["text"], "name_ja": ja(a["text"]), "question": m["question"],
-                         "prob": a.get("probability"), "bid": None, "ask": None, "volume": None, "end": None, "history": thin(hist)})
+                         "prob": a.get("probability"), "bid": None, "ask": None, "volume": None, "end": None, "history": thin(hist),
+                         "closed": bool(m.get("isResolved")), "won": (a.get("resolution") == "YES" or (a.get("probability") or 0) >= 0.99) if m.get("isResolved") else None})
         outs = select_outcomes(outs, item)
     else:
         return None
@@ -265,7 +275,7 @@ def fetch_manifold(item):
         "traders": m.get("uniqueBettorCount"),
         "end": datetime.fromtimestamp(close / 1000, timezone.utc).isoformat() if close else None,
         "description": (m.get("textDescription") or "")[:600], "n_total": len(outs),
-        "sum_to_one": m.get("shouldAnswersSumToOne", True), "outcomes": outs,
+        "sum_to_one": m.get("shouldAnswersSumToOne", True), "outcomes": outs, "closed": bool(m.get("isResolved")),
     }
 
 FETCHERS = {"polymarket": fetch_polymarket, "kalshi": fetch_kalshi, "manifold": fetch_manifold}
@@ -296,6 +306,32 @@ def main():
         print(f"[games] {gs['series']}")
         try: games += fetch_kalshi_games(gs)
         except Exception as e: print("   FAILED", e, file=sys.stderr)
+
+    # ---- アーカイブ: 結果が出た（全選択肢が終了した）マーケットは data/archive.json に保存し続ける
+    arch_path = os.path.join(DATA, "archive.json")
+    try: archive = json.load(open(arch_path, encoding="utf-8"))
+    except Exception: archive = {}
+    still_open = []
+    for ev in events:
+        if ev.get("closed"):
+            ev["status"] = "resolved"
+            winners = [o for o in ev["outcomes"] if o.get("won") or (o.get("prob") or 0) >= 0.99]
+            ev["winners"] = [o["key"] for o in winners]
+            prev = archive.get(ev["key"])
+            end_ts = None
+            try:
+                end_ts = int(datetime.fromisoformat((ev.get("end") or "").replace("Z", "+00:00")).timestamp())
+            except Exception:
+                pass
+            ev["resolved_at"] = prev.get("resolved_at") if prev and prev.get("resolved_at") else (end_ts if end_ts and end_ts < NOW else NOW)
+            ev["news"] = ev.get("news") or (prev.get("news") if prev else [])
+            for o in ev["outcomes"]: o["history"] = thin(o.get("history", []), 200)
+            archive[ev["key"]] = ev
+        else:
+            ev["status"] = "open"; still_open.append(ev)
+    events = still_open
+    json.dump(archive, open(arch_path, "w", encoding="utf-8"), ensure_ascii=False)
+    print(f"[archive] {len(archive)} resolved markets kept")
 
     # ---- 自前スナップショット（実行のたびに追記 → 独自の時系列）
     snap_path = os.path.join(DATA, "snapshots.jsonl")
@@ -329,6 +365,7 @@ def main():
     out = {
         "generated_at": NOW, "generated_at_jst": datetime.fromtimestamp(NOW, JST).strftime("%Y-%m-%d %H:%M JST"),
         "categories": CFG["categories"], "events": events, "games": games,
+        "archive": sorted(archive.values(), key=lambda e: -(e.get("resolved_at") or 0)),
         "sources": {
             "polymarket": {"name": "Polymarket", "note": "米国発の分散型予測市場（USDC建て）。価格＝YESの暗黙確率。"},
             "kalshi": {"name": "Kalshi", "note": "米CFTC規制下の予測市場取引所（ドル建て）。価格＝YESの暗黙確率。"},

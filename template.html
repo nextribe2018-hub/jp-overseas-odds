@@ -162,6 +162,16 @@ a{color:var(--accent)}
 .recent .rp:hover .t{color:var(--accent)}
 .recent .rp small{display:block;color:var(--ink-3);font-size:11.5px}
 .recent .rp .when{color:var(--ink-3);font-size:11.5px;white-space:nowrap}
+/* archive */
+.arch-h{margin-top:48px;padding:14px 18px;background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--ink-3);border-radius:6px;display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline}
+.arch-h h2{font-family:"Shippori Mincho B1",serif;font-weight:800;font-size:22px;margin:0}
+.arch-h p{margin:0;color:var(--ink-2);font-size:13px;flex-basis:100%}
+.ev.resolved{border-color:var(--line)}
+.ev.resolved .ev-h h3::before{content:"結果確定";font-size:10.5px;font-weight:500;letter-spacing:.08em;color:var(--paper);background:var(--ink-3);border-radius:3px;padding:2px 6px;margin-right:8px;vertical-align:2px}
+.result{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;padding:8px 16px;background:var(--accent-soft);border-top:1px solid var(--line-2);font-size:13px}
+.result b{font-size:14px}
+.result .lbl{font-size:11px;letter-spacing:.08em;color:var(--ink-2)}
+.ev td.name .win{display:inline-block;font-size:10.5px;color:var(--paper);background:var(--accent);border-radius:3px;padding:1px 5px;margin-left:6px;vertical-align:1px}
 /* games */
 .games table{width:100%;border-collapse:collapse;font-size:13px}
 .games th{text-align:left;font-size:11px;color:var(--ink-3);letter-spacing:.06em;font-weight:500;padding:6px 10px;border-bottom:1px solid var(--line)}
@@ -192,6 +202,7 @@ a{color:var(--accent)}
     <div class="meta">
       <span>更新 <b class="mono">__GENERATED__</b></span>
       <span>追跡マーケット <b class="mono" id="m-ev">–</b></span>
+      <span>アーカイブ <b class="mono" id="m-arch">–</b></span>
       <span>選択肢 <b class="mono" id="m-out">–</b></span>
       <span>直近の試合 <b class="mono" id="m-games">–</b></span>
     </div>
@@ -261,6 +272,7 @@ const CATS = D.categories;
 const SRC = {polymarket:'Polymarket', kalshi:'Kalshi', manifold:'Manifold'};
 const SERIES = ['var(--s1)','var(--s2)','var(--s3)','var(--s4)','var(--s5)','var(--s6)'];
 const $ = (s,el=document)=>el.querySelector(s);
+D.archive = D.archive || []; const ALL = D.events.concat(D.archive); const findEv = k => ALL.find(e=>e.key===k);
 const esc = s => String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const pct = p => p==null ? '—' : (p*100).toFixed(p<0.1||p>0.9?1:1)+'%';
 const odds = p => (p==null||p<=0) ? '—' : (p>=1 ? '1.00倍' : Math.min(999,1/p).toFixed(2)+'倍');
@@ -274,7 +286,7 @@ const oname = (o,ev) => o.name_ja || ((ev&&ev.outcomes.length===1&&o.name&&o.nam
 
 // ---- sparkline (last 30 days)
 function spark(hist, color){
-  const from = NOW-30*86400; let pts = hist.filter(h=>h[0]>=from); if(pts.length<2) pts = hist.slice(-2);
+  const lastT = hist.length ? hist[hist.length-1][0] : NOW; const from = Math.min(NOW,lastT)-30*86400; let pts = hist.filter(h=>h[0]>=from); if(pts.length<2) pts = hist.slice(-2);
   if(pts.length<2) return '';
   const W=120,H=26, t0=pts[0][0], t1=pts[pts.length-1][0]||t0+1;
   const ys=pts.map(p=>p[1]); let lo=Math.min(...ys), hi=Math.max(...ys); if(hi-lo<0.02){const m=(hi+lo)/2; lo=m-0.01; hi=m+0.01;}
@@ -325,12 +337,17 @@ function matches(ev){
 function card(ev){
   const outs=[...ev.outcomes].sort((a,b)=>(b.prob||0)-(a.prob||0));
   const rows=outs.map((o,i)=>{ const c=SERIES[i%SERIES.length]; const sub=(o.question&&ev.outcomes.length>1&&o.question!==oname(o,ev)&&ev.source!=='manifold')?`<small>${esc(o.question)}</small>`:((o.name_ja||ev.outcomes.length===1)&&o.name!==oname(o,ev)?`<small>${esc(o.name)}</small>`:'');
-    return `<tr><td class="name"><span class="sw" style="background:${c}"></span>${esc(oname(o,ev))}${sub}<div class="bar" style="max-width:220px"><i style="width:${Math.round((o.prob||0)*100)}%;background:${c}"></i></div></td><td class="prob mono">${pct(o.prob)}</td><td class="odds mono">${odds(o.prob)}</td><td class="mono">${delta(o.prob,o.prob_24h)}</td><td class="mono">${delta(o.prob,o.prob_7d)}</td><td class="mono" style="color:var(--ink-3)">${o.volume==null?'—':usd(o.volume)}</td><td class="spark">${spark(o.history,c)}</td></tr>`; }).join('');
+    const win = (ev.status==='resolved'&&(ev.winners||[]).includes(o.key)) ? '<span class="win">的中</span>' : '';
+    return `<tr><td class="name"><span class="sw" style="background:${c}"></span>${esc(oname(o,ev))}${win}${sub}<div class="bar" style="max-width:220px"><i style="width:${Math.round((o.prob||0)*100)}%;background:${c}"></i></div></td><td class="prob mono">${pct(o.prob)}</td><td class="odds mono">${odds(o.prob)}</td><td class="mono">${delta(o.prob,o.prob_24h)}</td><td class="mono">${delta(o.prob,o.prob_7d)}</td><td class="mono" style="color:var(--ink-3)">${o.volume==null?'—':usd(o.volume)}</td><td class="spark">${spark(o.history,c)}</td></tr>`; }).join('');
   const more = ev.n_total>ev.outcomes.length ? `全${ev.n_total}選択肢のうち${ev.outcomes.length}件を表示` : '';
-  return `<article class="ev" id="ev-${esc(ev.key)}" data-key="${esc(ev.key)}">
+  const resolved = ev.status==='resolved';
+  const winners = resolved ? ev.outcomes.filter(o=>(ev.winners||[]).includes(o.key)) : [];
+  const resultBar = resolved ? `<div class="result"><span class="lbl">結果</span>${winners.length?winners.map(w=>`<b>${esc(oname(w,ev))}</b>`).join('、'):'<b>該当なし（NO で確定）</b>'}<span style="color:var(--ink-3)">確定 ${ev.resolved_at?fmtD(ev.resolved_at):'—'} ／ 終了時点の価格と掲示板を保存しています</span></div>` : '';
+  return `<article class="ev ${resolved?'resolved':''}" id="ev-${esc(ev.key)}" data-key="${esc(ev.key)}">
     <div class="ev-h"><div><h3>${esc(ev.title_ja||ev.title)}</h3><div class="en">${esc(ev.title)}</div></div>
       <div class="right"><span class="src ${ev.source}">${SRC[ev.source]}</span><span>締切 <span class="mono">${fmtDate(ev.end)}</span></span><span>出来高 <span class="mono">${ev.source==='manifold'?('M'+(ev.volume||0).toLocaleString()):usd(ev.volume)}</span></span></div></div>
-    <div class="tbl-wrap"><table><thead><tr><th>選択肢</th><th>確率</th><th>倍率</th><th>24h</th><th>7日</th><th>出来高</th><th class="spark">30日推移</th></tr></thead><tbody>${rows}</tbody></table></div>
+    ${resultBar}
+    <div class="tbl-wrap"><table><thead><tr><th>選択肢</th><th>${resolved?'最終価格':'確率'}</th><th>倍率</th><th>24h</th><th>7日</th><th>出来高</th><th class="spark">${resolved?'終了前30日':'30日推移'}</th></tr></thead><tbody>${rows}</tbody></table></div>
     ${ev.news&&ev.news.length?`<ul class="news"><li style="display:block"><span class="lbl">関連ニュース</span></li>${ev.news.map(n=>`<li><a href="${esc(n.link)}" target="_blank" rel="noopener" title="${esc(n.title)}">${esc(n.title)}</a><span>${esc(n.source||'')}${n.ts?' · '+fmtD(n.ts):''}</span></li>`).join('')}</ul>`:''}
     <div class="ev-f"><button type="button" class="tgl">時系列チャートを開く</button><button type="button" class="btgl">💬 掲示板を開く<span class="bc"></span></button><span>${more}</span><span class="links"><a href="${esc(ev.url)}" target="_blank" rel="noopener">${SRC[ev.source]} で賭けを見る ↗</a><a href="${esc(ev.url_ja||ev.url)}" target="_blank" rel="noopener">日本語訳で見る</a><a href="${esc(ev.news_url||'#')}" target="_blank" rel="noopener">ニュースをもっと見る</a></span></div>
     <div class="chart hidden"></div><div class="board hidden"></div></article>`;
@@ -344,11 +361,12 @@ function openChart(el, force){
   if(show && !box.dataset.built){ box.dataset.built='1'; box.dataset.range='30'; drawChart(el); }
 }
 function drawChart(el){
-  const ev=D.events.find(e=>e.key===el.dataset.key); const box=$('.chart',el); const range=box.dataset.range;
+  const ev=findEv(el.dataset.key); const box=$('.chart',el); const range=box.dataset.range;
   const outs=[...ev.outcomes].sort((a,b)=>(b.prob||0)-(a.prob||0)).slice(0,6);
-  const from = range==='all'?0:NOW-parseInt(range)*86400;
+  const tEnd = ev.status==='resolved' ? Math.max(...ev.outcomes.flatMap(o=>o.history.map(h=>h[0])),0) : NOW;
+  const from = range==='all'?0:tEnd-parseInt(range)*86400;
   let series=outs.map((o,i)=>({o,c:SERIES[i%6],pts:o.history.filter(h=>h[0]>=from)})).filter(s=>s.pts.length>=1);
-  const all=series.flatMap(s=>s.pts); const t0=Math.min(...all.map(p=>p[0]),from||Infinity===Infinity?Math.min(...all.map(p=>p[0])):from), t1=NOW;
+  const all=series.flatMap(s=>s.pts); const t0=Math.min(...all.map(p=>p[0])), t1=ev.status==='resolved'?Math.max(...all.map(p=>p[0])):NOW;
   const W=900,H=260,L=44,R=90,T=10,B=28, X=t=>L+((t-t0)/((t1-t0)||1))*(W-L-R), Y=v=>T+(1-v)*(H-T-B);
   let grid=''; for(const v of [0,.25,.5,.75,1]) grid+=`<line x1="${L}" x2="${W-R}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--line-2)"/><text x="${L-6}" y="${Y(v)+4}" text-anchor="end" font-size="11" fill="var(--ink-3)" font-family="IBM Plex Mono,monospace">${v*100}%</text>`;
   const span=t1-t0, nt=6; let ticks='';
@@ -376,7 +394,7 @@ function render(){
   let evs=D.events.filter(matches);
   const sorters={default:(a,b)=>a._order-b._order, volume:(a,b)=>((b.source==='manifold'?0:b.volume)||0)-((a.source==='manifold'?0:a.volume)||0), move24:(a,b)=>evMove(b,'prob_24h')-evMove(a,'prob_24h'), move7:(a,b)=>evMove(b,'prob_7d')-evMove(a,'prob_7d'), end:(a,b)=>(a.end||'9999').localeCompare(b.end||'9999')};
   evs.sort(sorters[state.sort]);
-  const list=$('#list'); if(!evs.length){ list.innerHTML='<p class="empty">該当するマーケットがありません。</p>'; return; }
+  const list=$('#list'); if(!evs.length&&!D.archive.filter(matches).length){ list.innerHTML='<p class="empty">該当するマーケットがありません。</p>'; return; }
   if(state.sort==='default'){
     let html='';
     for(const sc of ['japan','global']){
@@ -385,9 +403,12 @@ function render(){
       html+= sc==='global' ? `<div class="scope-h"><h2>🌐 海外で人気の賭け</h2><p>世界の予測市場で資金が集中している注目マーケット。分野ごとに出来高上位を抜粋（誰が何倍かは各表のオッズ列）。</p></div>` : (state.scope==='all'?`<div class="scope-h" style="margin-top:28px"><h2>🎌 日本に関わる賭け</h2><p>日本の政治・経済・スポーツ・社会に関するマーケット。</p></div>`:'');
       html+=Object.keys(CATS).filter(k=>groups[k]).map(k=>`<section class="cat"><div class="cat-h"><h2>${CATS[k].icon} ${esc(CATS[k].ja)}</h2><span class="cnt">${groups[k].length}件</span></div>${groups[k].map(card).join('')}</section>`).join('');
     }
+    const arch=D.archive.filter(matches);
+    if(arch.length) html+=`<div class="arch-h"><h2>📁 アーカイブ：結果が出たマーケット</h2><span class="cnt" style="color:var(--ink-3);font-size:12px">${arch.length}件</span><p>終了したマーケットは削除せず、結果・終了までの価格推移・掲示板の書き込みをそのまま残します。</p></div>`+arch.map(card).join('');
     list.innerHTML=html;
   } else {
-    list.innerHTML=`<section class="cat"><div class="cat-h"><h2>${$('#sort').selectedOptions[0].textContent}</h2><span class="cnt">${evs.length}件</span></div>${evs.map(card).join('')}</section>`;
+    const arch=D.archive.filter(matches);
+    list.innerHTML=`<section class="cat"><div class="cat-h"><h2>${$('#sort').selectedOptions[0].textContent}</h2><span class="cnt">${evs.length}件</span></div>${evs.map(card).join('')}</section>`+(arch.length?`<div class="arch-h"><h2>📁 アーカイブ：結果が出たマーケット</h2><span class="cnt" style="color:var(--ink-3);font-size:12px">${arch.length}件</span></div>`+arch.map(card).join(''):'');
   }
   list.querySelectorAll('.tgl').forEach(b=>b.addEventListener('click',e=>openChart(e.target.closest('.ev'))));
   list.querySelectorAll('.btgl').forEach(b=>b.addEventListener('click',e=>openBoard(e.target.closest('.ev'))));
@@ -441,7 +462,7 @@ const Board = (()=>{
     const box=$('#recent'); if(!box) return;
     $('#recent-cnt').textContent = mode==='local' ? 'この端末のみ' : '共有';
     if(!ps.length){ box.innerHTML='<p class="empty" style="text-align:left;padding:8px 0">まだ書き込みはありません。気になるマーケットの「掲示板を開く」から最初の意見を投稿してください。</p>'; return; }
-    box.innerHTML=ps.map(p=>{ const ev=D.events.find(e=>e.key===p.ev); const o=ev&&ev.outcomes.find(x=>x.key===p.out); return `<div class="rp" data-ev="${esc(p.ev)}"><div class="t">${esc(p.text.length>90?p.text.slice(0,90)+'…':p.text)}<small>${esc(p.name||'匿名')} ／ ${esc(ev?ev.title_ja:p.ev)}${o?' ▸ '+esc(oname(o,ev)):''}</small></div><span class="when mono">${fmtTs(p.ts/1000)}</span></div>`; }).join('');
+    box.innerHTML=ps.map(p=>{ const ev=findEv(p.ev); const o=ev&&ev.outcomes.find(x=>x.key===p.out); return `<div class="rp" data-ev="${esc(p.ev)}"><div class="t">${esc(p.text.length>90?p.text.slice(0,90)+'…':p.text)}<small>${esc(p.name||'匿名')} ／ ${esc(ev?ev.title_ja:p.ev)}${o?' ▸ '+esc(oname(o,ev)):''}</small></div><span class="when mono">${fmtTs(p.ts/1000)}</span></div>`; }).join('');
     box.querySelectorAll('.rp').forEach(r=>r.addEventListener('click',()=>{ state.scope='all'; state.cat='all'; state.src='all'; $('#q').value=''; state.q=''; render(); const el=document.getElementById('ev-'+CSS.escape(r.dataset.ev)); if(el){ openBoard(el,true); el.scrollIntoView({behavior:'smooth',block:'start'}); } }));
   }
   return {init,list,recent,add,like,refreshCounts,modeText,get mode(){return mode;},get shared(){return !!(db||fs);}};
@@ -455,7 +476,7 @@ function openBoard(el, force){
   if(show) drawBoard(el);
 }
 async function drawBoard(el){
-  const ev=D.events.find(e=>e.key===el.dataset.key); const box=$('.board',el);
+  const ev=findEv(el.dataset.key); const box=$('.board',el);
   const outs=[...ev.outcomes].sort((a,b)=>(b.prob||0)-(a.prob||0)).slice(0,4);
   box.innerHTML=`<div class="board-top"><h4>💬 掲示板：選択肢ごとの意見を比較</h4><span class="mode">読み込み中…</span></div><div class="cols"></div>`;
   await Board.init();
@@ -485,7 +506,7 @@ function games(){
   $('#games-cnt').textContent=D.games.length+'試合（今後4日以内）';
 }
 
-$('#m-ev').textContent=D.events.length; $('#m-out').textContent=D.events.reduce((n,e)=>n+e.outcomes.length,0); $('#m-games').textContent=D.games.length;
+$('#m-ev').textContent=D.events.length; $('#m-arch').textContent=D.archive.length; $('#m-out').textContent=D.events.reduce((n,e)=>n+e.outcomes.length,0); $('#m-games').textContent=D.games.length;
 chips(); movers(); render(); games();
 })();
 </script>
