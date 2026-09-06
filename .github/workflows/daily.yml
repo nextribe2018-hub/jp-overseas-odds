@@ -1,0 +1,66 @@
+name: daily-odds
+
+on:
+  schedule:
+    - cron: "30 22 * * *"   # 毎日 07:30 JST（UTC 22:30）
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-odds
+  cancel-in-progress: false
+
+jobs:
+  update-and-mail:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
+      MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: オッズ取得（Polymarket / Kalshi / Manifold）
+        run: python3 fetch_odds.py
+
+      - name: サイト生成とメール本文生成
+        run: |
+          python3 build_site.py
+          python3 make_digest.py
+          echo "subject=$(cat digest/subject.txt)" >> "$GITHUB_OUTPUT"
+        id: digest
+
+      - name: データとサイトをコミット
+        run: |
+          git config user.name "odds-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/latest.json data/snapshots.jsonl docs/index.html
+          git commit -m "data: $(TZ=Asia/Tokyo date '+%Y-%m-%d %H:%M JST')" || echo "no changes"
+          git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
+          git push
+
+      - name: メール送信（Gmail SMTP）
+        if: env.MAIL_PASSWORD != ''
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          from: 日本関連 海外オッズ日報 <${{ secrets.MAIL_USERNAME }}>
+          to: ${{ vars.MAIL_TO }}
+          subject: ${{ steps.digest.outputs.subject }}
+          html_body: file://digest/email.html
+          attachments: docs/index.html
+          convert_markdown: false
+
+      - name: メール未設定の案内
+        if: env.MAIL_PASSWORD == ''
+        run: echo "::warning::MAIL_PASSWORD が未設定のためメールは送信していません。README の手順で Secrets を登録してください。"

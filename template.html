@@ -1,0 +1,336 @@
+<meta charset="utf-8">
+<title>日本関連 海外オッズ相場表</title>
+<meta name="description" content="Polymarket・Kalshi・Manifold の日本関連マーケットの掛け率と時系列変化">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@600;800&family=Noto+Sans+JP:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f2f3f6; --paper:#ffffff; --paper-2:#f8f8fa; --line:#d9dbe3; --line-2:#e9eaf0;
+  --ink:#1a1c25; --ink-2:#4b4f5e; --ink-3:#7b8090; --accent:#2b3f7a; --accent-ink:#ffffff; --accent-soft:#e6eaf6;
+  --up:#c8302a; --up-soft:#fbe9e7; --down:#1d7a4f; --down-soft:#e4f3ea; --flat:#7b8090;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300;
+  --pm:#2f5bd3; --ks:#0d8a6f; --mf:#8a5bd6;
+  --shadow:0 1px 2px rgba(20,24,40,.06),0 4px 14px rgba(20,24,40,.05);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#15171e; --paper:#1d2029; --paper-2:#232732; --line:#353a49; --line-2:#2b2f3c;
+    --ink:#eceef4; --ink-2:#b8bccb; --ink-3:#848a9c; --accent:#8fa6e6; --accent-ink:#0f1320; --accent-soft:#273053;
+    --up:#f07a6f; --up-soft:#3a2426; --down:#4fc48a; --down-soft:#1e3328; --flat:#848a9c;
+    --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300;
+    --pm:#7f9cf5; --ks:#3ec9a7; --mf:#b79cf0;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#15171e; --paper:#1d2029; --paper-2:#232732; --line:#353a49; --line-2:#2b2f3c;
+  --ink:#eceef4; --ink-2:#b8bccb; --ink-3:#848a9c; --accent:#8fa6e6; --accent-ink:#0f1320; --accent-soft:#273053;
+  --up:#f07a6f; --up-soft:#3a2426; --down:#4fc48a; --down-soft:#1e3328; --flat:#848a9c;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300;
+  --pm:#7f9cf5; --ks:#3ec9a7; --mf:#b79cf0;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans JP",system-ui,-apple-system,"Hiragino Sans","Yu Gothic",sans-serif;font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.mono{font-family:"IBM Plex Mono","SFMono-Regular",Menlo,Consolas,monospace;font-variant-numeric:tabular-nums}
+a{color:var(--accent)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px 80px}
+/* header */
+.masthead{border-bottom:2px solid var(--ink);padding:28px 0 16px;display:flex;flex-wrap:wrap;gap:16px 32px;align-items:flex-end;justify-content:space-between}
+.masthead h1{font-family:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif;font-weight:800;font-size:30px;letter-spacing:.02em;margin:0;line-height:1.25;text-wrap:balance}
+.masthead .sub{color:var(--ink-2);margin:6px 0 0;font-size:13px}
+.meta{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:12px;color:var(--ink-3)}
+.meta b{color:var(--ink);font-weight:500}
+.eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);font-weight:500}
+/* source badges */
+.src{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;letter-spacing:.04em;padding:2px 7px;border-radius:3px;border:1px solid var(--line);color:var(--ink-2);white-space:nowrap}
+.src::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--c)}
+.src.polymarket{--c:var(--pm)} .src.kalshi{--c:var(--ks)} .src.manifold{--c:var(--mf)}
+/* notice */
+.notice{margin:16px 0 0;padding:10px 14px;border-left:3px solid var(--accent);background:var(--paper);font-size:12.5px;color:var(--ink-2);line-height:1.7}
+/* summary */
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin:24px 0}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:14px 16px;box-shadow:var(--shadow)}
+.panel h2{font-family:"Shippori Mincho B1",serif;font-weight:700;font-size:16px;margin:0 0 10px;display:flex;align-items:baseline;gap:10px}
+.panel h2 small{font-family:"Noto Sans JP",sans-serif;font-weight:400;font-size:11.5px;color:var(--ink-3)}
+.mv{list-style:none;margin:0;padding:0}
+.mv li{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:10px;align-items:baseline;padding:7px 0;border-top:1px solid var(--line-2);cursor:pointer}
+.mv li:first-child{border-top:0}
+.mv li:hover .t{color:var(--accent)}
+.mv .t{font-size:13px;line-height:1.4;min-width:0;overflow-wrap:anywhere}
+.mv .t small{display:block;color:var(--ink-3);font-size:11.5px}
+.mv .p{font-size:15px;font-weight:600}
+/* delta chips */
+.d{display:inline-block;min-width:64px;text-align:right;font-size:12.5px;font-weight:500;padding:1px 6px;border-radius:3px}
+.d.up{color:var(--up);background:var(--up-soft)} .d.down{color:var(--down);background:var(--down-soft)} .d.flat{color:var(--flat)}
+/* filters */
+.filters{position:sticky;top:0;z-index:5;background:var(--bg);padding:12px 0 10px;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center}
+.chip{border:1px solid var(--line);background:var(--paper);color:var(--ink-2);border-radius:999px;padding:4px 11px;font-size:12.5px;cursor:pointer;font-family:inherit;line-height:1.4}
+.chip:hover{border-color:var(--ink-3)}
+.chip[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.chip .n{opacity:.7;margin-left:4px;font-size:11px}
+.filters .sep{width:1px;height:22px;background:var(--line);margin:0 4px}
+.filters input,.filters select{font-family:inherit;font-size:13px;padding:5px 9px;border:1px solid var(--line);border-radius:4px;background:var(--paper);color:var(--ink)}
+.filters input{min-width:200px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+/* category sections */
+.cat{margin-top:34px}
+.cat-h{display:flex;align-items:baseline;gap:12px;border-bottom:1px solid var(--ink);padding-bottom:6px;margin-bottom:14px}
+.cat-h h2{font-family:"Shippori Mincho B1",serif;font-weight:800;font-size:21px;margin:0;letter-spacing:.02em}
+.cat-h .cnt{color:var(--ink-3);font-size:12px}
+/* event */
+.ev{background:var(--paper);border:1px solid var(--line);border-radius:6px;margin-bottom:12px;box-shadow:var(--shadow);overflow:hidden}
+.ev-h{display:grid;grid-template-columns:1fr auto;gap:8px 16px;padding:12px 16px 8px;align-items:start}
+.ev-h h3{margin:0;font-size:15.5px;font-weight:700;line-height:1.45;text-wrap:balance}
+.ev-h .en{color:var(--ink-3);font-size:11.5px;margin-top:2px}
+.ev-h .right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;font-size:11.5px;color:var(--ink-3);white-space:nowrap}
+.ev table{width:100%;border-collapse:collapse}
+.ev th{font-weight:500;font-size:11px;color:var(--ink-3);letter-spacing:.06em;text-align:right;padding:4px 10px;border-bottom:1px solid var(--line-2);white-space:nowrap}
+.ev th:first-child,.ev td:first-child{text-align:left;padding-left:16px}
+.ev td{padding:6px 10px;border-bottom:1px solid var(--line-2);text-align:right;vertical-align:middle}
+.ev tr:last-child td{border-bottom:0}
+.ev td.name{font-weight:500;max-width:360px}
+.ev td.name small{display:block;color:var(--ink-3);font-weight:400;font-size:11px}
+.ev td.name .sw{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:7px;vertical-align:1px}
+.ev td.prob{font-size:15px;font-weight:600;width:84px}
+.ev td.odds{color:var(--ink-2);width:80px}
+.ev td.spark{width:130px;padding-right:16px}
+.ev td.spark svg{display:block;width:120px;height:26px;overflow:visible}
+.bar{height:4px;background:var(--line-2);border-radius:2px;margin-top:3px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent);border-radius:2px}
+.ev-f{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;padding:8px 16px;border-top:1px solid var(--line-2);background:var(--paper-2);font-size:12px;color:var(--ink-3)}
+.ev-f button{font-family:inherit;font-size:12.5px;padding:4px 10px;border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:4px;cursor:pointer}
+.ev-f button:hover{border-color:var(--accent);color:var(--accent)}
+.ev-f a{margin-left:auto}
+.tbl-wrap{overflow-x:auto}
+/* chart */
+.chart{padding:12px 16px 14px;border-top:1px solid var(--line-2)}
+.chart-top{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin-bottom:6px}
+.chart-top .rng{display:flex;gap:4px}
+.chart-top .rng button{font-family:inherit;font-size:12px;padding:3px 9px;border:1px solid var(--line);background:var(--paper);color:var(--ink-2);border-radius:3px;cursor:pointer}
+.chart-top .rng button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:var(--ink-2)}
+.legend span::before{content:"";display:inline-block;width:14px;height:3px;border-radius:2px;background:var(--c);margin-right:6px;vertical-align:3px}
+.chart svg{width:100%;height:260px;display:block;overflow:visible}
+.chart .tip{position:absolute;pointer-events:none;background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:6px 9px;font-size:12px;box-shadow:var(--shadow);white-space:nowrap;z-index:3}
+.chart .tip b{display:block;color:var(--ink-3);font-weight:400;font-size:11px;margin-bottom:2px}
+.chart .desc{font-size:12px;color:var(--ink-2);margin:10px 0 0;line-height:1.7;max-width:70ch;white-space:pre-line}
+/* games */
+.games table{width:100%;border-collapse:collapse;font-size:13px}
+.games th{text-align:left;font-size:11px;color:var(--ink-3);letter-spacing:.06em;font-weight:500;padding:6px 10px;border-bottom:1px solid var(--line)}
+.games td{padding:7px 10px;border-bottom:1px solid var(--line-2);vertical-align:middle}
+.games td.num{text-align:right}
+.games .team{font-weight:500}
+.games .fav{color:var(--accent);font-weight:700}
+.foot{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);font-size:12px;color:var(--ink-3);line-height:1.8}
+.hidden{display:none!important}
+.empty{padding:30px;text-align:center;color:var(--ink-3)}
+@media (max-width:640px){
+  .masthead h1{font-size:23px}
+  .ev-h{grid-template-columns:1fr}
+  .ev-h .right{flex-direction:row;align-items:center;gap:10px}
+  .ev td.spark{display:none} .ev th.spark{display:none}
+  .filters input{min-width:140px;flex:1}
+}
+@media (prefers-reduced-motion:no-preference){ .chip,.ev-f button{transition:background .15s,color .15s,border-color .15s} }
+</style>
+
+<div class="wrap">
+  <header class="masthead">
+    <div>
+      <div class="eyebrow">Overseas prediction markets · Japan watch</div>
+      <h1>日本関連 海外オッズ相場表</h1>
+      <p class="sub">Polymarket・Kalshi・Manifold に上場している「日本」に関わる賭けの一覧と、掛け率（暗黙の確率）の時系列。</p>
+    </div>
+    <div class="meta">
+      <span>更新 <b class="mono">__GENERATED__</b></span>
+      <span>追跡マーケット <b class="mono" id="m-ev">–</b></span>
+      <span>選択肢 <b class="mono" id="m-out">–</b></span>
+      <span>直近の試合 <b class="mono" id="m-games">–</b></span>
+    </div>
+  </header>
+  <div class="notice">
+    掲載する「確率」は各市場の YES 価格（＝市場参加者が織り込む確率）で、<b>オッズ</b>はそれを欧州式（1 ÷ 確率）に換算した参考値です。変化幅は確率のポイント差。相場表の慣例にならい<span class="d up" style="min-width:auto">上昇＝赤</span> <span class="d down" style="min-width:auto">下落＝緑</span>で示します。
+    Manifold はプレイマネー市場のため参考値。本ページは情報の整理を目的とし、賭博への参加を勧めるものではありません（日本国内からの海外賭博サイト利用は法的リスクがあります）。
+  </div>
+
+  <section class="summary" aria-label="注目の動き">
+    <div class="panel"><h2>24時間で動いた賭け <small>確率のポイント変化・上位</small></h2><ul class="mv" id="mv24"></ul></div>
+    <div class="panel"><h2>7日間で動いた賭け <small>確率のポイント変化・上位</small></h2><ul class="mv" id="mv7"></ul></div>
+    <div class="panel"><h2>資金が集まる賭け <small>出来高（USD）上位</small></h2><ul class="mv" id="mvvol"></ul></div>
+  </section>
+
+  <div class="filters" id="filters">
+    <span class="eyebrow">分野</span>
+    <div id="catchips" style="display:contents"></div>
+    <span class="sep"></span>
+    <span class="eyebrow">取引所</span>
+    <div id="srcchips" style="display:contents"></div>
+    <span class="sep"></span>
+    <input id="q" type="search" placeholder="検索：大谷、日銀、阪神…" aria-label="検索">
+    <select id="sort" aria-label="並び順">
+      <option value="default">既定の順</option>
+      <option value="volume">出来高が多い順</option>
+      <option value="move24">24h変動が大きい順</option>
+      <option value="move7">7日変動が大きい順</option>
+      <option value="end">締切が近い順</option>
+    </select>
+  </div>
+
+  <main id="list"></main>
+
+  <section class="cat games" id="games-sec">
+    <div class="cat-h"><h2>直近の試合（勝敗マーケット）</h2><span class="cnt" id="games-cnt"></span></div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>リーグ</th><th>日時（JST）</th><th>ホーム</th><th class="num">勝率</th><th class="num">オッズ</th><th>アウェイ</th><th class="num">勝率</th><th class="num">オッズ</th><th class="num">出来高</th></tr></thead>
+      <tbody id="games"></tbody>
+    </table></div>
+    <p class="foot" style="margin-top:10px;border:0;padding:0">Kalshi の各試合マーケット。勝率は買値と売値の仲値、または直近約定価格。「—」は取引が成立していない試合。</p>
+  </section>
+
+  <footer class="foot">
+    データ元：<a href="https://polymarket.com" target="_blank" rel="noopener">Polymarket</a>（Gamma / CLOB API）、<a href="https://kalshi.com" target="_blank" rel="noopener">Kalshi</a>（Trade API v2）、<a href="https://manifold.markets" target="_blank" rel="noopener">Manifold</a>（API v0）。
+    時系列は各取引所の価格履歴（Polymarket＝日次＋直近1週間は1時間足、Kalshi＝日次ローソク足＋直近1週間は1時間足、Manifold＝約定ごと）に、本ツールの取得スナップショットを重ねたもの。<br>
+    再取得： <code class="mono">./update.sh（GitHub Actions で毎朝自動更新）</code>
+  </footer>
+</div>
+
+<script id="data" type="application/json">__DATA__</script>
+<script>
+(function(){
+const D = JSON.parse(document.getElementById('data').textContent);
+const NOW = D.generated_at;
+const CATS = D.categories;
+const SRC = {polymarket:'Polymarket', kalshi:'Kalshi', manifold:'Manifold'};
+const SERIES = ['var(--s1)','var(--s2)','var(--s3)','var(--s4)','var(--s5)','var(--s6)'];
+const $ = (s,el=document)=>el.querySelector(s);
+const esc = s => String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pct = p => p==null ? '—' : (p*100).toFixed(p<0.1||p>0.9?1:1)+'%';
+const odds = p => (p==null||p<=0) ? '—' : (p>=1 ? '1.00' : Math.min(999,1/p).toFixed(2));
+const usd = v => v==null ? '—' : v>=1e6 ? '$'+(v/1e6).toFixed(2)+'M' : v>=1e3 ? '$'+(v/1e3).toFixed(0)+'K' : '$'+Math.round(v);
+const fmtDate = iso => { if(!iso) return '—'; const d=new Date(iso); if(isNaN(d)) return '—'; return d.toLocaleDateString('ja-JP',{timeZone:'Asia/Tokyo',year:'numeric',month:'numeric',day:'numeric'}); };
+const fmtDT = iso => { const d=new Date(iso); return d.toLocaleString('ja-JP',{timeZone:'Asia/Tokyo',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}); };
+const fmtTs = t => new Date(t*1000).toLocaleString('ja-JP',{timeZone:'Asia/Tokyo',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'});
+function delta(a,b){ if(a==null||b==null) return '<span class="d flat mono">—</span>'; const d=(a-b)*100; const c=Math.abs(d)<0.05?'flat':d>0?'up':'down'; return `<span class="d ${c} mono">${d>0?'+':''}${d.toFixed(1)}pt</span>`; }
+const oname = (o,ev) => o.name_ja || ((ev&&ev.outcomes.length===1&&o.name&&o.name.length>24)?'はい（YES）':o.name);
+
+// ---- sparkline (last 30 days)
+function spark(hist, color){
+  const from = NOW-30*86400; let pts = hist.filter(h=>h[0]>=from); if(pts.length<2) pts = hist.slice(-2);
+  if(pts.length<2) return '';
+  const W=120,H=26, t0=pts[0][0], t1=pts[pts.length-1][0]||t0+1;
+  const ys=pts.map(p=>p[1]); let lo=Math.min(...ys), hi=Math.max(...ys); if(hi-lo<0.02){const m=(hi+lo)/2; lo=m-0.01; hi=m+0.01;}
+  const X=t=>((t-t0)/((t1-t0)||1))*W, Y=v=>H-2-((v-lo)/(hi-lo))*(H-4);
+  const d=pts.map((p,i)=>(i?'L':'M')+X(p[0]).toFixed(1)+' '+Y(p[1]).toFixed(1)).join(' ');
+  const last=pts[pts.length-1];
+  return `<svg viewBox="0 0 ${W} ${H}" aria-hidden="true"><path d="${d} L${W} ${H} L0 ${H} Z" fill="${color}" opacity=".08"/><path d="${d}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linejoin="round"/><circle cx="${X(last[0]).toFixed(1)}" cy="${Y(last[1]).toFixed(1)}" r="2.5" fill="${color}"/></svg>`;
+}
+
+// ---- movers
+function movers(){
+  const rows=[];
+  D.events.forEach(ev=>ev.outcomes.forEach(o=>{ if(o.prob==null) return; rows.push({ev,o,m24:o.prob_24h==null?0:o.prob-o.prob_24h,m7:o.prob_7d==null?0:o.prob-o.prob_7d}); }));
+  const li=(r,dv,extra)=>`<li data-ev="${esc(r.ev.key)}"><div class="t">${esc(oname(r.o,r.ev))}<small>${esc(r.ev.title_ja)}</small></div><span class="p mono">${pct(r.o.prob)}</span>${extra}</li>`;
+  $('#mv24').innerHTML = rows.filter(r=>r.o.prob_24h!=null).sort((a,b)=>Math.abs(b.m24)-Math.abs(a.m24)).slice(0,7).map(r=>li(r,r.m24,delta(r.o.prob,r.o.prob_24h))).join('') || '<li class="empty">データなし</li>';
+  $('#mv7').innerHTML  = rows.filter(r=>r.o.prob_7d!=null).sort((a,b)=>Math.abs(b.m7)-Math.abs(a.m7)).slice(0,7).map(r=>li(r,r.m7,delta(r.o.prob,r.o.prob_7d))).join('');
+  const byVol=[...D.events].filter(e=>e.source!=='manifold').sort((a,b)=>(b.volume||0)-(a.volume||0)).slice(0,7);
+  $('#mvvol').innerHTML = byVol.map(ev=>{const top=[...ev.outcomes].sort((a,b)=>(b.prob||0)-(a.prob||0))[0]; return `<li data-ev="${esc(ev.key)}"><div class="t">${esc(ev.title_ja)}<small>${esc(SRC[ev.source])} · 首位 ${esc(oname(top,ev))}</small></div><span class="p mono">${pct(top.prob)}</span><span class="d flat mono">${usd(ev.volume)}</span></li>`;}).join('');
+  document.querySelectorAll('.mv li[data-ev]').forEach(li=>li.addEventListener('click',()=>{ state.cat='all'; state.src='all'; $('#q').value=''; state.q=''; render(); const el=document.getElementById('ev-'+CSS.escape(li.dataset.ev)); if(el){ openChart(el, true); el.scrollIntoView({behavior:'smooth',block:'start'}); } }));
+}
+
+// ---- filters
+const state={cat:'all',src:'all',q:'',sort:'default'};
+function chips(){
+  const counts={}; D.events.forEach(e=>counts[e.cat]=(counts[e.cat]||0)+1);
+  $('#catchips').innerHTML = `<button class="chip" data-cat="all" aria-pressed="true">すべて<span class="n">${D.events.length}</span></button>` + Object.entries(CATS).filter(([k])=>counts[k]).map(([k,v])=>`<button class="chip" data-cat="${k}" aria-pressed="false">${v.icon} ${esc(v.ja)}<span class="n">${counts[k]}</span></button>`).join('');
+  const sc={}; D.events.forEach(e=>sc[e.source]=(sc[e.source]||0)+1);
+  $('#srcchips').innerHTML = `<button class="chip" data-src="all" aria-pressed="true">すべて</button>` + Object.keys(SRC).filter(k=>sc[k]).map(k=>`<button class="chip" data-src="${k}" aria-pressed="false">${SRC[k]}<span class="n">${sc[k]}</span></button>`).join('');
+  $('#filters').addEventListener('click',e=>{ const b=e.target.closest('.chip'); if(!b) return; if(b.dataset.cat){state.cat=b.dataset.cat;} if(b.dataset.src){state.src=b.dataset.src;} render(); });
+  $('#q').addEventListener('input',e=>{state.q=e.target.value.trim().toLowerCase(); render();});
+  $('#sort').addEventListener('change',e=>{state.sort=e.target.value; render();});
+}
+function evMove(ev,k){ return Math.max(0,...ev.outcomes.map(o=>(o.prob!=null&&o[k]!=null)?Math.abs(o.prob-o[k]):0)); }
+function matches(ev){
+  if(state.cat!=='all'&&ev.cat!==state.cat) return false;
+  if(state.src!=='all'&&ev.source!==state.src) return false;
+  if(state.q){ const hay=[ev.title_ja,ev.title,...ev.outcomes.map(o=>oname(o,ev)+' '+o.name)].join(' ').toLowerCase(); if(!hay.includes(state.q)) return false; }
+  return true;
+}
+
+// ---- event card
+function card(ev){
+  const outs=[...ev.outcomes].sort((a,b)=>(b.prob||0)-(a.prob||0));
+  const rows=outs.map((o,i)=>{ const c=SERIES[i%SERIES.length]; const sub=(o.question&&ev.outcomes.length>1&&o.question!==oname(o,ev)&&ev.source!=='manifold')?`<small>${esc(o.question)}</small>`:((o.name_ja||ev.outcomes.length===1)&&o.name!==oname(o,ev)?`<small>${esc(o.name)}</small>`:'');
+    return `<tr><td class="name"><span class="sw" style="background:${c}"></span>${esc(oname(o,ev))}${sub}<div class="bar" style="max-width:220px"><i style="width:${Math.round((o.prob||0)*100)}%;background:${c}"></i></div></td><td class="prob mono">${pct(o.prob)}</td><td class="odds mono">${odds(o.prob)}</td><td class="mono">${delta(o.prob,o.prob_24h)}</td><td class="mono">${delta(o.prob,o.prob_7d)}</td><td class="mono" style="color:var(--ink-3)">${o.volume==null?'—':usd(o.volume)}</td><td class="spark">${spark(o.history,c)}</td></tr>`; }).join('');
+  const more = ev.n_total>ev.outcomes.length ? `全${ev.n_total}選択肢のうち${ev.outcomes.length}件を表示` : '';
+  return `<article class="ev" id="ev-${esc(ev.key)}" data-key="${esc(ev.key)}">
+    <div class="ev-h"><div><h3>${esc(ev.title_ja||ev.title)}</h3><div class="en">${esc(ev.title)}</div></div>
+      <div class="right"><span class="src ${ev.source}">${SRC[ev.source]}</span><span>締切 <span class="mono">${fmtDate(ev.end)}</span></span><span>出来高 <span class="mono">${ev.source==='manifold'?('M'+(ev.volume||0).toLocaleString()):usd(ev.volume)}</span></span></div></div>
+    <div class="tbl-wrap"><table><thead><tr><th>選択肢</th><th>確率</th><th>オッズ</th><th>24h</th><th>7日</th><th>出来高</th><th class="spark">30日推移</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <div class="ev-f"><button type="button" class="tgl">時系列チャートを開く</button><span>${more}</span><a href="${esc(ev.url)}" target="_blank" rel="noopener">${SRC[ev.source]} で見る ↗</a></div>
+    <div class="chart hidden"></div></article>`;
+}
+
+// ---- full chart
+function openChart(el, force){
+  const box=$('.chart',el), btn=$('.tgl',el);
+  const show = force ? true : box.classList.contains('hidden');
+  box.classList.toggle('hidden',!show); btn.textContent = show?'チャートを閉じる':'時系列チャートを開く';
+  if(show && !box.dataset.built){ box.dataset.built='1'; box.dataset.range='30'; drawChart(el); }
+}
+function drawChart(el){
+  const ev=D.events.find(e=>e.key===el.dataset.key); const box=$('.chart',el); const range=box.dataset.range;
+  const outs=[...ev.outcomes].sort((a,b)=>(b.prob||0)-(a.prob||0)).slice(0,6);
+  const from = range==='all'?0:NOW-parseInt(range)*86400;
+  let series=outs.map((o,i)=>({o,c:SERIES[i%6],pts:o.history.filter(h=>h[0]>=from)})).filter(s=>s.pts.length>=1);
+  const all=series.flatMap(s=>s.pts); const t0=Math.min(...all.map(p=>p[0]),from||Infinity===Infinity?Math.min(...all.map(p=>p[0])):from), t1=NOW;
+  const W=900,H=260,L=44,R=90,T=10,B=28, X=t=>L+((t-t0)/((t1-t0)||1))*(W-L-R), Y=v=>T+(1-v)*(H-T-B);
+  let grid=''; for(const v of [0,.25,.5,.75,1]) grid+=`<line x1="${L}" x2="${W-R}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--line-2)"/><text x="${L-6}" y="${Y(v)+4}" text-anchor="end" font-size="11" fill="var(--ink-3)" font-family="IBM Plex Mono,monospace">${v*100}%</text>`;
+  const span=t1-t0, nt=6; let ticks='';
+  for(let i=0;i<=nt;i++){ const t=t0+span*i/nt; const d=new Date(t*1000); const lab= span>200*86400 ? d.toLocaleDateString('ja-JP',{timeZone:'Asia/Tokyo',year:'2-digit',month:'numeric'}) : span>3*86400 ? d.toLocaleDateString('ja-JP',{timeZone:'Asia/Tokyo',month:'numeric',day:'numeric'}) : d.toLocaleTimeString('ja-JP',{timeZone:'Asia/Tokyo',hour:'2-digit',minute:'2-digit'}); ticks+=`<text x="${X(t)}" y="${H-8}" text-anchor="middle" font-size="11" fill="var(--ink-3)" font-family="IBM Plex Mono,monospace">${lab}</text>`; }
+  let paths='', labels=[];
+  series.forEach(s=>{ const d=s.pts.map((p,i)=>(i?'L':'M')+X(p[0]).toFixed(1)+' '+Y(p[1]).toFixed(1)).join(' ')+(s.pts.length?` L${X(t1).toFixed(1)} ${Y(s.pts[s.pts.length-1][1]).toFixed(1)}`:''); paths+=`<path d="${d}" fill="none" stroke="${s.c}" stroke-width="2" stroke-linejoin="round"/>`; const last=s.pts[s.pts.length-1]; paths+=`<circle cx="${X(t1).toFixed(1)}" cy="${Y(last[1]).toFixed(1)}" r="3.5" fill="${s.c}" stroke="var(--paper)" stroke-width="2"/>`; labels.push({y:Y(last[1]),c:s.c,txt:pct(last[1])+' '+oname(s.o,ev)}); });
+  labels.sort((a,b)=>a.y-b.y); for(let i=1;i<labels.length;i++) if(labels[i].y-labels[i-1].y<13) labels[i].y=labels[i-1].y+13;
+  const lab=labels.map(l=>`<text x="${W-R+8}" y="${l.y+4}" font-size="11" fill="var(--ink-2)" font-family="Noto Sans JP,sans-serif"><tspan fill="${l.c}">■</tspan> ${esc(l.txt.length>16?l.txt.slice(0,16)+'…':l.txt)}</text>`).join('');
+  box.innerHTML=`<div class="chart-top"><div class="rng">${[['7','7日'],['30','30日'],['90','90日'],['all','全期間']].map(([k,v])=>`<button type="button" data-r="${k}" aria-pressed="${range===k}">${v}</button>`).join('')}</div><div class="legend">${series.map(s=>`<span style="--c:${s.c}">${esc(oname(s.o,ev))}</span>`).join('')}</div></div>
+    <div style="position:relative"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(ev.title_ja)} の確率推移">${grid}${ticks}${paths}<line class="xh" x1="0" x2="0" y1="${T}" y2="${H-B}" stroke="var(--ink-3)" stroke-dasharray="3 3" style="display:none"/>${lab}</svg><div class="tip hidden"></div></div>
+    ${ev.description?`<p class="desc">${esc(ev.description.replace(/\s+\n/g,'\n'))}</p>`:''}`;
+  box.querySelectorAll('.rng button').forEach(b=>b.addEventListener('click',()=>{box.dataset.range=b.dataset.r; drawChart(el);}));
+  const svg=$('svg',box), tip=$('.tip',box), xh=$('.xh',svg);
+  svg.addEventListener('mousemove',e=>{ const r=svg.getBoundingClientRect(); const x=(e.clientX-r.left)/r.width*W; if(x<L||x>W-R){tip.classList.add('hidden');xh.style.display='none';return;} const t=t0+((x-L)/(W-L-R))*(t1-t0); xh.setAttribute('x1',x);xh.setAttribute('x2',x);xh.style.display='';
+    const rows=series.map(s=>{let v=null; for(const p of s.pts){ if(p[0]<=t) v=p[1]; else break;} if(v==null&&s.pts[0]&&s.pts[0][0]>t) v=null; return v==null?'':`<div><span style="color:${s.c}">■</span> ${esc(oname(s.o,ev))} <span class="mono" style="float:right;margin-left:12px;font-weight:600">${pct(v)}</span></div>`;}).join('');
+    tip.innerHTML=`<b>${fmtTs(t)}</b>${rows}`; tip.classList.remove('hidden'); const px=e.clientX-r.left, py=e.clientY-r.top; tip.style.left=(px+14+tip.offsetWidth>r.width?px-tip.offsetWidth-10:px+14)+'px'; tip.style.top=Math.max(0,py-10)+'px'; });
+  svg.addEventListener('mouseleave',()=>{tip.classList.add('hidden');xh.style.display='none';});
+}
+
+// ---- render list
+function render(){
+  document.querySelectorAll('#catchips .chip').forEach(b=>b.setAttribute('aria-pressed',b.dataset.cat===state.cat));
+  document.querySelectorAll('#srcchips .chip').forEach(b=>b.setAttribute('aria-pressed',b.dataset.src===state.src));
+  let evs=D.events.filter(matches);
+  const sorters={default:(a,b)=>a._order-b._order, volume:(a,b)=>((b.source==='manifold'?0:b.volume)||0)-((a.source==='manifold'?0:a.volume)||0), move24:(a,b)=>evMove(b,'prob_24h')-evMove(a,'prob_24h'), move7:(a,b)=>evMove(b,'prob_7d')-evMove(a,'prob_7d'), end:(a,b)=>(a.end||'9999').localeCompare(b.end||'9999')};
+  evs.sort(sorters[state.sort]);
+  const list=$('#list'); if(!evs.length){ list.innerHTML='<p class="empty">該当するマーケットがありません。</p>'; return; }
+  if(state.sort==='default'){
+    const groups={}; evs.forEach(e=>(groups[e.cat]=groups[e.cat]||[]).push(e));
+    list.innerHTML=Object.keys(CATS).filter(k=>groups[k]).map(k=>`<section class="cat"><div class="cat-h"><h2>${CATS[k].icon} ${esc(CATS[k].ja)}</h2><span class="cnt">${groups[k].length}件</span></div>${groups[k].map(card).join('')}</section>`).join('');
+  } else {
+    list.innerHTML=`<section class="cat"><div class="cat-h"><h2>${$('#sort').selectedOptions[0].textContent}</h2><span class="cnt">${evs.length}件</span></div>${evs.map(card).join('')}</section>`;
+  }
+  list.querySelectorAll('.tgl').forEach(b=>b.addEventListener('click',e=>openChart(e.target.closest('.ev'))));
+}
+
+// ---- games
+function games(){
+  const rows=D.games.map(g=>{ const [h,a]=g.outcomes; if(!h||!a) return ''; const fav=(h.prob||0)>=(a.prob||0);
+    return `<tr><td>${esc(g.league_ja)}</td><td class="mono">${fmtDT(g.start||g.close)}</td><td class="team ${fav&&h.prob!=null?'fav':''}">${esc(oname(h))}</td><td class="num mono">${pct(h.prob)}</td><td class="num mono">${odds(h.prob)}</td><td class="team ${!fav&&a.prob!=null?'fav':''}">${esc(oname(a))}</td><td class="num mono">${pct(a.prob)}</td><td class="num mono">${odds(a.prob)}</td><td class="num mono" style="color:var(--ink-3)">${usd(g.volume)}</td></tr>`; }).join('');
+  $('#games').innerHTML=rows||'<tr><td colspan="9" class="empty">直近の試合マーケットはありません</td></tr>';
+  $('#games-cnt').textContent=D.games.length+'試合（今後4日以内）';
+}
+
+$('#m-ev').textContent=D.events.length; $('#m-out').textContent=D.events.reduce((n,e)=>n+e.outcomes.length,0); $('#m-games').textContent=D.games.length;
+chips(); movers(); render(); games();
+})();
+</script>
