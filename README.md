@@ -68,3 +68,16 @@ MacBook を閉じていても GitHub 側で毎朝 07:30 JST に実行され、Gm
 
 Secrets が未登録の間も、取得・サイト更新・コミットは毎日動き、メール送信だけスキップされます。
 配信時刻を変えるには `.github/workflows/daily.yml` の `cron`（UTC 表記）を編集します。
+
+## 公開掲示板にする（Firebase / 無料）
+
+GitHub Pages 版の掲示板を「誰でも匿名で書き込める共有掲示板」にするには、無料の Firebase（Firestore）を 1 つ作り、接続情報を `config/firebase.json` に置くだけです。
+
+1. <https://console.firebase.google.com> → 「プロジェクトを追加」→ 名前を付けて作成（Google アナリティクスは不要）
+2. 左メニュー「構築」→「Firestore Database」→「データベースを作成」→ ロケーション `asia-northeast1`（東京）→「本番環境モード」で有効化
+3. 「ルール」タブに、このリポジトリの `firestore.rules` の内容を貼り付けて「公開」
+4. 歯車 →「プロジェクトの設定」→「マイアプリ」→ ウェブ（`</>`）→ ニックネームを付けて登録 → 表示される `firebaseConfig` の中身を `config/firebase.json` に保存（`config/firebase.json.example` と同じ形）
+5. コミットして push。次回の自動更新（または `./update.sh`）でページが Firestore に接続され、画面の掲示板に「公開掲示板」と表示されます
+
+料金: Firebase の Spark プラン（無料枠）は Firestore 1 GiB・1 日あたり読み取り 5 万件／書き込み 2 万件まで無料で、クレジットカード登録も不要。上限に達しても課金されず、その日の書き込みが止まるだけです。
+`firebase.json` の apiKey は公開前提の識別子で、書き込み制限は `firestore.rules` 側で行います。

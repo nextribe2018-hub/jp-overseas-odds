@@ -1,0 +1,21 @@
+// Firebase コンソール → Firestore Database → ルール に貼り付けて「公開」
+// posts コレクション: 誰でも読める / 匿名で投稿できる（本文400字・名前20字まで） / 賛同(likes)は+1のみ / 削除不可
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /posts/{id} {
+      allow read: if true;
+      allow create: if request.resource.data.keys().hasOnly(['ev', 'out', 'name', 'text', 'ts', 'likes', 'by'])
+        && request.resource.data.text is string && request.resource.data.text.size() > 0 && request.resource.data.text.size() <= 400
+        && request.resource.data.name is string && request.resource.data.name.size() <= 20
+        && request.resource.data.ev is string && request.resource.data.ev.size() <= 120
+        && request.resource.data.out is string && request.resource.data.out.size() <= 200
+        && request.resource.data.by is string && request.resource.data.by.size() <= 8
+        && request.resource.data.ts is number && request.resource.data.likes == 0;
+      allow update: if request.resource.data.diff(resource.data).affectedKeys().hasOnly(['likes'])
+        && request.resource.data.likes == resource.data.likes + 1;
+      allow delete: if false;
+    }
+    match /{document=**} { allow read, write: if false; }
+  }
+}

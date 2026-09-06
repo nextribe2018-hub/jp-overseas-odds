@@ -251,6 +251,7 @@ a{color:var(--accent)}
   </footer>
 </div>
 
+__FIREBASE__
 <script id="data" type="application/json">__DATA__</script>
 <script>
 (function(){
@@ -395,33 +396,40 @@ function render(){
 
 // ---- board (掲示板): 保存先 = Claude 共有DB（db capability）→ 無ければこの端末の localStorage
 const Board = (()=>{
-  let db=null, ready=null, mode='local';
+  let db=null, fs=null, ready=null, mode='local';
   const LS='jpodds.board.v1';
   const lsAll=()=>{ try{ return JSON.parse(localStorage.getItem(LS)||'[]'); }catch(e){ return []; } };
   const lsSave=a=>{ try{ localStorage.setItem(LS, JSON.stringify(a.slice(-500))); }catch(e){} };
   const liked=()=>{ try{ return JSON.parse(localStorage.getItem(LS+'.liked')||'{}'); }catch(e){ return {}; } };
-  const init=()=>{ if(ready) return ready; ready=(async()=>{ try{ if(window.claude&&window.claude.use){ db=await window.claude.use('db'); if(db){ mode='shared'; } } }catch(e){ db=null; } document.querySelectorAll('.board .mode').forEach(m=>m.textContent=modeText()); return mode; })(); return ready; };
-  const modeText=()=> mode==='shared' ? '共有掲示板（同じページを開いている全員に共有・匿名）' : 'この端末のみに保存（共有DBが使えない環境です。Artifact版で開くと共有されます）';
+  const init=()=>{ if(ready) return ready; ready=(async()=>{
+    try{ if(window.claude&&window.claude.use){ db=await window.claude.use('db'); if(db){ mode='shared'; } } }catch(e){ db=null; }
+    if(!db){ try{ if(window.firebase&&window.FIREBASE_CONFIG){ if(!firebase.apps.length) firebase.initializeApp(window.FIREBASE_CONFIG); fs=firebase.firestore(); mode='firebase'; } }catch(e){ console.warn('firebase init',e); fs=null; } }
+    document.querySelectorAll('.board .mode').forEach(m=>{ m.textContent=modeText(); m.classList.toggle('shared',mode!=='local'); }); return mode; })(); return ready; };
+  const modeText=()=> mode==='shared' ? '共有掲示板（同じページを開いている全員に共有・匿名）' : mode==='firebase' ? '公開掲示板（誰でも匿名で書き込み可・全員に共有）' : 'この端末のみに保存（共有DBが使えない環境です。Artifact版で開くと共有されます）';
   const uid=()=>{ let u=null; try{ u=localStorage.getItem(LS+'.uid'); if(!u){ u=Math.random().toString(36).slice(2,10); localStorage.setItem(LS+'.uid',u);} }catch(e){ u='anon'; } return u; };
   async function list(evKey){
     await init();
     if(db){ const q=db.collection('posts').where('ev','==',evKey).orderBy('ts','desc').limit(200); const snap=await q.get(); return snap.docs.map(d=>Object.assign({id:d.id},d.data())); }
+    if(fs){ const snap=await fs.collection('posts').where('ev','==',evKey).limit(300).get(); return snap.docs.map(d=>Object.assign({id:d.id},d.data())).sort((a,b)=>b.ts-a.ts); }
     return lsAll().filter(p=>p.ev===evKey).sort((a,b)=>b.ts-a.ts);
   }
   async function recent(n){
     await init();
     if(db){ const snap=await db.collection('posts').orderBy('ts','desc').limit(n).get(); return snap.docs.map(d=>Object.assign({id:d.id},d.data())); }
+    if(fs){ const snap=await fs.collection('posts').orderBy('ts','desc').limit(n).get(); return snap.docs.map(d=>Object.assign({id:d.id},d.data())); }
     return lsAll().sort((a,b)=>b.ts-a.ts).slice(0,n);
   }
   async function add(post){
     await init();
     post.ts=Date.now(); post.likes=0; post.by=uid().slice(0,4);
     if(db){ const ref=await db.collection('posts').add(post); post.id=ref.id; return post; }
+    if(fs){ const ref=await fs.collection('posts').add(post); post.id=ref.id; return post; }
     const a=lsAll(); post.id='l'+post.ts; a.push(post); lsSave(a); return post;
   }
   async function like(post){
     await init(); const l=liked(); if(l[post.id]) return false; l[post.id]=1; try{ localStorage.setItem(LS+'.liked',JSON.stringify(l)); }catch(e){}
     if(db){ await db.doc('posts/'+post.id).update({likes:(post.likes||0)+1}); return true; }
+    if(fs){ await fs.collection('posts').doc(post.id).update({likes:(post.likes||0)+1}); return true; }
     const a=lsAll(); const p=a.find(x=>x.id===post.id); if(p){ p.likes=(p.likes||0)+1; lsSave(a); } return true;
   }
   async function refreshCounts(){
@@ -431,12 +439,12 @@ const Board = (()=>{
   }
   function renderRecent(ps){
     const box=$('#recent'); if(!box) return;
-    $('#recent-cnt').textContent = mode==='shared' ? '共有' : 'この端末のみ';
+    $('#recent-cnt').textContent = mode==='local' ? 'この端末のみ' : '共有';
     if(!ps.length){ box.innerHTML='<p class="empty" style="text-align:left;padding:8px 0">まだ書き込みはありません。気になるマーケットの「掲示板を開く」から最初の意見を投稿してください。</p>'; return; }
     box.innerHTML=ps.map(p=>{ const ev=D.events.find(e=>e.key===p.ev); const o=ev&&ev.outcomes.find(x=>x.key===p.out); return `<div class="rp" data-ev="${esc(p.ev)}"><div class="t">${esc(p.text.length>90?p.text.slice(0,90)+'…':p.text)}<small>${esc(p.name||'匿名')} ／ ${esc(ev?ev.title_ja:p.ev)}${o?' ▸ '+esc(oname(o,ev)):''}</small></div><span class="when mono">${fmtTs(p.ts/1000)}</span></div>`; }).join('');
     box.querySelectorAll('.rp').forEach(r=>r.addEventListener('click',()=>{ state.scope='all'; state.cat='all'; state.src='all'; $('#q').value=''; state.q=''; render(); const el=document.getElementById('ev-'+CSS.escape(r.dataset.ev)); if(el){ openBoard(el,true); el.scrollIntoView({behavior:'smooth',block:'start'}); } }));
   }
-  return {init,list,recent,add,like,refreshCounts,modeText,get mode(){return mode;},get shared(){return !!db;}};
+  return {init,list,recent,add,like,refreshCounts,modeText,get mode(){return mode;},get shared(){return !!(db||fs);}};
 })();
 Board.init();
 
