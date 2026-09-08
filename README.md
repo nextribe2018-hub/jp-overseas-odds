@@ -9,7 +9,8 @@
 - 選択肢ごとの確率・倍率（欧州式オッズ）・24h/7日変化・30日推移・時系列チャート
 - 各マーケットの「賭けを見る」（原文サイト）と「日本語訳で見る」（Google翻訳経由）リンク、関連ニュース（Googleニュース日本語・上位3件）
 - アーカイブ：結果が出たマーケットは削除せず、結果・終了までの価格推移・掲示板の書き込みを `data/archive.json` に保存し、ページ末尾の「アーカイブ」に表示
-- 掲示板：選択肢（例：利上げ／据え置き／利下げ）ごとに匿名の意見を並べて比較。Claude Artifact 版では共有DBに保存され全員に共有、GitHub Pages 版は端末内保存のみ
+- AI解説：Claude Opus 5 が各マーケットの解説を毎朝生成（`ai_commentary.py`）。注目の日本関連3件＋海外2件は掲示板へ自動投稿、それ以外は誰かが掲示板を開いた時に投稿される。GitHub Secrets に `ANTHROPIC_API_KEY` が必要
+- 掲示板：マーケットごとに1つ。（例：利上げ／据え置き／利下げ）ごとに匿名の意見を並べて比較。Claude Artifact 版では共有DBに保存され全員に共有、GitHub Pages 版は端末内保存のみ
 
 ## 構成
 
@@ -21,6 +22,7 @@
 | `build_site.py` + `template.html` | `data/latest.json` を埋め込んだ単一ファイル `site/index.html` を生成 |
 | `update.sh` | 取得 → 生成をまとめて実行 |
 | `make_digest.py` | 毎日のメール本文（HTML）と件名を生成 |
+| `ai_commentary.py` | Claude でAI解説を生成し `data/ai_comments.json` に保持、注目マーケットへ自動投稿 |
 | `docs/index.html` | 完成した閲覧ページ（GitHub Pages で公開） |
 | `.github/workflows/daily.yml` | 毎朝 07:30 JST に取得→生成→コミット→メール送信する GitHub Actions |
 

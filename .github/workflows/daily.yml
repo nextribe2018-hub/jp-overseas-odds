@@ -29,6 +29,13 @@ jobs:
       - name: オッズ取得（Polymarket / Kalshi / Manifold）
         run: python3 fetch_odds.py
 
+      - name: AI解説の生成と注目マーケットへの自動投稿（Claude Opus 5）
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          pip install -q anthropic
+          python3 ai_commentary.py
+
       - name: サイト生成とメール本文生成
         run: |
           python3 build_site.py
@@ -40,7 +47,7 @@ jobs:
         run: |
           git config user.name "odds-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add data/latest.json data/snapshots.jsonl data/archive.json docs/index.html
+          git add data docs
           git commit -m "data: $(TZ=Asia/Tokyo date '+%Y-%m-%d %H:%M JST')" || echo "no changes"
           git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
           git push

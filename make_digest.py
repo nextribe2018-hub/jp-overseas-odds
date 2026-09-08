@@ -92,6 +92,19 @@ for scope, head, lead in (("japan", "🎌 日本に関わる賭け", "首位の�
     for ev in sevs: groups.setdefault(ev["cat"], []).append(ev)
     for k, c in CATS.items():
         if k in groups: parts.append(f'<h2 {H2}>{c["icon"]} {e(c["ja"])}</h2>' + cat_table(groups[k]))
+# AIの見立て（本日自動投稿した注目マーケット）
+try:
+    AI = json.load(open(os.path.join(ROOT, "data", "ai_comments.json"), encoding="utf-8")).get("comments", {})
+except Exception:
+    AI = {}
+today_ai = [(ev, AI[ev["key"]]) for ev in D["events"] if ev["key"] in AI and AI[ev["key"]].get("auto_posted") and NOW - AI[ev["key"]]["auto_posted"] <= 36 * 3600]
+if today_ai:
+    blocks = []
+    for ev, c in today_ai:
+        top = sorted(ev["outcomes"], key=lambda o: -(o["prob"] or 0))[0]
+        blocks.append(f'<div style="border:1px solid #e6e7ec;border-left:3px solid #2b3f7a;border-radius:4px;padding:8px 10px;margin:0 0 8px"><b>{e(ev["title_ja"])}</b> <span style="color:#777;font-size:12px">首位 {e(oname(top, ev))} {pct(top["prob"])}（{odds(top["prob"])}）</span><p style="margin:6px 0 0;font-size:13px;line-height:1.7;color:#333">{e(c["text"])}</p><p style="margin:4px 0 0;font-size:11px;color:#999">Claude Opus 5 による自動生成・参考情報 ／ <a href="{e(SITE + "#ev-" + ev["key"])}" style="color:#2b3f7a">掲示板で議論する</a></p></div>')
+    parts.append(f'<h2 {H2}>🤖 今日のAI解説（掲示板に投稿済み）</h2>' + "".join(blocks))
+
 # 直近7日で結果が出たマーケット
 newly = [ev for ev in D.get("archive", []) if ev.get("resolved_at") and NOW - ev["resolved_at"] <= 7 * 86400]
 if newly:

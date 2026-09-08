@@ -135,8 +135,15 @@ a{color:var(--accent)}
 .board-top h4{margin:0;font-size:14px;font-family:"Shippori Mincho B1",serif}
 .board-top .mode{font-size:11.5px;color:var(--ink-3)}
 .board-top .mode.shared{color:var(--down)}
-.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;align-items:start}
-.col{background:var(--paper);border:1px solid var(--line);border-radius:6px;border-top:3px solid var(--c);padding:10px 12px;display:flex;flex-direction:column;gap:8px}
+.cols{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;align-items:start}
+.col{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:10px 14px;display:flex;flex-direction:column;gap:8px}
+.stances{display:flex;flex-wrap:wrap;gap:6px;font-size:11.5px}
+.stances span{border:1px solid var(--line);border-radius:999px;padding:1px 8px;color:var(--ink-2)}
+.stances span i{display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--c);margin-right:5px;vertical-align:0}
+.post.ai{background:var(--accent-soft);border:1px solid var(--line);border-radius:6px;padding:8px 10px;margin-top:4px}
+.post .ai-badge{display:inline-block;font-size:10.5px;color:var(--paper);background:var(--accent);border-radius:3px;padding:1px 6px;margin-right:6px;letter-spacing:.04em}
+.post .stance{display:inline-block;font-size:10.5px;border:1px solid var(--line);border-radius:999px;padding:0 7px;color:var(--ink-2);margin-left:6px}
+.col select{font-family:inherit;font-size:12px;padding:4px 6px;border:1px solid var(--line);border-radius:4px;background:var(--paper);color:var(--ink);max-width:220px}
 .col .oh{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
 .col .oh b{font-size:13.5px}
 .col .oh span{font-size:12px;color:var(--ink-2);white-space:nowrap}
@@ -242,7 +249,7 @@ a{color:var(--accent)}
 
   <section class="cat recent" id="recent-sec">
     <div class="cat-h"><h2>💬 掲示板：最近の書き込み</h2><span class="cnt" id="recent-cnt"></span></div>
-    <p class="foot" style="margin:0 0 8px;border:0;padding:0">各マーケットの「掲示板を開く」から、利上げ／据え置き／利下げなど選択肢ごとに匿名で意見を書き込み、並べて比較できます。賭けはできません。</p>
+    <p class="foot" style="margin:0 0 8px;border:0;padding:0">マーケットごとに掲示板が1つ。開くと Claude（AI）の解説が先頭に入り、その下に匿名の意見が並びます。投稿時に「支持する選択肢」を選ぶと、選択肢ごとの支持数が比較できます。賭けはできません。</p>
     <div id="recent"></div>
   </section>
 
@@ -442,7 +449,7 @@ const Board = (()=>{
   }
   async function add(post){
     await init();
-    post.ts=Date.now(); post.likes=0; post.by=uid().slice(0,4);
+    post.ts=Date.now(); post.likes=0; post.by=post.by_override||uid().slice(0,4); delete post.by_override;
     if(db){ const ref=await db.collection('posts').add(post); post.id=ref.id; return post; }
     if(fs){ const ref=await fs.collection('posts').add(post); post.id=ref.id; return post; }
     const a=lsAll(); post.id='l'+post.ts; a.push(post); lsSave(a); return post;
@@ -462,10 +469,10 @@ const Board = (()=>{
     const box=$('#recent'); if(!box) return;
     $('#recent-cnt').textContent = mode==='local' ? 'この端末のみ' : '共有';
     if(!ps.length){ box.innerHTML='<p class="empty" style="text-align:left;padding:8px 0">まだ書き込みはありません。気になるマーケットの「掲示板を開く」から最初の意見を投稿してください。</p>'; return; }
-    box.innerHTML=ps.map(p=>{ const ev=findEv(p.ev); const o=ev&&ev.outcomes.find(x=>x.key===p.out); return `<div class="rp" data-ev="${esc(p.ev)}"><div class="t">${esc(p.text.length>90?p.text.slice(0,90)+'…':p.text)}<small>${esc(p.name||'匿名')} ／ ${esc(ev?ev.title_ja:p.ev)}${o?' ▸ '+esc(oname(o,ev)):''}</small></div><span class="when mono">${fmtTs(p.ts/1000)}</span></div>`; }).join('');
+    box.innerHTML=ps.map(p=>{ const ev=findEv(p.ev); const o=ev&&ev.outcomes.find(x=>x.key===p.out); return `<div class="rp" data-ev="${esc(p.ev)}"><div class="t">${p.by==='claude'?'<span class="ai-badge" style="font-size:10.5px;color:var(--paper);background:var(--accent);border-radius:3px;padding:1px 6px;margin-right:6px">🤖 AI</span>':''}${esc(p.text.length>90?p.text.slice(0,90)+'…':p.text)}<small>${esc(p.name||'匿名')} ／ ${esc(ev?ev.title_ja:p.ev)}${o?' ▸ 支持: '+esc(oname(o,ev)):''}</small></div><span class="when mono">${fmtTs(p.ts/1000)}</span></div>`; }).join('');
     box.querySelectorAll('.rp').forEach(r=>r.addEventListener('click',()=>{ state.scope='all'; state.cat='all'; state.src='all'; $('#q').value=''; state.q=''; render(); const el=document.getElementById('ev-'+CSS.escape(r.dataset.ev)); if(el){ openBoard(el,true); el.scrollIntoView({behavior:'smooth',block:'start'}); } }));
   }
-  return {init,list,recent,add,like,refreshCounts,modeText,get mode(){return mode;},get shared(){return !!(db||fs);}};
+  return {init,list,recent,add,like,refreshCounts,modeText,get mode(){return mode;},get shared(){return !!(db||fs);},get local(){return !db&&!fs;}};
 })();
 Board.init();
 
@@ -477,22 +484,35 @@ function openBoard(el, force){
 }
 async function drawBoard(el){
   const ev=findEv(el.dataset.key); const box=$('.board',el);
-  const outs=[...ev.outcomes].sort((a,b)=>(b.prob||0)-(a.prob||0)).slice(0,4);
-  box.innerHTML=`<div class="board-top"><h4>💬 掲示板：選択肢ごとの意見を比較</h4><span class="mode">読み込み中…</span></div><div class="cols"></div>`;
+  const outs=[...ev.outcomes].sort((a,b)=>(b.prob||0)-(a.prob||0)).slice(0,6);
+  box.innerHTML=`<div class="board-top"><h4>💬 掲示板：${esc(ev.title_ja)}</h4><span class="mode">読み込み中…</span></div><div class="cols"></div>`;
   await Board.init();
   $('.mode',box).textContent=Board.modeText(); $('.mode',box).classList.toggle('shared',Board.shared);
   let posts=[]; try{ posts=await Board.list(ev.key); }catch(e){ box.insertAdjacentHTML('beforeend',`<p class="err">書き込みを読み込めませんでした（${esc(e.code||e.message||e)}）</p>`); }
-  const cols=$('.cols',box); const expanded={};
+  // AI解説: 事前生成分があり、まだこの掲示板に投稿されていなければ、開いた時点で投稿する
+  const ai=(D.ai||{})[ev.key];
+  if(ai && !posts.some(p=>p.by==='claude' && (p.text===ai.text || p.text.slice(0,60)===ai.text.slice(0,60)))){
+    try{ const p=await Board.add({ev:ev.key,out:'',name:'AI解説（Claude）',text:ai.text,by_override:'claude'}); posts.unshift(p); Board.refreshCounts(); }catch(e){ console.warn('ai post',e); }
+  }
+  const cols=$('.cols',box); let expanded=false;
+  const chip=k=>{ const o=outs.find(x=>x.key===k); if(!o) return ''; return `<span class="stance">支持: ${esc(oname(o,ev))}</span>`; };
   const draw=()=>{
-    cols.innerHTML=outs.map((o,i)=>{ const c=SERIES[i%6]; const ps=posts.filter(p=>p.out===o.key); const show=expanded[o.key]?ps:ps.slice(0,3);
-      return `<div class="col" style="--c:${c}" data-out="${esc(o.key)}"><div class="oh"><b>${esc(oname(o,ev))}</b><span class="mono">${pct(o.prob)} · ${odds(o.prob)}</span></div><div class="cnt">${ps.length}件の意見</div>
-        ${ps.length?show.map(p=>`<div class="post"><div class="pm"><b>${esc(p.name||'匿名')}</b><span class="mono">${fmtTs(p.ts/1000)}</span></div><p>${esc(p.text)}</p><button type="button" class="like" data-id="${esc(p.id)}">👍 賛同 ${p.likes||0}</button></div>`).join(''):`<div class="empty">まだ意見がありません。最初の1件を書き込んでください。</div>`}
-        ${ps.length>3&&!expanded[o.key]?`<button type="button" class="more">残り${ps.length-3}件を表示</button>`:''}
-        <form><textarea maxlength="400" placeholder="「${esc(oname(o,ev))}」についての見方・根拠（400字まで）" required></textarea><div class="fr"><input type="text" maxlength="20" placeholder="名前（任意・匿名）"><button type="submit">投稿する</button></div></form></div>`; }).join('');
-    cols.querySelectorAll('.more').forEach(b=>b.addEventListener('click',()=>{ expanded[b.closest('.col').dataset.out]=1; draw(); }));
-    cols.querySelectorAll('.like').forEach(b=>b.addEventListener('click',async()=>{ const p=posts.find(x=>x.id===b.dataset.id); if(!p) return; b.disabled=true; try{ const ok=await Board.like(p); if(ok){ p.likes=(p.likes||0)+1; b.textContent=`👍 賛同 ${p.likes}`; } }catch(e){ b.disabled=false; } }));
-    cols.querySelectorAll('form').forEach(f=>f.addEventListener('submit',async e=>{ e.preventDefault(); const ta=f.querySelector('textarea'), nm=f.querySelector('input'), bt=f.querySelector('button'); const text=ta.value.trim(); if(!text) return; bt.disabled=true; bt.textContent='送信中…';
-      try{ const p=await Board.add({ev:ev.key,out:f.closest('.col').dataset.out,name:(nm.value.trim()||'匿名').slice(0,20),text:text.slice(0,400)}); posts.unshift(p); draw(); Board.refreshCounts(); }
+    const aiPosts=posts.filter(p=>p.by==='claude').sort((a,b)=>b.ts-a.ts).slice(0,1);
+    const human=posts.filter(p=>p.by!=='claude').sort((a,b)=>b.ts-a.ts);
+    const show=expanded?human:human.slice(0,5);
+    const counts={}; human.forEach(p=>{ if(p.out) counts[p.out]=(counts[p.out]||0)+1; });
+    cols.innerHTML=`<div class="col">
+      <div class="stances">${outs.map((o,i)=>`<span style="--c:${SERIES[i%6]}"><i></i>${esc(oname(o,ev))} ${pct(o.prob)}・${odds(o.prob)}${counts[o.key]?` <b>${counts[o.key]}件</b>`:''}</span>`).join('')}</div>
+      ${aiPosts.map(p=>`<div class="post ai"><div class="pm"><b><span class="ai-badge">🤖 AI解説</span>Claude Opus 5 による自動生成 ／ 参考情報であり投資助言ではありません</b><span class="mono">${fmtTs(p.ts/1000)}</span></div><p>${esc(p.text)}</p><button type="button" class="like" data-id="${esc(p.id)}">👍 参考になった ${p.likes||0}</button></div>`).join('')}
+      ${!aiPosts.length&&!ai?`<div class="empty">AI解説は次回の自動更新（毎朝）で生成されます。</div>`:''}
+      <div class="cnt">みんなの意見 ${human.length}件</div>
+      ${human.length?show.map(p=>`<div class="post"><div class="pm"><b>${esc(p.name||'匿名')}${chip(p.out)}</b><span class="mono">${fmtTs(p.ts/1000)}</span></div><p>${esc(p.text)}</p><button type="button" class="like" data-id="${esc(p.id)}">👍 賛同 ${p.likes||0}</button></div>`).join(''):`<div class="empty">まだ意見がありません。最初の1件を書き込んでください。</div>`}
+      ${human.length>5&&!expanded?`<button type="button" class="more">残り${human.length-5}件を表示</button>`:''}
+      <form><textarea maxlength="400" placeholder="見方・根拠を書く（400字まで・匿名）" required></textarea><div class="fr"><select aria-label="支持する選択肢"><option value="">支持する選択肢（任意）</option>${outs.map(o=>`<option value="${esc(o.key)}">${esc(oname(o,ev))}</option>`).join('')}</select><input type="text" maxlength="20" placeholder="名前（任意）"><button type="submit">投稿する</button></div></form></div>`;
+    cols.querySelectorAll('.more').forEach(b=>b.addEventListener('click',()=>{ expanded=true; draw(); }));
+    cols.querySelectorAll('.like').forEach(b=>b.addEventListener('click',async()=>{ const p=posts.find(x=>x.id===b.dataset.id); if(!p) return; b.disabled=true; try{ const ok=await Board.like(p); if(ok){ p.likes=(p.likes||0)+1; b.textContent=b.textContent.replace(/\d+$/,p.likes); } }catch(e){ b.disabled=false; } }));
+    cols.querySelectorAll('form').forEach(f=>f.addEventListener('submit',async e=>{ e.preventDefault(); const ta=f.querySelector('textarea'), nm=f.querySelector('input'), sel=f.querySelector('select'), bt=f.querySelector('button[type=submit]'); const text=ta.value.trim(); if(!text) return; bt.disabled=true; bt.textContent='送信中…';
+      try{ const p=await Board.add({ev:ev.key,out:sel.value||'',name:(nm.value.trim()||'匿名').slice(0,20),text:text.slice(0,400)}); posts.unshift(p); draw(); Board.refreshCounts(); }
       catch(err){ bt.disabled=false; bt.textContent='投稿する'; alert('投稿できませんでした：'+(err.code==='quota_exceeded'?'保存容量の上限に達しています。':(err.code||err.message||err))); } }));
   };
   draw();

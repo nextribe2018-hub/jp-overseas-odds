@@ -4,6 +4,12 @@ import json, os
 ROOT = os.path.dirname(os.path.abspath(__file__))
 data = json.load(open(os.path.join(ROOT, "data", "latest.json"), encoding="utf-8"))
 tpl = open(os.path.join(ROOT, "template.html"), encoding="utf-8").read()
+ai_path = os.path.join(ROOT, "data", "ai_comments.json")
+try:
+    ai = json.load(open(ai_path, encoding="utf-8")).get("comments", {})
+    data["ai"] = {k: {"text": v["text"], "ts": v["ts"], "kind": v["kind"], "hash": v["hash"], "auto_posted": v.get("auto_posted")} for k, v in ai.items()}
+except Exception:
+    data["ai"] = {}
 payload = json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
 fb_path = os.path.join(ROOT, "config", "firebase.json")
 fb = ""
