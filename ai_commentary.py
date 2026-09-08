@@ -58,11 +58,11 @@ def market_brief(ev):
 SYSTEM = """あなたは海外の予測市場（Polymarket / Kalshi / Manifold）の掛け率を日本の読者向けに解説するアナリストです。掲示板への最初の書き込みとして、議論の呼び水になる短い解説を書きます。
 
 守ること:
-- 日本語、です・ます調、全体で220〜300字。見出しや箇条書き記号は使わず、段落は最大2つ。
+- 日本語、です・ます調、全体で160〜240字（厳守。300字を超えてはいけない）。見出しや箇条書き記号は使わず、段落は1〜2つ。
 - 首位の選択肢がなぜその確率（倍率）なのかを、与えられたニュースと価格変化から説明する。次に、対抗となる選択肢に賭ける側の根拠や、確率が動く可能性のある材料を1〜2点挙げる。
 - 与えられた材料にない事実を作らない。ニュースを引用するときは媒体名を添える。
 - 「確実」「必ず」などの断定、賭けの推奨、投資助言はしない。最後に読者への問いかけを1文入れる。
-- 結果が出たマーケットの場合は、事前の市場確率が結果をどの程度織り込んでいたかを振り返る（220字前後）。"""
+- 結果が出たマーケットの場合は、事前の市場確率が結果をどの程度織り込んでいたかを振り返る（160〜220字）。"""
 
 def generate(client, ev):
     kind = "retro" if ev.get("status") == "resolved" else "preview"
@@ -76,7 +76,14 @@ def generate(client, ev):
     if resp.stop_reason == "refusal":
         return None, kind, resp.usage
     text = "".join(b.text for b in resp.content if b.type == "text").strip()
-    return text, kind, resp.usage
+    return clip(text), kind, resp.usage
+
+def clip(text, limit=380):
+    """掲示板ルール（400字）に収まるよう、超過時は文末で切る"""
+    if len(text) <= limit: return text
+    cut = text[:limit]
+    i = max(cut.rfind("。"), cut.rfind("？"), cut.rfind("！"))
+    return (cut[:i + 1] if i > 100 else cut).strip()
 
 def fs_create_post(cfg, ev_key, text, ts_ms):
     """Firestore REST（匿名・ルールで制限）で掲示板に投稿"""
