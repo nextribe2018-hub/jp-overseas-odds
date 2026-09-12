@@ -92,6 +92,48 @@ def thin(hist, max_pts=400):
     out = [hist[int(i * step)] for i in range(max_pts - 1)] + [hist[-1]]
     return [[t, round(p, 4)] for t, p in out]
 
+def build_review(ev, news_all):
+    """結果が出たマーケットの検証データ: 節目のオッズと、オッズを大きく動かした日＋前後のニュース"""
+    outs = sorted(ev["outcomes"], key=lambda o: -(o.get("prob") or 0))
+    winners = set(ev.get("winners") or [])
+    outs.sort(key=lambda o: (0 if o["key"] in winners else 1, -(o.get("prob") or 0)))
+    outs = outs[:4]
+    def at(h, t):
+        past = [p for tt, p in h if tt <= t]
+        return past[-1] if past else None
+    rows, moves = [], []
+    for o in outs:
+        h = o.get("history") or []
+        if not h: continue
+        t_end = h[-1][0]
+        # 「直前」= 結果確定で 0/1 に張り付く前の最後の実勢価格
+        pre = None
+        for tt, p in reversed(h[:-1]):
+            if 0.01 < p < 0.99: pre = p; break
+        if pre is None: pre = at(h, t_end - 3 * 3600)
+        final = o["prob"] if (o.get("closed") and o.get("prob") is not None) else h[-1][1]
+        rows.append({"key": o["key"], "name": o.get("name_ja") or o["name"], "won": o["key"] in winners,
+                     "final": final, "pre": pre, "d1": at(h, t_end - 86400), "d7": at(h, t_end - 7 * 86400), "d30": at(h, t_end - 30 * 86400)})
+        # 日次の終値で変化を見る
+        daily = {}
+        for tt, p in h: daily[int(tt // 86400)] = (tt, p)
+        days = sorted(daily)
+        for a, b in zip(days, days[1:]):
+            d = daily[b][1] - daily[a][1]
+            if abs(d) >= 0.03 and 0.01 < daily[b][1] < 0.99 or (abs(d) >= 0.08):
+                near = [n for n in news_all if abs(n["ts"] - daily[b][0]) <= 2 * 86400]
+                near.sort(key=lambda n: abs(n["ts"] - daily[b][0]))
+                moves.append({"t": daily[b][0], "key": o["key"], "name": o.get("name_ja") or o["name"], "delta": round(d, 4),
+                              "before": round(daily[a][1], 4), "after": round(daily[b][1], 4), "news": near[:3]})
+    moves.sort(key=lambda m: -abs(m["delta"]))
+    # 同じ日の重複は最大の変化のみ
+    seen, top = set(), []
+    for m in moves:
+        k = (int(m["t"] // 86400), m["key"])
+        if k in seen: continue
+        seen.add(k); top.append(m)
+    return {"rows": rows, "moves": top[:6]}
+
 def select_outcomes(outcomes, item):
     """keep（キーワード一致）と top（上位N件）で選択肢を絞る。指定なしなら全件。"""
     keep = item.get("keep"); top = item.get("top")
@@ -299,8 +341,20 @@ def main():
             print("   -> no data", file=sys.stderr)
     print("[news] 関連ニュースを取得")
     with ThreadPoolExecutor(6) as ex:
-        for ev, news in zip(events, ex.map(lambda e: fetch_news(e["news_q"]), events)):
-            ev["news"] = news
+        for ev, news in zip(events, ex.map(lambda e: fetch_news(e["news_q"], 5), events)):
+            ev["news"] = news[:3]
+    # 蓄積: data/news_log.json（key → [{ts,title,link,source}]、link で重複排除、最大80件）
+    log_path = os.path.join(DATA, "news_log.json")
+    try: news_log = json.load(open(log_path, encoding="utf-8"))
+    except Exception: news_log = {}
+    for ev in events:
+        lst = news_log.setdefault(ev["key"], [])
+        seen = {n.get("link") for n in lst}
+        for n in ev.get("news") or []:
+            if n.get("link") and n["link"] not in seen and n.get("ts"):
+                lst.append({"ts": n["ts"], "title": n["title"], "link": n["link"], "source": n.get("source", "")}); seen.add(n["link"])
+        lst.sort(key=lambda n: n["ts"]); del lst[:-80]
+    json.dump(news_log, open(log_path, "w", encoding="utf-8"), ensure_ascii=False)
     games = []
     for gs in CFG.get("game_series", []):
         print(f"[games] {gs['series']}")
@@ -326,6 +380,14 @@ def main():
             ev["resolved_at"] = prev.get("resolved_at") if prev and prev.get("resolved_at") else (end_ts if end_ts and end_ts < NOW else NOW)
             ev["news"] = ev.get("news") or (prev.get("news") if prev else [])
             for o in ev["outcomes"]: o["history"] = thin(o.get("history", []), 200)
+            try:
+                nl = json.load(open(os.path.join(DATA, "news_log.json"), encoding="utf-8")).get(ev["key"], [])
+            except Exception:
+                nl = []
+            if prev and prev.get("news_all"):
+                have = {n["link"] for n in nl}; nl += [n for n in prev["news_all"] if n["link"] not in have]; nl.sort(key=lambda n: n["ts"])
+            ev["news_all"] = nl[-80:]
+            ev["review"] = build_review(ev, ev["news_all"])
             archive[ev["key"]] = ev
         else:
             ev["status"] = "open"; still_open.append(ev)
@@ -365,7 +427,7 @@ def main():
     out = {
         "generated_at": NOW, "generated_at_jst": datetime.fromtimestamp(NOW, JST).strftime("%Y-%m-%d %H:%M JST"),
         "categories": CFG["categories"], "events": events, "games": games,
-        "archive": sorted(archive.values(), key=lambda e: -(e.get("resolved_at") or 0)),
+        "archive": sorted(archive.values(), key=lambda e: (-(e.get("volume") or 0) if e.get("source") != "manifold" else 0, -(e.get("resolved_at") or 0))),
         "sources": {
             "polymarket": {"name": "Polymarket", "note": "米国発の分散型予測市場（USDC建て）。価格＝YESの暗黙確率。"},
             "kalshi": {"name": "Kalshi", "note": "米CFTC規制下の予測市場取引所（ドル建て）。価格＝YESの暗黙確率。"},

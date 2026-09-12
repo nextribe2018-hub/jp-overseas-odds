@@ -41,12 +41,18 @@ def market_brief(ev):
     if ev.get("status") == "resolved":
         wins = [oname(o, ev) for o in ev["outcomes"] if o["key"] in (ev.get("winners") or [])]
         lines.append("結果: " + ("、".join(wins) if wins else "該当なし（NO）"))
-        # 終了30日前の価格
-        for o in outs[:3]:
-            h = o.get("history") or []
-            if h:
-                t_end = h[-1][0]; past = [p for t, p in h if t <= t_end - 30 * 86400]
-                if past: lines.append(f"  {oname(o, ev)} の30日前の価格: {pct(past[-1])} → 最終 {pct(h[-1][1])}")
+        rv = ev.get("review") or {}
+        if rv.get("rows"):
+            lines.append("節目のオッズ（1ヶ月前 → 1週間前 → 1日前 → 直前 → 最終）:")
+            for r in rv["rows"]:
+                lines.append(f"- {r['name']}{'（的中）' if r.get('won') else ''}: {pct(r.get('d30'))} → {pct(r.get('d7'))} → {pct(r.get('d1'))} → {pct(r.get('pre'))} → {pct(r.get('final'))}")
+        if rv.get("moves"):
+            lines.append("オッズを大きく動かした日と前後のニュース:")
+            for m in rv["moves"][:4]:
+                d = datetime.fromtimestamp(m["t"], JST).strftime("%-m/%-d")
+                lines.append(f"- {d} {m['name']} {pct(m['before'])}→{pct(m['after'])}（{m['delta']*100:+.1f}pt）")
+                for n in m.get("news", [])[:2]:
+                    lines.append(f"    ・[{n.get('source','')}] {n['title']}")
     news = ev.get("news") or []
     if news:
         lines.append("関連ニュース（日本語・新しい順）:")
@@ -62,7 +68,7 @@ SYSTEM = """あなたは海外の予測市場（Polymarket / Kalshi / Manifold�
 - 首位の選択肢がなぜその確率（倍率）なのかを、与えられたニュースと価格変化から説明する。次に、対抗となる選択肢に賭ける側の根拠や、確率が動く可能性のある材料を1〜2点挙げる。
 - 与えられた材料にない事実を作らない。ニュースを引用するときは媒体名を添える。
 - 「確実」「必ず」などの断定、賭けの推奨、投資助言はしない。最後に読者への問いかけを1文入れる。
-- 結果が出たマーケットの場合は、事前の市場確率が結果をどの程度織り込んでいたかを振り返る（160〜220字）。"""
+- 結果が出たマーケットの場合は「振り返り」として、節目のオッズ（1ヶ月前→1週間前→1日前→直前→最終）の推移と、オッズを動かした出来事（与えられたニュース）を使い、市場が結果をいつ・何をきっかけに織り込んだか、見誤った点は何かを述べる（200〜260字、300字以内）。"""
 
 def generate(client, ev):
     kind = "retro" if ev.get("status") == "resolved" else "preview"
@@ -99,7 +105,8 @@ def fs_create_post(cfg, ev_key, text, ts_ms):
 def needs_generation(ev, prev):
     if not prev: return "new"
     if ev.get("status") == "resolved":
-        return None if prev.get("kind") == "retro" else "resolved"
+        if prev.get("kind") == "retro" and prev.get("v") == 2: return None
+        return "resolved"
     if NOW - prev.get("ts", 0) > 7 * 86400: return "stale"
     snap = prev.get("probs") or {}
     for o in ev["outcomes"]:
@@ -148,13 +155,13 @@ def main():
         if not text: print("  refused:", ev["title_ja"]); continue
         cost_in += usage.input_tokens + (getattr(usage, "cache_read_input_tokens", 0) or 0) + (getattr(usage, "cache_creation_input_tokens", 0) or 0)
         cost_out += usage.output_tokens
-        comments[ev["key"]] = {"text": text, "kind": kind, "ts": NOW, "model": MODEL, "why": why, "hash": digest(text),
+        comments[ev["key"]] = {"text": text, "kind": kind, "ts": NOW, "model": MODEL, "why": why, "hash": digest(text), "v": 2,
                                "probs": {o["key"]: o["prob"] for o in ev["outcomes"]}, "title_ja": ev["title_ja"]}
         print(f"  generated[{why}] {ev['title_ja'][:40]}")
     print(f"[ai] tokens in≈{cost_in} out≈{cost_out} → 概算 ${cost_in/1e6*5 + cost_out/1e6*25:.2f}")
 
     # ---- 自動投稿: 今日の注目（日本関連3 + 海外2）。未投稿の解説だけ。
-    if fb.get("projectId"):
+    if fb.get("projectId") and os.environ.get("AI_AUTO_POST", "true").lower() != "false":
         cands = [ev for ev in latest["events"] if ev["key"] in comments and posted.get(ev["key"]) != comments[ev["key"]]["hash"]]
         cands.sort(key=lambda e: -score(e))
         pick = [e for e in cands if e.get("scope") != "global"][:AUTO_JP] + [e for e in cands if e.get("scope") == "global"][:AUTO_GLOBAL]

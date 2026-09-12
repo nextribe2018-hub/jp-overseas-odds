@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: "30 22 * * *"   # 毎日 07:30 JST（UTC 22:30）
   workflow_dispatch:
+    inputs:
+      auto_post:
+        description: "AI解説を掲示板へ自動投稿する（false で生成のみ）"
+        type: boolean
+        default: true
 
 permissions:
   contents: write
@@ -32,6 +37,7 @@ jobs:
       - name: AI解説の生成と注目マーケットへの自動投稿（Claude Opus 5）
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          AI_AUTO_POST: ${{ github.event.inputs.auto_post || 'true' }}
         run: |
           pip install -q anthropic
           python3 ai_commentary.py

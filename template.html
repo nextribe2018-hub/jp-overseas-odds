@@ -120,6 +120,28 @@ a{color:var(--accent);text-decoration:none;transition:var(--ease)} a:hover{color
 .result b{font-family:var(--serif-ja);font-size:15px;font-weight:500}
 .result .lbl{font-family:var(--serif-en);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent)}
 .ev.resolved .ev-h h3::before{content:"Settled";font-family:var(--serif-en);font-size:10.5px;font-weight:500;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent);border-radius:1px;padding:2px 8px;margin-right:12px;vertical-align:4px}
+/* review (検証) */
+.review{padding:16px 24px 18px;border-top:1px solid var(--line-2);display:grid;gap:18px}
+.review h4{margin:0 0 8px;font-family:var(--serif-en);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:500}
+.review table{width:100%;border-collapse:collapse;font-size:13px}
+.review th{font-family:var(--serif-en);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3);font-weight:400;text-align:right;padding:4px 10px;border-bottom:1px solid var(--line-2)}
+.review th:first-child,.review td:first-child{text-align:left;padding-left:0}
+.review td{padding:8px 10px;border-bottom:1px solid var(--line-2);text-align:right;vertical-align:baseline}
+.review td .o{display:block;font-size:11px;color:var(--ink-3)}
+.review td.final{font-family:var(--serif-en);font-size:17px;font-weight:500}
+.review tr.won td:first-child{color:var(--accent)}
+.moves{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.moves li{display:grid;grid-template-columns:76px 1fr;gap:12px;font-size:13px;line-height:1.6}
+.moves .when{font-family:var(--serif-en);font-size:14px;color:var(--ink-2);letter-spacing:.04em}
+.moves .mv-h{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline}
+.moves .mv-h b{font-weight:500}
+.moves .nl{margin:2px 0 0;padding:0;list-style:none;display:grid;gap:2px}
+.moves .nl li{display:block;font-size:12.5px;color:var(--ink-2)}
+.moves .nl a{color:var(--ink-2)} .moves .nl a:hover{color:var(--accent)}
+.moves .nl span{color:var(--ink-3);font-size:11px;margin-left:6px}
+.retro{background:var(--accent-soft);border:1px solid var(--line);border-radius:2px;padding:12px 14px;font-size:13.5px;line-height:1.85}
+.retro p{margin:0;white-space:pre-wrap}
+.retro .note{display:block;margin-top:6px;font-size:11px;color:var(--ink-3)}
 /* chart */
 .chart{padding:16px 24px 18px;border-top:1px solid var(--line-2)}
 .chart-top{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;margin-bottom:8px}
@@ -360,11 +382,22 @@ function card(ev){
   return `<article class="ev ${resolved?'resolved':''}" id="ev-${esc(ev.key)}" data-key="${esc(ev.key)}">
     <div class="ev-h"><div><h3>${esc(ev.title_ja||ev.title)}</h3><div class="en">${esc(ev.title)}</div></div>
       <div class="right"><span class="src ${ev.source}">${SRC[ev.source]}</span><span>締切 <span class="mono">${fmtDate(ev.end)}</span></span><span>出来高 <span class="mono">${ev.source==='manifold'?('M'+(ev.volume||0).toLocaleString()):usd(ev.volume)}</span></span></div></div>
-    ${resultBar}
+    ${resultBar}${resolved?reviewPanel(ev):''}
     <div class="tbl-wrap"><table><thead><tr><th>選択肢</th><th>${resolved?'最終価格':'確率'}</th><th>倍率</th><th>24h</th><th>7日</th><th>出来高</th><th class="spark">${resolved?'終了前30日':'30日推移'}</th></tr></thead><tbody>${rows}</tbody></table></div>
     ${ev.news&&ev.news.length?`<ul class="news"><li style="display:block"><span class="lbl">Related News</span></li>${ev.news.map(n=>`<li><a href="${esc(n.link)}" target="_blank" rel="noopener" title="${esc(n.title)}">${esc(n.title)}</a><span>${esc(n.source||'')}${n.ts?' · '+fmtD(n.ts):''}</span></li>`).join('')}</ul>`:''}
     <div class="ev-f"><button type="button" class="tgl">時系列チャートを開く</button><button type="button" class="btgl">掲示板を開く<span class="bc"></span></button><span>${more}</span><span class="links"><a href="${esc(ev.url)}" target="_blank" rel="noopener">${SRC[ev.source]} で賭けを見る</a><a href="${esc(ev.url_ja||ev.url)}" target="_blank" rel="noopener">日本語訳で見る</a><a href="${esc(ev.news_url||'#')}" target="_blank" rel="noopener">ニュースをもっと見る</a></span></div>
     <div class="chart hidden"></div><div class="board hidden"></div></article>`;
+}
+
+// ---- review panel (結果が出たマーケットの検証)
+function reviewPanel(ev){
+  const rv=ev.review||{}; const rows=rv.rows||[]; const moves=rv.moves||[]; const ai=(D.ai||{})[ev.key];
+  const cell=(p,cls)=> p==null?`<td class="${cls||''}">—</td>`:`<td class="${cls||''}">${pct(p)}<span class="o">${odds(p)}</span></td>`;
+  const tbl= rows.length?`<div><h4>Odds Trajectory · 節目のオッズ</h4><div class="tbl-wrap"><table><thead><tr><th>選択肢</th><th>1ヶ月前</th><th>1週間前</th><th>1日前</th><th>直前</th><th>最終</th></tr></thead><tbody>${rows.map(r=>`<tr class="${r.won?'won':''}"><td>${esc(r.name)}${r.won?'<span class="win">的中</span>':''}</td>${cell(r.d30)}${cell(r.d7)}${cell(r.d1)}${cell(r.pre)}${cell(r.final,'final')}</tr>`).join('')}</tbody></table></div></div>`:'';
+  const mv= moves.length?`<div><h4>What Moved the Odds · オッズを動かした出来事</h4><ul class="moves">${moves.map(m=>`<li><span class="when">${fmtD(m.t)}</span><div><div class="mv-h"><b>${esc(m.name)}</b><span class="mono">${pct(m.before)} → ${pct(m.after)}</span>${delta(m.after,m.before)}</div>${m.news&&m.news.length?`<ul class="nl">${m.news.map(n=>`<li><a href="${esc(n.link)}" target="_blank" rel="noopener">${esc(n.title)}</a><span>${esc(n.source||'')} ${n.ts?fmtD(n.ts):''}</span></li>`).join('')}</ul>`:`<div class="nl"><li>前後2日に該当ニュースなし</li></div>`}</div></li>`).join('')}</ul></div>`:'';
+  const retro= ai&&ai.kind==='retro'?`<div><h4>AI Review · 振り返り</h4><div class="retro"><p>${esc(ai.text)}</p><span class="note">Claude Opus 5 による自動生成 ／ ${fmtD(ai.ts)} 時点の節目オッズと関連ニュースをもとに作成</span></div></div>`:`<div><h4>AI Review · 振り返り</h4><div class="retro"><p style="color:var(--ink-3)">振り返り解説は次回の自動更新で生成されます。</p></div></div>`;
+  if(!tbl&&!mv) return '';
+  return `<div class="review">${tbl}${mv}${retro}</div>`;
 }
 
 // ---- full chart
