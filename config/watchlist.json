@@ -3,43 +3,53 @@
  "categories": {
   "politics": {
    "ja": "政治・選挙",
-   "icon": "🏛️"
+   "icon": "🏛️",
+   "en": "Politics & Elections"
   },
   "economy": {
    "ja": "経済・金融",
-   "icon": "💴"
+   "icon": "💴",
+   "en": "Economy & Markets"
   },
   "geo": {
    "ja": "地政学・安全保障",
-   "icon": "🌏"
+   "icon": "🌏",
+   "en": "Geopolitics"
   },
   "mlb": {
    "ja": "MLB・大谷翔平",
-   "icon": "⚾"
+   "icon": "⚾",
+   "en": "MLB"
   },
   "npb": {
    "ja": "プロ野球 NPB",
-   "icon": "🏟️"
+   "icon": "🏟️",
+   "en": "NPB"
   },
   "soccer": {
    "ja": "サッカー",
-   "icon": "⚽"
+   "icon": "⚽",
+   "en": "Football"
   },
   "sumo": {
    "ja": "大相撲",
-   "icon": "🥋"
+   "icon": "🥋",
+   "en": "Grand Sumo"
   },
   "sports": {
    "ja": "その他スポーツ",
-   "icon": "🏅"
+   "icon": "🏅",
+   "en": "Sports"
   },
   "culture": {
    "ja": "エンタメ・社会",
-   "icon": "🎮"
+   "icon": "🎮",
+   "en": "Culture & Society"
   },
   "disaster": {
    "ja": "災害・気象",
-   "icon": "🌋"
+   "icon": "🌋",
+   "en": "Disaster & Weather"
   }
  },
  "items": [

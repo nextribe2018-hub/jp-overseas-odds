@@ -20,7 +20,7 @@ def delta(a, b):
     if a is None or b is None: return '<span style="color:#888">—</span>'
     d = (a - b) * 100
     if abs(d) < 0.05: return '<span style="color:#888">±0.0pt</span>'
-    col = "#c8302a" if d > 0 else "#1d7a4f"
+    col = "#B5503F" if d > 0 else "#3F7A4B"
     return f'<span style="color:{col};font-weight:600">{d:+.1f}pt</span>'
 def oname(o, ev=None):
     if o.get("name_ja"): return o["name_ja"]
@@ -34,7 +34,7 @@ mv7 = sorted([r for r in rows if r[1].get("prob_7d") is not None], key=lambda r:
 
 TD = 'style="padding:6px 8px;border-bottom:1px solid #e6e7ec;font-size:13px;vertical-align:top"'
 TDR = 'style="padding:6px 8px;border-bottom:1px solid #e6e7ec;font-size:13px;text-align:right;white-space:nowrap;font-family:Menlo,Consolas,monospace"'
-TH = 'style="padding:6px 8px;border-bottom:2px solid #1a1c25;font-size:11px;color:#666;text-align:left;letter-spacing:.06em"'
+TH = 'style="padding:6px 8px;border-bottom:1px solid #1A1714;font-size:11px;color:#666;text-align:left;letter-spacing:.06em"'
 THR = TH.replace("text-align:left", "text-align:right")
 
 def mover_table(items, key):
@@ -52,8 +52,8 @@ def cat_table(evs):
         if len(outs) > 1 and outs[1]["prob"] is not None and (ev.get("sum_to_one", True)):
             second = f'<br><span style="color:#777;font-size:12px">2位 {e(oname(outs[1], ev))} {pct(outs[1]["prob"])}（{odds(outs[1]["prob"])}）</span>'
         vol = f'M{ev["volume"]:,}' if ev["source"] == "manifold" else usd(ev["volume"])
-        link = (f' <a href="{e(ev["url"])}" style="color:#2b3f7a;font-size:11px">賭けを見る↗</a>'
-                f' <a href="{e(ev.get("url_ja") or ev["url"])}" style="color:#2b3f7a;font-size:11px">日本語訳</a>')
+        link = (f' <a href="{e(ev["url"])}" style="color:#9C7C3C;font-size:11px">賭けを見る↗</a>'
+                f' <a href="{e(ev.get("url_ja") or ev["url"])}" style="color:#9C7C3C;font-size:11px">日本語訳</a>')
         news = "".join(f'<br><span style="font-size:11px;color:#555">▸ <a href="{e(n["link"])}" style="color:#555">{e(n["title"][:48])}</a> <span style="color:#999">{e(n.get("source") or "")} {fmt_d(n.get("ts"))}</span></span>' for n in (ev.get("news") or [])[:2])
         others = ""
         if len(outs) > 2 and ev.get("sum_to_one", True):
@@ -70,28 +70,28 @@ def games_table():
         if len(g["outcomes"]) != 2: continue
         h, a = g["outcomes"]
         t = datetime.fromisoformat((g.get("start") or g["close"]).replace("Z", "+00:00")).astimezone(JST).strftime("%-m/%-d %H:%M")
-        bh = "font-weight:700;color:#2b3f7a" if (h["prob"] or 0) >= (a["prob"] or 0) and h["prob"] is not None else ""
-        ba = "font-weight:700;color:#2b3f7a" if (a["prob"] or 0) > (h["prob"] or 0) else ""
+        bh = "font-weight:700;color:#9C7C3C" if (h["prob"] or 0) >= (a["prob"] or 0) and h["prob"] is not None else ""
+        ba = "font-weight:700;color:#9C7C3C" if (a["prob"] or 0) > (h["prob"] or 0) else ""
         out.append(f'<tr><td {TD}>{e(g["league_ja"])}</td><td {TDR}>{t}</td><td {TD} style="{bh}">{e(oname(h))}</td><td {TDR}>{pct(h["prob"])}</td><td {TD} style="{ba}">{e(oname(a))}</td><td {TDR}>{pct(a["prob"])}</td></tr>')
     return "".join(out) + "</table>"
 
-H2 = 'style="font-size:17px;margin:28px 0 8px;padding-bottom:4px;border-bottom:1px solid #1a1c25;font-family:Georgia,\'Hiragino Mincho ProN\',serif"'
-parts = [f'''<div style="font-family:-apple-system,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif;color:#1a1c25;max-width:760px;margin:0 auto;padding:16px;background:#fff">
-<div style="font-size:11px;letter-spacing:.14em;color:#777">OVERSEAS PREDICTION MARKETS · JAPAN WATCH</div>
-<h1 style="font-size:22px;margin:4px 0 6px;font-family:Georgia,'Hiragino Mincho ProN',serif">日本関連 海外オッズ 日報 {today.strftime("%Y年%-m月%-d日")}</h1>
+H2 = 'style="font-size:17px;margin:28px 0 8px;padding-bottom:4px;border-bottom:1px solid #1a1c25;font-family:\'Shippori Mincho B1\',\'Hiragino Mincho ProN\',\'Yu Mincho\',Georgia,serif"'
+parts = [f'''<div style="font-family:-apple-system,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif;color:#1A1714;max-width:760px;margin:0 auto;padding:16px;background:#fff">
+<div style="font-size:11px;letter-spacing:.24em;color:#9C7C3C;font-family:Georgia,serif">ICURATE · OVERSEAS PREDICTION MARKETS · JAPAN WATCH</div>
+<h1 style="font-size:22px;margin:4px 0 6px;font-family:'Shippori Mincho B1','Hiragino Mincho ProN','Yu Mincho',Georgia,serif">日本関連 海外オッズ 日報 {today.strftime("%Y年%-m月%-d日")}</h1>
 <p style="font-size:12.5px;color:#555;margin:0 0 6px">データ取得 {D["generated_at_jst"]} ／ 追跡 {len(D["events"])}マーケット・{sum(len(x["outcomes"]) for x in D["events"])}選択肢 ／ Polymarket・Kalshi・Manifold</p>
-{f'<p style="font-size:13px;margin:0"><a href="{e(SITE)}" style="color:#2b3f7a">▶ 一覧サイト（時系列チャート付き）を開く</a></p>' if SITE else ''}
-<p style="font-size:12px;color:#666;background:#f3f4f7;padding:8px 10px;border-left:3px solid #2b3f7a;margin:12px 0 0">確率＝各市場のYES価格、倍率＝欧州式オッズ（1÷確率、的中時の払戻倍率）。「賭けを見る」で実際のサイト、「日本語訳」でGoogle翻訳経由の日本語ページへ。変化幅は確率のポイント差で、<span style="color:#c8302a">上昇＝赤</span>・<span style="color:#1d7a4f">下落＝緑</span>。Manifoldはプレイマネーのため参考値。</p>''']
+{f'<p style="font-size:13px;margin:0"><a href="{e(SITE)}" style="color:#9C7C3C">▶ 一覧サイト（時系列チャート付き）を開く</a></p>' if SITE else ''}
+<p style="font-size:12px;color:#666;background:#f3f4f7;padding:8px 10px;border-left:3px solid #9C7C3C;margin:12px 0 0">確率＝各市場のYES価格、倍率＝欧州式オッズ（1÷確率、的中時の払戻倍率）。「賭けを見る」で実際のサイト、「日本語訳」でGoogle翻訳経由の日本語ページへ。変化幅は確率のポイント差で、<span style="color:#B5503F">上昇＝赤</span>・<span style="color:#3F7A4B">下落＝緑</span>。Manifoldはプレイマネーのため参考値。</p>''']
 parts.append(f'<h2 {H2}>24時間で動いた賭け</h2>' + mover_table(mv24, "prob_24h"))
 parts.append(f'<h2 {H2}>7日間で動いた賭け</h2>' + mover_table(mv7, "prob_7d"))
-for scope, head, lead in (("japan", "🎌 日本に関わる賭け", "首位の選択肢と倍率、2〜5位、関連ニュース。"), ("global", "🌐 海外で人気の賭け", "世界の予測市場で資金が集中している注目マーケット（分野ごとに抜粋）。")):
+for scope, head, lead in (("japan", "日本に関わる賭け", "首位の選択肢と倍率、2〜5位、関連ニュース。"), ("global", "海外で人気の賭け", "世界の予測市場で資金が集中している注目マーケット（分野ごとに抜粋）。")):
     sevs = [ev for ev in D["events"] if (ev.get("scope") or "japan") == scope]
     if not sevs: continue
-    parts.append(f'<h2 style="font-size:19px;margin:34px 0 4px;font-family:Georgia,\'Hiragino Mincho ProN\',serif;border-left:4px solid #2b3f7a;padding-left:10px">{head}</h2><p style="font-size:12px;color:#666;margin:0 0 6px">{lead}</p>')
+    parts.append(f'<h2 style="font-size:19px;margin:34px 0 4px;font-family:\'Shippori Mincho B1\',\'Hiragino Mincho ProN\',\'Yu Mincho\',Georgia,serif;border-left:4px solid #9C7C3C;padding-left:10px">{head}</h2><p style="font-size:12px;color:#666;margin:0 0 6px">{lead}</p>')
     groups = {}
     for ev in sevs: groups.setdefault(ev["cat"], []).append(ev)
     for k, c in CATS.items():
-        if k in groups: parts.append(f'<h2 {H2}>{c["icon"]} {e(c["ja"])}</h2>' + cat_table(groups[k]))
+        if k in groups: parts.append(f'<h2 {H2}><span style="font-size:11px;letter-spacing:.2em;color:#9C7C3C;font-family:Georgia,serif;margin-right:10px">{e(c.get("en","").upper())}</span>{e(c["ja"])}</h2>' + cat_table(groups[k]))
 # AIの見立て（本日自動投稿した注目マーケット）
 try:
     AI = json.load(open(os.path.join(ROOT, "data", "ai_comments.json"), encoding="utf-8")).get("comments", {})
@@ -102,8 +102,8 @@ if today_ai:
     blocks = []
     for ev, c in today_ai:
         top = sorted(ev["outcomes"], key=lambda o: -(o["prob"] or 0))[0]
-        blocks.append(f'<div style="border:1px solid #e6e7ec;border-left:3px solid #2b3f7a;border-radius:4px;padding:8px 10px;margin:0 0 8px"><b>{e(ev["title_ja"])}</b> <span style="color:#777;font-size:12px">首位 {e(oname(top, ev))} {pct(top["prob"])}（{odds(top["prob"])}）</span><p style="margin:6px 0 0;font-size:13px;line-height:1.7;color:#333">{e(c["text"])}</p><p style="margin:4px 0 0;font-size:11px;color:#999">Claude Opus 5 による自動生成・参考情報 ／ <a href="{e(SITE + "#ev-" + ev["key"])}" style="color:#2b3f7a">掲示板で議論する</a></p></div>')
-    parts.append(f'<h2 {H2}>🤖 今日のAI解説（掲示板に投稿済み）</h2>' + "".join(blocks))
+        blocks.append(f'<div style="border:1px solid #e6e7ec;border-left:3px solid #9C7C3C;border-radius:4px;padding:8px 10px;margin:0 0 8px"><b>{e(ev["title_ja"])}</b> <span style="color:#777;font-size:12px">首位 {e(oname(top, ev))} {pct(top["prob"])}（{odds(top["prob"])}）</span><p style="margin:6px 0 0;font-size:13px;line-height:1.7;color:#333">{e(c["text"])}</p><p style="margin:4px 0 0;font-size:11px;color:#999">Claude Opus 5 による自動生成・参考情報 ／ <a href="{e(SITE + "#ev-" + ev["key"])}" style="color:#9C7C3C">掲示板で議論する</a></p></div>')
+    parts.append(f'<h2 {H2}>今日のAI解説（掲示板に投稿済み）</h2>' + "".join(blocks))
 
 # 直近7日で結果が出たマーケット
 newly = [ev for ev in D.get("archive", []) if ev.get("resolved_at") and NOW - ev["resolved_at"] <= 7 * 86400]
@@ -111,8 +111,8 @@ if newly:
     rows_ = [f'<table cellspacing="0" cellpadding="0" width="100%"><tr><th {TH}>マーケット</th><th {TH}>結果</th><th {THR}>確定日</th></tr>']
     for ev in newly:
         wins = [o for o in ev["outcomes"] if o["key"] in (ev.get("winners") or [])]
-        rows_.append(f'<tr><td {TD}>{e(ev["title_ja"])}<br><span style="color:#999;font-size:11px">{SRC[ev["source"]]}</span> <a href="{e(ev["url"])}" style="color:#2b3f7a;font-size:11px">結果を見る↗</a></td><td {TD}><b>{e("、".join(oname(w, ev) for w in wins) or "該当なし（NO）")}</b></td><td {TDR}>{fmt_d(ev["resolved_at"])}</td></tr>')
-    parts.append(f'<h2 {H2}>📁 結果が出たマーケット（直近7日）</h2><p style="font-size:12px;color:#666;margin:0 0 6px">終了したマーケットは一覧サイトの「アーカイブ」に、価格推移と掲示板ごと残ります。</p>' + "".join(rows_) + "</table>")
+        rows_.append(f'<tr><td {TD}>{e(ev["title_ja"])}<br><span style="color:#999;font-size:11px">{SRC[ev["source"]]}</span> <a href="{e(ev["url"])}" style="color:#9C7C3C;font-size:11px">結果を見る↗</a></td><td {TD}><b>{e("、".join(oname(w, ev) for w in wins) or "該当なし（NO）")}</b></td><td {TDR}>{fmt_d(ev["resolved_at"])}</td></tr>')
+    parts.append(f'<h2 {H2}>結果が出たマーケット（直近7日）</h2><p style="font-size:12px;color:#666;margin:0 0 6px">終了したマーケットは一覧サイトの「アーカイブ」に、価格推移と掲示板ごと残ります。</p>' + "".join(rows_) + "</table>")
 parts.append(f'<h2 {H2}>直近の試合（36時間以内）</h2>' + games_table())
 parts.append('<p style="font-size:11px;color:#888;margin-top:28px;line-height:1.7">本メールは情報の整理を目的とした自動配信で、賭博への参加を勧めるものではありません。日本国内からの海外賭博サイト利用には法的リスクがあります。配信停止はGitHubリポジトリのワークフローを無効化してください。</p></div>')
 

@@ -1,0 +1,28 @@
+{
+  "project": "日本関連 海外オッズ相場表（iCurate）",
+  "version": "1.0",
+  "created": "2026-09-13",
+  "source": "iCurate の姉妹プロジェクト（時計claude / 高級車claude / 高級レストランclaude）の Design DNA を継承。ユーザー要件「シンプルかつ高級感、見やすく」＋ icurate.net からリンクされる前提で同一ブランドの色・書体に統一",
+  "typography": {
+    "personality": "editorial",
+    "weight_preference": "light(300-400)",
+    "mix_ja_en": true,
+    "suggested_fonts": ["Cormorant Garamond", "Shippori Mincho B1", "Noto Sans JP"],
+    "rules": ["見出しは欧文セリフ+和文明朝", "本文は和文ゴシック細字（Noto Sans JP 300/400）", "英字の小見出しはレタースペース0.2em以上の小型大文字", "数字は本文フォントで等幅（tabular-nums）", "UIに絵文字を使わない（分野名は英字小見出しで示す）"]
+  },
+  "color": {
+    "palette_type": "monochrome + single accent",
+    "primary_hue": "warm",
+    "contrast_level": "medium",
+    "hex_palette": ["#EDE6DA", "#C9A96E", "#B8892A", "#6A93CF", "#857B6E", "#2E2823", "#1A1714", "#0F0D0B"],
+    "roles_dark": {"ink": "#EDE6DA", "ink_secondary": "#B9AF9F", "muted": "#857B6E", "accent_gold": "#C9A96E", "accent_gold_deep": "#9C7C3C", "line": "#2E2823", "surface": "#1A1714", "surface_2": "#221E1A", "bg": "#0F0D0B", "up": "#D08A78", "down": "#8FB08A"},
+    "roles_light": {"ink": "#1A1714", "ink_secondary": "#5C544A", "muted": "#857B6E", "accent_gold": "#9C7C3C", "accent_gold_deep": "#7E6330", "line": "#DCD4C6", "surface": "#FBF9F5", "surface_2": "#F3EFE8", "bg": "#F3EFE8", "up": "#B5503F", "down": "#3F7A4B"},
+    "chart_series_dark": ["#C9A96E", "#6A93CF", "#C97A88", "#8FB08A", "#A08BD6", "#D08050"],
+    "chart_series_light": ["#9C7C3C", "#3F6BB5", "#B5566A", "#4F8A5C", "#7A5FBF", "#B8652E"],
+    "market_convention": "相場表の慣例で 上昇＝赤系 / 下落＝緑系"
+  },
+  "layout": {"density": "airy", "structure": "grid", "whitespace_use": "generous", "max_width_px": 1280, "radius_px": 2, "rules": "hairline（1px）の罫線で区切る。塗りのカードや影は使わない"},
+  "motion": {"style": "subtle", "timing": "slow-luxury", "transition_css": "all .45s cubic-bezier(.2,.7,.2,1)"},
+  "cultural_reference": ["luxury", "editorial", "japanese", "market-board"],
+  "anti_patterns": ["no_neon_colors", "no_heavy_gradients", "no_large_rounded_corners", "no_heavy_drop_shadows", "no_emoji_in_ui", "no_dual_axis_chart", "no_dashed_gridlines"]
+}
