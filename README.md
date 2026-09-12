@@ -1,5 +1,7 @@
 # 日本関連 海外オッズ相場表
 
+公開URL: https://odds.icurate.net/ （GitHub Pages、カスタムドメイン）。iCurate の HP https://icurate.net/ からリンク。
+
 海外の予測市場（Polymarket / Kalshi / Manifold）に上場している「日本」に関わる賭けを収集し、
 掛け率（暗黙の確率）の一覧と時系列変化を 1 枚の HTML で表示するツール。
 
