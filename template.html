@@ -310,6 +310,9 @@ a{color:var(--accent);text-decoration:none;transition:var(--ease)} a:hover{color
   <div class="filters" id="filters">
     <div id="scopechips" style="display:contents"></div>
     <span class="sep"></span>
+    <span class="eyebrow">国</span>
+    <div id="ctrychips" style="display:contents"></div>
+    <span class="sep"></span>
     <span class="eyebrow">分野</span>
     <div id="catchips" style="display:contents"></div>
     <span class="sep"></span>
@@ -318,7 +321,8 @@ a{color:var(--accent);text-decoration:none;transition:var(--ease)} a:hover{color
     <span class="sep"></span>
     <input id="q" type="search" placeholder="検索：大谷、日銀、阪神…" aria-label="検索">
     <select id="sort" aria-label="並び順">
-      <option value="default">既定の順</option>
+      <option value="default">分野別（既定）</option>
+      <option value="country">国別に整理</option>
       <option value="volume">出来高が多い順</option>
       <option value="move24">24h変動が大きい順</option>
       <option value="move7">7日変動が大きい順</option>
@@ -399,22 +403,26 @@ function movers(){
 }
 
 // ---- filters
-const state={scope:'all',cat:'all',src:'all',q:'',sort:'default'};
+const state={scope:'all',ctry:'all',cat:'all',src:'all',q:'',sort:'default'};
+const CTRY=D.countries||{};
 const SCOPES={japan:{ja:'日本関連'},global:{ja:'世界の人気'}};
 function chips(){
   const sc0={}; D.events.forEach(e=>sc0[e.scope]=(sc0[e.scope]||0)+1);
   $('#scopechips').innerHTML = `<button class="chip" data-scope="all" aria-pressed="true">すべて</button>` + Object.entries(SCOPES).map(([k,v])=>`<button class="chip" data-scope="${k}" aria-pressed="false">${v.ja}<span class="n">${sc0[k]||0}</span></button>`).join('');
+  const cc={}; D.events.forEach(e=>cc[e.country||'JP']=(cc[e.country||'JP']||0)+1);
+  $('#ctrychips').innerHTML = `<button class="chip" data-ctry="all" aria-pressed="true">すべて</button>` + Object.keys(CTRY).filter(k=>cc[k]).map(k=>`<button class="chip" data-ctry="${k}" aria-pressed="false">${esc(CTRY[k].ja)}<span class="n">${cc[k]}</span></button>`).join('');
   const counts={}; D.events.forEach(e=>counts[e.cat]=(counts[e.cat]||0)+1);
   $('#catchips').innerHTML = `<button class="chip" data-cat="all" aria-pressed="true">すべて<span class="n">${D.events.length}</span></button>` + Object.entries(CATS).filter(([k])=>counts[k]).map(([k,v])=>`<button class="chip" data-cat="${k}" aria-pressed="false">${esc(v.ja)}<span class="n">${counts[k]}</span></button>`).join('');
   const sc={}; D.events.forEach(e=>sc[e.source]=(sc[e.source]||0)+1);
   $('#srcchips').innerHTML = `<button class="chip" data-src="all" aria-pressed="true">すべて</button>` + Object.keys(SRC).filter(k=>sc[k]).map(k=>`<button class="chip" data-src="${k}" aria-pressed="false">${SRC[k]}<span class="n">${sc[k]}</span></button>`).join('');
-  $('#filters').addEventListener('click',e=>{ const b=e.target.closest('.chip'); if(!b) return; if(b.dataset.scope){state.scope=b.dataset.scope;} if(b.dataset.cat){state.cat=b.dataset.cat;} if(b.dataset.src){state.src=b.dataset.src;} render(); });
+  $('#filters').addEventListener('click',e=>{ const b=e.target.closest('.chip'); if(!b) return; if(b.dataset.scope){state.scope=b.dataset.scope;} if(b.dataset.ctry){state.ctry=b.dataset.ctry;} if(b.dataset.cat){state.cat=b.dataset.cat;} if(b.dataset.src){state.src=b.dataset.src;} render(); });
   $('#q').addEventListener('input',e=>{state.q=e.target.value.trim().toLowerCase(); render();});
   $('#sort').addEventListener('change',e=>{state.sort=e.target.value; render();});
 }
 function evMove(ev,k){ return Math.max(0,...ev.outcomes.map(o=>(o.prob!=null&&o[k]!=null)?Math.abs(o.prob-o[k]):0)); }
 function matches(ev){
   if(state.scope!=='all'&&ev.scope!==state.scope) return false;
+  if(state.ctry!=='all'&&(ev.country||'JP')!==state.ctry) return false;
   if(state.cat!=='all'&&ev.cat!==state.cat) return false;
   if(state.src!=='all'&&ev.source!==state.src) return false;
   if(state.q){ const hay=[ev.title_ja,ev.title,...ev.outcomes.map(o=>oname(o,ev)+' '+o.name)].join(' ').toLowerCase(); if(!hay.includes(state.q)) return false; }
@@ -487,6 +495,7 @@ function drawChart(el){
 
 // ---- render list
 function render(){
+  document.querySelectorAll('#ctrychips .chip').forEach(b=>b.setAttribute('aria-pressed',b.dataset.ctry===state.ctry));
   document.querySelectorAll('#scopechips .chip').forEach(b=>b.setAttribute('aria-pressed',b.dataset.scope===state.scope));
   document.querySelectorAll('#catchips .chip').forEach(b=>b.setAttribute('aria-pressed',b.dataset.cat===state.cat));
   document.querySelectorAll('#srcchips .chip').forEach(b=>b.setAttribute('aria-pressed',b.dataset.src===state.src));
@@ -494,7 +503,18 @@ function render(){
   const sorters={default:(a,b)=>a._order-b._order, volume:(a,b)=>((b.source==='manifold'?0:b.volume)||0)-((a.source==='manifold'?0:a.volume)||0), move24:(a,b)=>evMove(b,'prob_24h')-evMove(a,'prob_24h'), move7:(a,b)=>evMove(b,'prob_7d')-evMove(a,'prob_7d'), end:(a,b)=>(a.end||'9999').localeCompare(b.end||'9999')};
   evs.sort(sorters[state.sort]);
   const list=$('#list'); if(!evs.length&&!D.archive.filter(matches).length){ list.innerHTML='<p class="empty">該当するマーケットがありません。</p>'; return; }
-  if(state.sort==='default'){
+  if(state.sort==='country'){
+    let html='';
+    for(const ck of Object.keys(CTRY)){
+      const cevs=evs.filter(e=>(e.country||'JP')===ck); if(!cevs.length) continue;
+      const groups={}; cevs.forEach(e=>(groups[e.cat]=groups[e.cat]||[]).push(e));
+      html+=`<div class="scope-h"><h2><small style="font-family:var(--serif-en);font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:6px">${esc(CTRY[ck].en)}</small>${esc(CTRY[ck].ja)}</h2><span class="cnt" style="color:var(--ink-3);font-size:12px">${cevs.length}件</span></div>`;
+      html+=Object.keys(CATS).filter(k=>groups[k]).map(k=>`<section class="cat"><div class="cat-h"><h2><small>${esc(CATS[k].en||'')}</small>${esc(CATS[k].ja)}</h2><span class="cnt">${groups[k].length}件</span></div>${groups[k].map(card).join('')}</section>`).join('');
+    }
+    const arch=D.archive.filter(matches);
+    if(arch.length) html+=`<div class="arch-h"><h2>アーカイブ：結果が出たマーケット</h2><span class="cnt" style="color:var(--ink-3);font-size:12px">${arch.length}件</span></div>`+arch.map(card).join('');
+    list.innerHTML=html;
+  } else if(state.sort==='default'){
     let html='';
     for(const sc of ['japan','global']){
       const sevs=evs.filter(e=>(e.scope||'japan')===sc); if(!sevs.length) continue;

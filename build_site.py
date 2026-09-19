@@ -24,6 +24,12 @@ if os.path.exists(fb_path):
             print("firebase: 掲示板を Firestore に接続 (project:", cfg["projectId"] + ")")
     except Exception as e:
         print("firebase.json を読めません:", e)
+# ---- 国コードの補完（watchlist から）
+wl = json.load(open(os.path.join(ROOT, "config", "watchlist.json"), encoding="utf-8"))
+cmap = {f"{i['source']}:{i['id']}": i.get("country") for i in wl["items"]}
+data["countries"] = wl.get("countries", {})
+for e in data["events"] + data.get("archive", []):
+    e["country"] = e.get("country") or cmap.get(e["key"]) or ("JP" if e.get("scope", "japan") == "japan" else "WORLD")
 # ---- 特設ページ
 try: features = json.load(open(os.path.join(ROOT, "config", "features.json"), encoding="utf-8"))
 except Exception: features = []

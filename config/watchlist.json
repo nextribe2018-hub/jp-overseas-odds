@@ -59,7 +59,8 @@
    "cat": "politics",
    "title_ja": "高市早苗首相は2026年中に退任するか？",
    "scope": "japan",
-   "news_q": "高市首相 退陣"
+   "news_q": "高市首相 退陣",
+   "country": "JP"
   },
   {
    "source": "polymarket",
@@ -67,7 +68,8 @@
    "cat": "politics",
    "title_ja": "2026年中に衆議院が解散されるか？",
    "scope": "japan",
-   "news_q": "衆議院 解散"
+   "news_q": "衆議院 解散",
+   "country": "JP"
   },
   {
    "source": "polymarket",
@@ -75,7 +77,8 @@
    "cat": "politics",
    "title_ja": "習近平国家主席と高市首相の会談はいつ実現するか？",
    "scope": "japan",
-   "news_q": "習近平 高市 会談"
+   "news_q": "習近平 高市 会談",
+   "country": "JP"
   },
   {
    "source": "polymarket",
@@ -84,7 +87,8 @@
    "title_ja": "沖縄県知事選（9/13投開票）当選者",
    "top": 6,
    "scope": "japan",
-   "news_q": "沖縄県知事選"
+   "news_q": "沖縄県知事選",
+   "country": "JP"
   },
   {
    "source": "polymarket",
@@ -93,7 +97,8 @@
    "title_ja": "福島県知事選（10/25投開票）当選者",
    "top": 5,
    "scope": "japan",
-   "news_q": "福島県知事選"
+   "news_q": "福島県知事選",
+   "country": "JP"
   },
   {
    "source": "polymarket",
@@ -105,7 +110,8 @@
    ],
    "top": 3,
    "scope": "japan",
-   "news_q": "高市首相 支持率"
+   "news_q": "高市首相 支持率",
+   "country": "JP"
   },
   {
    "source": "manifold",
@@ -113,7 +119,8 @@
    "cat": "politics",
    "title_ja": "高市首相の在任期間はどれくらいになるか？",
    "scope": "japan",
-   "news_q": "高市政権"
+   "news_q": "高市政権",
+   "country": "JP"
   },
   {
    "source": "manifold",
@@ -121,7 +128,8 @@
    "cat": "politics",
    "title_ja": "高市首相は在任中に靖国神社を参拝するか？",
    "scope": "japan",
-   "news_q": "高市 靖国参拝"
+   "news_q": "高市 靖国参拝",
+   "country": "JP"
   },
   {
    "source": "manifold",
@@ -129,7 +137,8 @@
    "cat": "politics",
    "title_ja": "次の衆議院選挙はいつ行われるか？",
    "scope": "japan",
-   "news_q": "衆院選 時期"
+   "news_q": "衆院選 時期",
+   "country": "JP"
   },
   {
    "source": "manifold",
@@ -138,7 +147,8 @@
    "title_ja": "日本の首相が台湾問題で中国に謝罪する時期は？",
    "top": 6,
    "scope": "japan",
-   "news_q": "高市 台湾 発言 中国"
+   "news_q": "高市 台湾 発言 中国",
+   "country": "JP"
   },
   {
    "source": "manifold",
@@ -146,7 +156,8 @@
    "cat": "politics",
    "title_ja": "次の国政選挙の投票率は60%を超えるか？",
    "scope": "japan",
-   "news_q": "国政選挙 投票率"
+   "news_q": "国政選挙 投票率",
+   "country": "JP"
   },
   {
    "source": "kalshi",
@@ -154,7 +165,8 @@
    "cat": "politics",
    "title_ja": "沖縄県知事選 当選者（Kalshi）",
    "scope": "japan",
-   "news_q": "沖縄県知事選"
+   "news_q": "沖縄県知事選",
+   "country": "JP"
   },
   {
    "source": "polymarket",
@@ -162,7 +174,8 @@
    "cat": "economy",
    "title_ja": "日銀 9月会合（9/17-18）の政策金利決定",
    "scope": "japan",
-   "news_q": "日銀 9月 利上げ"
+   "news_q": "日銀 9月 利上げ",
+   "country": "JP"
   },
   {
    "source": "kalshi",
@@ -170,7 +183,8 @@
    "cat": "economy",
    "title_ja": "日銀 9月会合の政策金利決定（Kalshi）",
    "scope": "japan",
-   "news_q": "日銀 金融政策決定会合"
+   "news_q": "日銀 金融政策決定会合",
+   "country": "JP"
   },
   {
    "source": "polymarket",
@@ -178,7 +192,8 @@
    "cat": "economy",
    "title_ja": "日銀 10月会合の政策金利決定",
    "scope": "japan",
-   "news_q": "日銀 10月 利上げ"
+   "news_q": "日銀 10月 利上げ",
+   "country": "JP"
   },
   {
    "source": "kalshi",
@@ -186,7 +201,8 @@
    "cat": "economy",
    "title_ja": "日銀 10月会合の政策金利決定（Kalshi）",
    "scope": "japan",
-   "news_q": "日銀 10月会合"
+   "news_q": "日銀 10月会合",
+   "country": "JP"
   },
   {
    "source": "kalshi",
@@ -194,7 +210,8 @@
    "cat": "economy",
    "title_ja": "日銀 12月会合の政策金利決定（Kalshi）",
    "scope": "japan",
-   "news_q": "日銀 12月 利上げ"
+   "news_q": "日銀 12月 利上げ",
+   "country": "JP"
   },
   {
    "source": "manifold",
@@ -202,7 +219,8 @@
    "cat": "economy",
    "title_ja": "日銀は2026年末までにマイナス金利を再導入するか？",
    "scope": "japan",
-   "news_q": "日銀 マイナス金利"
+   "news_q": "日銀 マイナス金利",
+   "country": "JP"
   },
   {
    "source": "polymarket",
@@ -210,7 +228,8 @@
    "cat": "economy",
    "title_ja": "ドル円は2026年中にどの水準に到達するか？",
    "scope": "japan",
-   "news_q": "ドル円 為替"
+   "news_q": "ドル円 為替",
+   "country": "JP"
   },
   {
    "source": "polymarket",
@@ -218,7 +237,8 @@
    "cat": "economy",
    "title_ja": "米国が再度の円買い介入を発表するか？",
    "scope": "japan",
-   "news_q": "円 為替介入"
+   "news_q": "円 為替介入",
+   "country": "JP"
   },
   {
    "source": "polymarket",
@@ -226,7 +246,8 @@
    "cat": "economy",
    "title_ja": "日経平均 2026年末の終値",
    "scope": "japan",
-   "news_q": "日経平均"
+   "news_q": "日経平均",
+   "country": "JP"
   },
   {
    "source": "kalshi",
@@ -234,7 +255,8 @@
    "cat": "economy",
    "title_ja": "日経平均は2026年中にどこまで上昇するか？（Kalshi）",
    "scope": "japan",
-   "news_q": "日経平均 最高値"
+   "news_q": "日経平均 最高値",
+   "country": "JP"
   },
   {
    "source": "polymarket",
@@ -242,7 +264,8 @@
    "cat": "economy",
    "title_ja": "日本10年国債利回り 2026年末",
    "scope": "japan",
-   "news_q": "長期金利 10年債"
+   "news_q": "長期金利 10年債",
+   "country": "JP"
   },
   {
    "source": "polymarket",
@@ -250,7 +273,8 @@
    "cat": "economy",
    "title_ja": "日本コアCPI（前年比）2026年",
    "scope": "japan",
-   "news_q": "消費者物価 コアCPI"
+   "news_q": "消費者物価 コアCPI",
+   "country": "JP"
   },
   {
    "source": "polymarket",
@@ -258,7 +282,8 @@
    "cat": "economy",
    "title_ja": "日本コアコアCPI（前年比）2026年",
    "scope": "japan",
-   "news_q": "コアコアCPI"
+   "news_q": "コアコアCPI",
+   "country": "JP"
   },
   {
    "source": "polymarket",
@@ -266,7 +291,8 @@
    "cat": "economy",
    "title_ja": "日本 2026年Q3 GDP成長率（年率）",
    "scope": "japan",
-   "news_q": "GDP 速報 日本"
+   "news_q": "GDP 速報 日本",
+   "country": "JP"
   },
   {
    "source": "kalshi",
@@ -275,7 +301,8 @@
    "title_ja": "日本の名目GDP 2026年（ドル建て）",
    "top": 6,
    "scope": "japan",
-   "news_q": "名目GDP 日本"
+   "news_q": "名目GDP 日本",
+   "country": "JP"
   },
   {
    "source": "polymarket",
@@ -283,7 +310,8 @@
    "cat": "economy",
    "title_ja": "日本は2026年に景気後退入りするか？",
    "scope": "japan",
-   "news_q": "日本 景気後退"
+   "news_q": "日本 景気後退",
+   "country": "JP"
   },
   {
    "source": "kalshi",
@@ -291,7 +319,8 @@
    "cat": "economy",
    "title_ja": "8月の日本のインフレ率はシンガポールを上回るか？",
    "scope": "japan",
-   "news_q": "日本 インフレ率"
+   "news_q": "日本 インフレ率",
+   "country": "JP"
   },
   {
    "source": "polymarket",
@@ -299,7 +328,8 @@
    "cat": "geo",
    "title_ja": "2027年より前に日中の軍事衝突が起きるか？",
    "scope": "japan",
-   "news_q": "日中 軍事 緊張"
+   "news_q": "日中 軍事 緊張",
+   "country": "JP"
   },
   {
    "source": "manifold",
@@ -307,7 +337,8 @@
    "cat": "geo",
    "title_ja": "2027年より前の日中衝突（形態別）",
    "scope": "japan",
-   "news_q": "日中関係"
+   "news_q": "日中関係",
+   "country": "JP"
   },
   {
    "source": "manifold",
@@ -315,7 +346,8 @@
    "cat": "geo",
    "title_ja": "日本は2030年末までに核兵器を保有するか？",
    "scope": "japan",
-   "news_q": "日本 核武装 議論"
+   "news_q": "日本 核武装 議論",
+   "country": "JP"
   },
   {
    "source": "polymarket",
@@ -323,7 +355,8 @@
    "cat": "geo",
    "title_ja": "【関連】2027年より前に中台の軍事衝突が起きるか？",
    "scope": "japan",
-   "news_q": "中国 台湾 軍事"
+   "news_q": "中国 台湾 軍事",
+   "country": "CN"
   },
   {
    "source": "polymarket",
@@ -331,7 +364,8 @@
    "cat": "geo",
    "title_ja": "【関連】中国は2027年6月末までに台湾へ侵攻するか？",
    "scope": "japan",
-   "news_q": "台湾有事"
+   "news_q": "台湾有事",
+   "country": "CN"
   },
   {
    "source": "polymarket",
@@ -339,7 +373,8 @@
    "cat": "geo",
    "title_ja": "【関連】中国は2026年中に台湾を封鎖するか？",
    "scope": "japan",
-   "news_q": "台湾 封鎖"
+   "news_q": "台湾 封鎖",
+   "country": "CN"
   },
   {
    "source": "polymarket",
@@ -352,7 +387,8 @@
    ],
    "top": 3,
    "scope": "japan",
-   "news_q": "大谷翔平 MVP"
+   "news_q": "大谷翔平 MVP",
+   "country": "JP"
   },
   {
    "source": "kalshi",
@@ -365,7 +401,8 @@
    ],
    "top": 3,
    "scope": "japan",
-   "news_q": "ナ・リーグ MVP"
+   "news_q": "ナ・リーグ MVP",
+   "country": "JP"
   },
   {
    "source": "polymarket",
@@ -380,7 +417,8 @@
    ],
    "top": 3,
    "scope": "japan",
-   "news_q": "サイ・ヤング賞 山本由伸"
+   "news_q": "サイ・ヤング賞 山本由伸",
+   "country": "JP"
   },
   {
    "source": "kalshi",
@@ -395,7 +433,8 @@
    ],
    "top": 3,
    "scope": "japan",
-   "news_q": "サイ・ヤング賞"
+   "news_q": "サイ・ヤング賞",
+   "country": "JP"
   },
   {
    "source": "kalshi",
@@ -403,7 +442,8 @@
    "cat": "mlb",
    "title_ja": "大谷翔平がMVPとサイ・ヤング賞を同時受賞するか？",
    "scope": "japan",
-   "news_q": "大谷翔平 二刀流"
+   "news_q": "大谷翔平 二刀流",
+   "country": "JP"
   },
   {
    "source": "kalshi",
@@ -411,7 +451,8 @@
    "cat": "mlb",
    "title_ja": "大谷翔平は2026年レギュラーシーズン中に再び登板するか？",
    "scope": "japan",
-   "news_q": "大谷翔平 登板"
+   "news_q": "大谷翔平 登板",
+   "country": "JP"
   },
   {
    "source": "polymarket",
@@ -423,7 +464,8 @@
    ],
    "top": 3,
    "scope": "japan",
-   "news_q": "ハンク・アーロン賞"
+   "news_q": "ハンク・アーロン賞",
+   "country": "JP"
   },
   {
    "source": "polymarket",
@@ -437,7 +479,8 @@
    ],
    "top": 3,
    "scope": "japan",
-   "news_q": "本塁打王 MLB"
+   "news_q": "本塁打王 MLB",
+   "country": "JP"
   },
   {
    "source": "polymarket",
@@ -451,7 +494,8 @@
    ],
    "top": 3,
    "scope": "japan",
-   "news_q": "大谷翔平 本塁打"
+   "news_q": "大谷翔平 本塁打",
+   "country": "JP"
   },
   {
    "source": "polymarket",
@@ -465,7 +509,8 @@
    ],
    "top": 3,
    "scope": "japan",
-   "news_q": "大谷翔平 50本塁打"
+   "news_q": "大谷翔平 50本塁打",
+   "country": "JP"
   },
   {
    "source": "manifold",
@@ -473,7 +518,8 @@
    "cat": "mlb",
    "title_ja": "大谷翔平は2026年に43本塁打以上を打つか？",
    "scope": "japan",
-   "news_q": "大谷翔平 ホームラン"
+   "news_q": "大谷翔平 ホームラン",
+   "country": "JP"
   },
   {
    "source": "manifold",
@@ -481,7 +527,8 @@
    "cat": "mlb",
    "title_ja": "大谷翔平が2026年に受賞するタイトルは？",
    "scope": "japan",
-   "news_q": "大谷翔平 受賞"
+   "news_q": "大谷翔平 受賞",
+   "country": "JP"
   },
   {
    "source": "polymarket",
@@ -493,7 +540,8 @@
    ],
    "top": 3,
    "scope": "japan",
-   "news_q": "大谷翔平 DH"
+   "news_q": "大谷翔平 DH",
+   "country": "JP"
   },
   {
    "source": "polymarket",
@@ -505,7 +553,8 @@
    ],
    "top": 3,
    "scope": "japan",
-   "news_q": "大谷翔平 WAR"
+   "news_q": "大谷翔平 WAR",
+   "country": "JP"
   },
   {
    "source": "polymarket",
@@ -520,7 +569,8 @@
    ],
    "top": 3,
    "scope": "japan",
-   "news_q": "山本由伸 防御率"
+   "news_q": "山本由伸 防御率",
+   "country": "JP"
   },
   {
    "source": "polymarket",
@@ -535,7 +585,8 @@
    ],
    "top": 3,
    "scope": "japan",
-   "news_q": "奪三振 MLB 日本人"
+   "news_q": "奪三振 MLB 日本人",
+   "country": "JP"
   },
   {
    "source": "polymarket",
@@ -547,7 +598,8 @@
    ],
    "top": 3,
    "scope": "japan",
-   "news_q": "大谷翔平 人気"
+   "news_q": "大谷翔平 人気",
+   "country": "JP"
   },
   {
    "source": "polymarket",
@@ -556,7 +608,8 @@
    "title_ja": "NPB 2026 日本シリーズ優勝チーム",
    "top": 12,
    "scope": "japan",
-   "news_q": "日本シリーズ 優勝 予想"
+   "news_q": "日本シリーズ 優勝 予想",
+   "country": "JP"
   },
   {
    "source": "kalshi",
@@ -565,7 +618,8 @@
    "title_ja": "NPB 2026 日本一（Kalshi）",
    "top": 12,
    "scope": "japan",
-   "news_q": "プロ野球 優勝争い"
+   "news_q": "プロ野球 優勝争い",
+   "country": "JP"
   },
   {
    "source": "polymarket",
@@ -574,7 +628,8 @@
    "title_ja": "Jリーグ 2026-27 優勝チーム",
    "top": 8,
    "scope": "japan",
-   "news_q": "Jリーグ 2026-27 優勝チーム"
+   "news_q": "Jリーグ 2026-27 優勝チーム",
+   "country": "JP"
   },
   {
    "source": "polymarket",
@@ -583,7 +638,8 @@
    "title_ja": "Jリーグ 2026-27 2位",
    "top": 6,
    "scope": "japan",
-   "news_q": "Jリーグ 2026-27 2位"
+   "news_q": "Jリーグ 2026-27 2位",
+   "country": "JP"
   },
   {
    "source": "polymarket",
@@ -592,7 +648,8 @@
    "title_ja": "Jリーグ 2026-27 降格チーム",
    "top": 6,
    "scope": "japan",
-   "news_q": "Jリーグ 2026-27 降格チーム"
+   "news_q": "Jリーグ 2026-27 降格チーム",
+   "country": "JP"
   },
   {
    "source": "kalshi",
@@ -601,7 +658,8 @@
    "title_ja": "大相撲九月場所 幕内最高優勝",
    "top": 10,
    "scope": "japan",
-   "news_q": "大相撲 九月場所"
+   "news_q": "大相撲 九月場所",
+   "country": "JP"
   },
   {
    "source": "manifold",
@@ -609,7 +667,8 @@
    "cat": "sumo",
    "title_ja": "2026年末までに新たな横綱が誕生するか？",
    "scope": "japan",
-   "news_q": "横綱 昇進"
+   "news_q": "横綱 昇進",
+   "country": "JP"
   },
   {
    "source": "manifold",
@@ -617,7 +676,8 @@
    "cat": "sumo",
    "title_ja": "2026年に幕内で全勝優勝（15戦全勝）が出るか？",
    "scope": "japan",
-   "news_q": "大相撲 全勝"
+   "news_q": "大相撲 全勝",
+   "country": "JP"
   },
   {
    "source": "manifold",
@@ -625,7 +685,8 @@
    "cat": "sumo",
    "title_ja": "高市首相が2026年の大相撲で優勝杯を授与するか？",
    "scope": "japan",
-   "news_q": "高市首相 大相撲 内閣総理大臣杯"
+   "news_q": "高市首相 大相撲 内閣総理大臣杯",
+   "country": "JP"
   },
   {
    "source": "polymarket",
@@ -633,7 +694,8 @@
    "cat": "culture",
    "title_ja": "日本政府は2026年に新たなUFO関連文書を公開するか？",
    "scope": "japan",
-   "news_q": "UFO 日本政府"
+   "news_q": "UFO 日本政府",
+   "country": "JP"
   },
   {
    "source": "manifold",
@@ -641,7 +703,8 @@
    "cat": "culture",
    "title_ja": "9/8のNintendo Directでスマブラ新作が発表されるか？",
    "scope": "japan",
-   "news_q": "Nintendo Direct スマブラ"
+   "news_q": "Nintendo Direct スマブラ",
+   "country": "JP"
   },
   {
    "source": "manifold",
@@ -649,7 +712,8 @@
    "cat": "culture",
    "title_ja": "2030年より前に東京にMLB球団ができるか？",
    "scope": "japan",
-   "news_q": "MLB 東京 球団"
+   "news_q": "MLB 東京 球団",
+   "country": "JP"
   },
   {
    "source": "kalshi",
@@ -657,7 +721,8 @@
    "cat": "disaster",
    "title_ja": "2030年より前に日本でM8.0以上の地震が発生するか？",
    "scope": "japan",
-   "news_q": "巨大地震 発生確率"
+   "news_q": "巨大地震 発生確率",
+   "country": "JP"
   },
   {
    "source": "polymarket",
@@ -669,7 +734,8 @@
    ],
    "top": 3,
    "scope": "japan",
-   "news_q": "地震 M6"
+   "news_q": "地震 M6",
+   "country": "JP"
   },
   {
    "source": "polymarket",
@@ -678,7 +744,8 @@
    "title_ja": "米中間選挙 2026：上下両院の勢力図",
    "top": 4,
    "news_q": "米中間選挙",
-   "scope": "global"
+   "scope": "global",
+   "country": "US"
   },
   {
    "source": "polymarket",
@@ -687,7 +754,8 @@
    "title_ja": "2028年 米大統領選 当選者",
    "top": 5,
    "news_q": "2028年 米大統領選",
-   "scope": "global"
+   "scope": "global",
+   "country": "US"
   },
   {
    "source": "polymarket",
@@ -696,7 +764,8 @@
    "title_ja": "2028年 米民主党 大統領候補",
    "top": 5,
    "news_q": "民主党 大統領候補 2028",
-   "scope": "global"
+   "scope": "global",
+   "country": "US"
   },
   {
    "source": "polymarket",
@@ -705,7 +774,8 @@
    "title_ja": "次期フランス大統領選 当選者",
    "top": 4,
    "news_q": "フランス大統領選",
-   "scope": "global"
+   "scope": "global",
+   "country": "FR"
   },
   {
    "source": "polymarket",
@@ -714,7 +784,8 @@
    "title_ja": "ブラジル大統領選（10/4）当選者",
    "top": 3,
    "news_q": "ブラジル大統領選",
-   "scope": "global"
+   "scope": "global",
+   "country": "BR"
   },
   {
    "source": "polymarket",
@@ -722,7 +793,8 @@
    "cat": "economy",
    "title_ja": "FRB 9月FOMC（9/15-16）の政策金利決定",
    "news_q": "FOMC 9月 利上げ",
-   "scope": "global"
+   "scope": "global",
+   "country": "US"
   },
   {
    "source": "polymarket",
@@ -731,7 +803,8 @@
    "title_ja": "FRB 2026年の利下げ回数",
    "top": 4,
    "news_q": "FRB 利下げ 2026",
-   "scope": "global"
+   "scope": "global",
+   "country": "US"
   },
   {
    "source": "polymarket",
@@ -740,7 +813,8 @@
    "title_ja": "2026年末 時価総額世界1位の企業",
    "top": 4,
    "news_q": "時価総額 世界一 エヌビディア",
-   "scope": "global"
+   "scope": "global",
+   "country": "US"
   },
   {
    "source": "polymarket",
@@ -749,7 +823,8 @@
    "title_ja": "ロシア・ウクライナ停戦合意はいつ？",
    "top": 4,
    "news_q": "ウクライナ 停戦",
-   "scope": "global"
+   "scope": "global",
+   "country": "RU"
   },
   {
    "source": "polymarket",
@@ -757,7 +832,8 @@
    "cat": "geo",
    "title_ja": "米国は2027年より前にイランへ侵攻するか？",
    "news_q": "米国 イラン 攻撃",
-   "scope": "global"
+   "scope": "global",
+   "country": "IR"
   },
   {
    "source": "polymarket",
@@ -766,7 +842,8 @@
    "title_ja": "プーチン大統領の退陣はいつ？",
    "top": 3,
    "news_q": "プーチン 退陣",
-   "scope": "global"
+   "scope": "global",
+   "country": "RU"
   },
   {
    "source": "polymarket",
@@ -775,7 +852,8 @@
    "title_ja": "NFL 2026シーズン スーパーボウル優勝",
    "top": 5,
    "news_q": "NFL スーパーボウル 優勝候補",
-   "scope": "global"
+   "scope": "global",
+   "country": "US"
   },
   {
    "source": "polymarket",
@@ -784,7 +862,8 @@
    "title_ja": "MLB 2026 ワールドシリーズ優勝",
    "top": 5,
    "news_q": "ワールドシリーズ ドジャース",
-   "scope": "global"
+   "scope": "global",
+   "country": "US"
   },
   {
    "source": "polymarket",
@@ -793,7 +872,8 @@
    "title_ja": "F1 2026 ドライバーズチャンピオン",
    "top": 4,
    "news_q": "F1 チャンピオン争い",
-   "scope": "global"
+   "scope": "global",
+   "country": "WORLD"
   },
   {
    "source": "polymarket",
@@ -802,7 +882,8 @@
    "title_ja": "バロンドール 2026 受賞者",
    "top": 4,
    "news_q": "バロンドール 2026",
-   "scope": "global"
+   "scope": "global",
+   "country": "WORLD"
   },
   {
    "source": "polymarket",
@@ -811,7 +892,8 @@
    "title_ja": "全米オープンテニス 2026 男子優勝",
    "top": 4,
    "news_q": "全米オープン テニス 男子",
-   "scope": "global"
+   "scope": "global",
+   "country": "US"
   },
   {
    "source": "polymarket",
@@ -820,7 +902,8 @@
    "title_ja": "2026年 世界興行収入1位の映画",
    "top": 3,
    "news_q": "世界興行収入 2026 映画",
-   "scope": "global"
+   "scope": "global",
+   "country": "US"
   },
   {
    "source": "polymarket",
@@ -829,7 +912,8 @@
    "title_ja": "ノーベル平和賞 2026（10/10発表）",
    "top": 5,
    "news_q": "ノーベル平和賞 2026",
-   "scope": "global"
+   "scope": "global",
+   "country": "WORLD"
   },
   {
    "source": "polymarket",
@@ -838,7 +922,8 @@
    "title_ja": "9月末時点で最高性能のAIモデルを持つ企業",
    "top": 4,
    "news_q": "AI モデル 性能 ランキング",
-   "scope": "global"
+   "scope": "global",
+   "country": "US"
   },
   {
    "source": "polymarket",
@@ -846,7 +931,8 @@
    "cat": "economy",
    "title_ja": "日銀 7月会合（7/30-31）の政策金利決定",
    "news_q": "日銀 7月会合 結果",
-   "scope": "japan"
+   "scope": "japan",
+   "country": "JP"
   },
   {
    "source": "polymarket",
@@ -854,7 +940,8 @@
    "cat": "economy",
    "title_ja": "日本 2026年Q2 GDP成長率（年率）",
    "news_q": "4-6月期 GDP 速報",
-   "scope": "japan"
+   "scope": "japan",
+   "country": "JP"
   },
   {
    "source": "polymarket",
@@ -862,7 +949,8 @@
    "cat": "disaster",
    "title_ja": "スーパー台風ドルフィンは日本に上陸するか？",
    "news_q": "台風 上陸 8月",
-   "scope": "japan"
+   "scope": "japan",
+   "country": "JP"
   },
   {
    "source": "polymarket",
@@ -871,7 +959,8 @@
    "title_ja": "衆院選（2026年2月）後の首相は誰か？",
    "top": 4,
    "news_q": "衆院選 首相指名",
-   "scope": "japan"
+   "scope": "japan",
+   "country": "JP"
   }
  ],
  "game_series": [
@@ -906,5 +995,43 @@
    "cat": "sports",
    "must": "JPN"
   }
- ]
+ ],
+ "countries": {
+  "JP": {
+   "ja": "日本",
+   "en": "Japan"
+  },
+  "US": {
+   "ja": "アメリカ",
+   "en": "United States"
+  },
+  "CN": {
+   "ja": "中国・台湾",
+   "en": "China & Taiwan"
+  },
+  "KR": {
+   "ja": "韓国",
+   "en": "Korea"
+  },
+  "FR": {
+   "ja": "フランス",
+   "en": "France"
+  },
+  "BR": {
+   "ja": "ブラジル",
+   "en": "Brazil"
+  },
+  "RU": {
+   "ja": "ロシア・ウクライナ",
+   "en": "Russia & Ukraine"
+  },
+  "IR": {
+   "ja": "イラン・中東",
+   "en": "Iran & Middle East"
+  },
+  "WORLD": {
+   "ja": "国際・世界",
+   "en": "International"
+  }
+ }
 }

@@ -332,7 +332,7 @@ def main():
         except Exception as e:
             print("   FAILED", e, file=sys.stderr); ev = None
         if ev and ev["outcomes"]:
-            ev["_order"] = len(events); ev["scope"] = item.get("scope", "japan")
+            ev["_order"] = len(events); ev["scope"] = item.get("scope", "japan"); ev["country"] = item.get("country") or ("JP" if item.get("scope", "japan") == "japan" else "WORLD")
             ev["url_ja"] = translate_url(ev["url"])
             ev["news_q"] = item.get("news_q") or item.get("title_ja") or ev["title"]
             ev["news_url"] = "https://news.google.com/search?q=" + urllib.parse.quote(ev["news_q"]) + "&hl=ja&gl=JP&ceid=JP:ja"
@@ -440,7 +440,7 @@ def main():
 
     out = {
         "generated_at": NOW, "generated_at_jst": datetime.fromtimestamp(NOW, JST).strftime("%Y-%m-%d %H:%M JST"),
-        "categories": CFG["categories"], "events": events, "games": games,
+        "categories": CFG["categories"], "countries": CFG.get("countries", {}), "events": events, "games": games,
         "archive": sorted(archive.values(), key=lambda e: (-(e.get("volume") or 0) if e.get("source") != "manifold" else 0, -(e.get("resolved_at") or 0))),
         "sources": {
             "polymarket": {"name": "Polymarket", "note": "米国発の分散型予測市場（USDC建て）。価格＝YESの暗黙確率。"},
