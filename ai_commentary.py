@@ -175,6 +175,38 @@ def main():
                 print("  post ERR", ev["title_ja"], e.code, e.read()[:200], file=sys.stderr)
             except Exception as e:
                 print("  post ERR", ev["title_ja"], e, file=sys.stderr)
+    # ---- 特設ページのブリーフィング（テーマ単位、1日1回）
+    try: features = json.load(open(os.path.join(ROOT, "config", "features.json"), encoding="utf-8"))
+    except Exception: features = []
+    try: news_log = json.load(open(os.path.join(DATA, "news_log.json"), encoding="utf-8"))
+    except Exception: news_log = {}
+    fstate = state.setdefault("features", {})
+    by_key = {e["key"]: e for e in events}
+    for ft in features:
+        prev = fstate.get(ft["slug"])
+        if prev and NOW - prev.get("ts", 0) < 20 * 3600: continue
+        lines = [f"特設テーマ: {ft['title_ja']}", ft.get("lead", ""), "このテーマのマーケット（上位選択肢・確率・倍率・24h/7日変化）:"]
+        for k in ft["events"]:
+            ev = by_key.get(k)
+            if not ev: continue
+            outs = sorted(ev["outcomes"], key=lambda o: -(o["prob"] or 0))[:3]
+            tag = "（結果確定）" if ev.get("status") == "resolved" else ""
+            lines.append(f"■ {ev['title_ja']}{tag}: " + " ／ ".join(f"{oname(o, ev)} {pct(o['prob'])}（{odds(o['prob'])}）" + ("" if o.get('prob_7d') is None or o['prob'] is None else f" 7日{((o['prob']-o['prob_7d'])*100):+.1f}pt") for o in outs))
+        recent = sorted(news_log.get("feature:" + ft["slug"], []), key=lambda n: -n["ts"])[:10]
+        if recent:
+            lines.append("直近のニュース（新しい順）:")
+            for n in recent: lines.append(f"- [{datetime.fromtimestamp(n['ts'], JST).strftime('%-m/%-d')} {n.get('source','')}] {n['title']}")
+        cal = [c for c in ft.get("calendar", []) if c["date"] >= datetime.fromtimestamp(NOW, JST).strftime("%Y-%m-%d")][:3]
+        if cal: lines.append("今後の予定: " + " ／ ".join(f"{c['date']} {c['label']}" for c in cal))
+        prompt = "\n".join(lines) + "\n\n上記をもとに、特設ページ冒頭の「今日のブリーフィング」を書いてください。構成は (1)いま市場が織り込んでいること (2)直近のニュースがオッズに与えた影響 (3)次の節目までに注目する材料、の3段落。全体で320〜420字、見出しや箇条書きは使わない。断定・賭けの推奨はしない。"
+        try:
+            resp = client.messages.create(model=MODEL, max_tokens=2000, system=[{"type": "text", "text": SYSTEM, "cache_control": {"type": "ephemeral"}}], output_config={"effort": "medium"}, messages=[{"role": "user", "content": prompt}])
+            if resp.stop_reason == "refusal": print("  feature refused:", ft["slug"]); continue
+            text = "".join(b.text for b in resp.content if b.type == "text").strip()
+            fstate[ft["slug"]] = {"text": text, "ts": NOW, "model": MODEL, "hash": digest(text)}
+            print("  feature briefing:", ft["slug"], len(text), "字")
+        except Exception as e:
+            print("  feature ERR", ft["slug"], e, file=sys.stderr)
     state["updated_at"] = NOW
     json.dump(state, open(STATE_PATH, "w", encoding="utf-8"), ensure_ascii=False)
     print(f"[ai] 保持 {len(comments)} 件 / 自動投稿済み {len(posted)} 件 -> data/ai_comments.json")

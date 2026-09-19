@@ -82,6 +82,12 @@ parts = [f'''<div style="font-family:-apple-system,'Helvetica Neue','Hiragino Sa
 <p style="font-size:12.5px;color:#555;margin:0 0 6px">データ取得 {D["generated_at_jst"]} ／ 追跡 {len(D["events"])}マーケット・{sum(len(x["outcomes"]) for x in D["events"])}選択肢 ／ Polymarket・Kalshi・Manifold</p>
 {f'<p style="font-size:13px;margin:0"><a href="{e(SITE)}" style="color:#9C7C3C">▶ 一覧サイト（時系列チャート付き）を開く</a></p>' if SITE else ''}
 <p style="font-size:12px;color:#666;background:#f3f4f7;padding:8px 10px;border-left:3px solid #9C7C3C;margin:12px 0 0">確率＝各市場のYES価格、倍率＝欧州式オッズ（1÷確率、的中時の払戻倍率）。「賭けを見る」で実際のサイト、「日本語訳」でGoogle翻訳経由の日本語ページへ。変化幅は確率のポイント差で、<span style="color:#B5503F">上昇＝赤</span>・<span style="color:#3F7A4B">下落＝緑</span>。Manifoldはプレイマネーのため参考値。</p>''']
+try:
+    FEATS = json.load(open(os.path.join(ROOT, "config", "features.json"), encoding="utf-8"))
+except Exception:
+    FEATS = []
+if FEATS and SITE:
+    parts.append(f'<h2 {H2}>特設ページ</h2><p style="font-size:13px;line-height:2;margin:0">' + " ／ ".join(f'<a href="{e(SITE + "f/" + f["slug"] + "/")}" style="color:#9C7C3C;text-decoration:none">{e(f["title_ja"])}</a>' for f in FEATS) + '</p><p style="font-size:11px;color:#888;margin:4px 0 0">注目テーマごとに、賭けの一覧・関連ニュース・AIブリーフィング・掲示板をまとめています。</p>')
 parts.append(f'<h2 {H2}>24時間で動いた賭け</h2>' + mover_table(mv24, "prob_24h"))
 parts.append(f'<h2 {H2}>7日間で動いた賭け</h2>' + mover_table(mv7, "prob_7d"))
 for scope, head, lead in (("japan", "日本に関わる賭け", "首位の選択肢と倍率、2〜5位、関連ニュース。"), ("global", "海外で人気の賭け", "世界の予測市場で資金が集中している注目マーケット（分野ごとに抜粋）。")):

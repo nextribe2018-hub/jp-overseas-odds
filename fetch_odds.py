@@ -354,6 +354,20 @@ def main():
             if n.get("link") and n["link"] not in seen and n.get("ts"):
                 lst.append({"ts": n["ts"], "title": n["title"], "link": n["link"], "source": n.get("source", "")}); seen.add(n["link"])
         lst.sort(key=lambda n: n["ts"]); del lst[:-80]
+    # 特設ページ用のニュース（複数クエリを束ねて蓄積、最大150件）
+    try: features = json.load(open(os.path.join(ROOT, "config", "features.json"), encoding="utf-8"))
+    except Exception: features = []
+    print("[news] 特設ページのニュースを取得")
+    for ft in features:
+        with ThreadPoolExecutor(5) as ex:
+            batches = list(ex.map(lambda q: fetch_news(q, 8), ft.get("news_q", [])))
+        lst = news_log.setdefault("feature:" + ft["slug"], [])
+        seen = {n.get("link") for n in lst}
+        for batch in batches:
+            for n in batch:
+                if n.get("link") and n["link"] not in seen and n.get("ts"):
+                    lst.append({"ts": n["ts"], "title": n["title"], "link": n["link"], "source": n.get("source", "")}); seen.add(n["link"])
+        lst.sort(key=lambda n: n["ts"]); del lst[:-150]
     json.dump(news_log, open(log_path, "w", encoding="utf-8"), ensure_ascii=False)
     games = []
     for gs in CFG.get("game_series", []):
