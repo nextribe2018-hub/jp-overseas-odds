@@ -961,6 +961,55 @@
    "news_q": "衆院選 首相指名",
    "scope": "japan",
    "country": "JP"
+  },
+  {
+   "source": "kalshi",
+   "id": "KXNOBELLIT-26",
+   "cat": "culture",
+   "title_ja": "ノーベル文学賞 2026（村上春樹の扱い）",
+   "keep": [
+    "Murakami"
+   ],
+   "top": 4,
+   "scope": "japan",
+   "country": "JP",
+   "news_q": "ノーベル文学賞 村上春樹"
+  },
+  {
+   "source": "kalshi",
+   "id": "KXMLB-26",
+   "cat": "mlb",
+   "title_ja": "MLB 2026 ワールドシリーズ優勝（Kalshi）",
+   "top": 6,
+   "scope": "global",
+   "country": "US",
+   "news_q": "ワールドシリーズ ドジャース"
+  },
+  {
+   "source": "kalshi",
+   "id": "KXMLBNLCSQUAL-26",
+   "cat": "mlb",
+   "title_ja": "MLB 2026 ナ・リーグ優勝決定シリーズ進出チーム",
+   "keep": [
+    "Los Angeles D"
+   ],
+   "top": 4,
+   "scope": "global",
+   "country": "US",
+   "news_q": "ドジャース ディビジョンシリーズ"
+  },
+  {
+   "source": "polymarket",
+   "id": "956265",
+   "cat": "mlb",
+   "title_ja": "MLB ポストシーズン：NLCS 進出チーム（Polymarket）",
+   "keep": [
+    "Dodgers"
+   ],
+   "top": 4,
+   "scope": "global",
+   "country": "US",
+   "news_q": "ドジャース ポストシーズン"
   }
  ],
  "game_series": [
